@@ -76,7 +76,7 @@ function ShopView({ categorySlug, query, isNew }: ShopViewProps) {
       : ["/products/pack-040.webp", "/shop/colour-novelty-hookah.webp", "/shop/gold-honeycomb-grinder.webp"];
 
   return (
-    <div className="bg-white">
+    <div>
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -107,14 +107,14 @@ function ShopView({ categorySlug, query, isNew }: ShopViewProps) {
 
         <ShopCategoriesNav activeSlug={categorySlug} isNew={isNew} />
 
-        <div className="mb-8 overflow-hidden rounded-[1.6rem] border-2 border-brand-200 bg-gradient-to-br from-white via-brand-50/70 to-white p-4 shadow-[0_16px_40px_rgba(236,72,153,0.12)] sm:p-5">
+        <div className="mb-8 overflow-hidden rounded-[1.6rem] border border-brand-200 bg-white p-4 shadow-[0_10px_30px_rgba(5,31,32,0.05)] sm:p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <p className="mb-1 inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.2em] text-brand-600">
-                <Sparkles className="h-3.5 w-3.5" />
+              <p className="mb-1 inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-brand-700">
+                <Sparkles className="h-3.5 w-3.5 text-gold" />
                 {query ? "Search" : category?.name ?? "All products"}
               </p>
-              <h2 className="text-2xl font-black tracking-tight text-black md:text-3xl">
+              <h2 className="font-serif text-3xl font-normal tracking-tight text-ink md:text-4xl">
                 {query
                   ? `Results for “${query}”`
                   : isNew
@@ -131,14 +131,14 @@ function ShopView({ categorySlug, query, isNew }: ShopViewProps) {
             </div>
 
             {!query && !categorySlug ? (
-              <div className="flex rounded-2xl border-2 border-brand-200 bg-white p-1">
+              <div className="flex rounded-2xl border border-brand-200 bg-cream p-1">
                 <Link
                   href="/shop/"
                   className={cn(
                     "rounded-xl px-4 py-2.5 text-sm font-black transition",
                     !isNew
-                      ? "bg-black text-white shadow-md"
-                      : "text-black/70 hover:bg-brand-50 hover:text-brand-700"
+                      ? "bg-ink text-white shadow-md"
+                      : "text-ink/70 hover:bg-white hover:text-ink"
                   )}
                 >
                   All {products.length}
@@ -148,8 +148,8 @@ function ShopView({ categorySlug, query, isNew }: ShopViewProps) {
                   className={cn(
                     "rounded-xl px-4 py-2.5 text-sm font-black transition",
                     isNew
-                      ? "bg-brand-600 text-white shadow-md"
-                      : "text-black/70 hover:bg-brand-50 hover:text-brand-700"
+                      ? "bg-ink text-gold shadow-md"
+                      : "text-ink/70 hover:bg-white hover:text-ink"
                   )}
                 >
                   New {newCount}
@@ -158,7 +158,7 @@ function ShopView({ categorySlug, query, isNew }: ShopViewProps) {
             ) : query ? (
               <Link
                 href="/shop/"
-                className="inline-flex w-fit rounded-xl bg-black px-4 py-2.5 text-sm font-black text-white"
+                className="inline-flex w-fit rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white hover:bg-graphite"
               >
                 Clear search
               </Link>
@@ -167,9 +167,9 @@ function ShopView({ categorySlug, query, isNew }: ShopViewProps) {
         </div>
 
         {displayProducts.length === 0 ? (
-          <div className="rounded-2xl border-2 border-dashed border-brand-200 py-16 text-center">
-            <p className="mb-3 font-semibold text-black/60">No products found.</p>
-            <Link href="/shop/" className="font-bold text-brand-600 hover:underline">
+          <div className="rounded-2xl border border-dashed border-brand-300 py-16 text-center">
+            <p className="mb-3 font-semibold text-graphite/60">No products found.</p>
+            <Link href="/shop/" className="font-bold text-brand-700 hover:underline">
               Browse the shop
             </Link>
           </div>

@@ -16,7 +16,7 @@ export default function RegisterPage() {
         </p>
         <Link
           href="/account/"
-          className="inline-flex px-6 py-3 bg-brand-700 text-white font-semibold rounded-xl hover:bg-brand-800 transition-colors"
+          className="inline-flex px-6 py-3 bg-ink text-white font-semibold rounded-xl hover:bg-graphite transition-colors"
         >
           How to order
         </Link>

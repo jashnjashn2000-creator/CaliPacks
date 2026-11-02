@@ -1,9 +1,13 @@
-# Local Worker secrets — never commit
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
-# Optional
-STRIPE_SECRET_KEY_TEST=
-STRIPE_WEBHOOK_SECRET_TEST=
+# Local Worker secrets for `npm run checkout` — never commit the real .dev.vars file.
+# Copy this file to .dev.vars and fill in DEMO credentials first (see VIVA-SETUP.md).
+VIVA_ENV=demo
+VIVA_CLIENT_ID=
+VIVA_CLIENT_SECRET=
+VIVA_SOURCE_CODE=
+# Needed only for the webhook "Verify" step:
+VIVA_MERCHANT_ID=
+VIVA_API_KEY=
+# Optional order notifications:
 ZAPIER_WEBHOOK_URL=
 RESEND_API_KEY=
 OWNER_NOTIFY_EMAIL=hello@calipacks.co.uk

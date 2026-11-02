@@ -28,7 +28,7 @@ export function LoadMoreGrid({ products }: { products: Product[] }) {
           <button
             type="button"
             onClick={() => setPage((p) => p + 1)}
-            className="inline-flex items-center justify-center rounded-xl bg-brand-600 px-6 py-3 text-sm font-black text-white shadow-lg shadow-brand-200 transition hover:bg-brand-500"
+            className="inline-flex items-center justify-center rounded-full bg-ink px-7 py-3 text-sm font-semibold text-white transition hover:bg-graphite"
           >
             Load more
           </button>

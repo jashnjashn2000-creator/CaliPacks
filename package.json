@@ -6,6 +6,8 @@
     "setup": "npm install && npm run dev",
     "dev": "next dev --hostname 0.0.0.0",
     "checkout": "npm --prefix ./cloudflare/checkout-worker run dev",
+    "prebuild": "node scripts/generate-worker-catalog.mjs",
+    "catalog": "node scripts/generate-worker-catalog.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

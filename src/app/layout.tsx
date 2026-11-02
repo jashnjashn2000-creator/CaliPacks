@@ -1,22 +1,41 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Fraunces, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { AgeGate } from "@/components/legal/AgeGate";
 import { CartProvider } from "@/context/CartContext";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { contactInfo, socialLinks } from "@/data/social";
+import { localBusinessJsonLd } from "@/lib/local-business";
 import { SITE_LOGO, SITE_NAME, SITE_URL, pageUrl } from "@/lib/site";
 import "./globals.css";
 
+// Logo wordmark only — keeps the brand mark unchanged.
 const inter = Inter({
   subsets: ["latin"],
+  weight: ["800", "900"],
   display: "optional",
   variable: "--font-inter",
+  preload: false,
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jakarta",
+  preload: true,
+});
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  axes: ["SOFT"],
+  display: "swap",
+  variable: "--font-fraunces",
+  preload: true,
 });
 
 export const viewport: Viewport = {
-  themeColor: "#ec4899",
+  themeColor: "#051f20",
   width: "device-width",
   initialScale: 1,
 };
@@ -25,6 +44,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: SITE_NAME,
   authors: [{ name: SITE_NAME, url: SITE_URL }],
+  formatDetection: { telephone: true, email: true, address: true },
   creator: SITE_NAME,
   publisher: SITE_NAME,
   category: "shopping",
@@ -38,7 +58,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description:
-    "Smoke Cali is a Manchester smoke shop for wholesale Cali Packs. 111 HD designs, £0.20 per pack, minimum 50 pcs, UK delivery in 2–3 days.",
+    "Smoke Cali is a Manchester smoke shop for wholesale Cali Packs. 111 HD designs, £0.20 per pack, minimum 50 pcs, UK delivery from £4.00. Visit us at 5 Sagar Street, Manchester, open daily 9:30–19:30.",
   keywords: [
     "Smoke Cali",
     "Cali Packs UK",
@@ -46,11 +66,10 @@ export const metadata: Metadata = {
     "Cali Packs Manchester",
     "3.5g mylar bags UK",
     "smoke shop Manchester",
+    "mylar bags UK",
     "wholesale cali packs",
   ],
-  alternates: {
-    canonical: pageUrl("/"),
-  },
+  // Canonicals are set per-page so cart/checkout don't inherit the homepage URL.
   openGraph: {
     type: "website",
     locale: "en_GB",
@@ -61,9 +80,9 @@ export const metadata: Metadata = {
       "111 HD Cali Packs from Smoke Cali Manchester. £0.20 per pack, minimum 50 pcs. Shop online or visit Sagar Street.",
     images: [
       {
-        url: "/hero-cali-packs.jpg",
-        width: 1920,
-        height: 980,
+        url: "/hero-cali-packs.webp",
+        width: 1280,
+        height: 720,
         alt: "Smoke Cali Cali Packs wholesale wall",
       },
     ],
@@ -72,7 +91,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Smoke Cali | Cali Packs £0.20",
     description: "111 HD Cali Packs. £0.20 per pack, min 50 pcs. Manchester smoke shop.",
-    images: ["/hero-cali-packs.jpg"],
+    images: ["/hero-cali-packs.webp"],
   },
   robots: {
     index: true,
@@ -93,65 +112,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-GB" className={inter.variable}>
+    <html lang="en-GB" className={`${inter.variable} ${jakarta.variable} ${fraunces.variable}`}>
       <body className="antialiased">
-        <JsonLd
-          data={{
-            "@context": "https://schema.org",
-            "@graph": [
-              {
-                "@type": "Organization",
-                "@id": `${SITE_URL}/#organization`,
-                name: SITE_NAME,
-                url: SITE_URL,
-                logo: `${SITE_URL}${SITE_LOGO}`,
-                email: contactInfo.email,
-                telephone: contactInfo.phone,
-                sameAs: [
-                  socialLinks.facebook.href,
-                  socialLinks.tiktok.href,
-                  socialLinks.youtube.href,
-                ],
-              },
-              {
-                "@type": "WebSite",
-                "@id": `${SITE_URL}/#website`,
-                url: SITE_URL,
-                name: SITE_NAME,
-                publisher: { "@id": `${SITE_URL}/#organization` },
-                potentialAction: {
-                  "@type": "SearchAction",
-                  target: {
-                    "@type": "EntryPoint",
-                    urlTemplate: `${SITE_URL}/shop/?q={search_term_string}`,
-                  },
-                  "query-input": "required name=search_term_string",
-                },
-              },
-              {
-                "@type": ["LocalBusiness", "Store"],
-                "@id": `${SITE_URL}/#local`,
-                name: SITE_NAME,
-                url: SITE_URL,
-                image: `${SITE_URL}/hero-cali-packs.jpg`,
-                description:
-                  "Manchester smoke shop supplying wholesale Cali Packs at £0.20 per pack, minimum 50 pcs.",
-                priceRange: "£",
-                telephone: contactInfo.phone,
-                email: contactInfo.email,
-                address: {
-                  "@type": "PostalAddress",
-                  streetAddress: "5 Sagar Street",
-                  postalCode: "M8 8EU",
-                  addressLocality: "Manchester",
-                  addressCountry: "GB",
-                },
-                areaServed: "GB",
-              },
-            ],
-          }}
-        />
+        <JsonLd data={localBusinessJsonLd()} />
         <CartProvider>
+          <AgeGate />
           <AnnouncementBar />
           <Header />
           <main className="min-h-[60vh]">{children}</main>

@@ -1,40 +1,23 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/seo/JsonLd";
+import Link from "next/link";
 import { pageUrl } from "@/lib/site";
+import { faqs } from "@/data/faqs";
 
 export const metadata: Metadata = {
   title: "FAQ",
   description:
-    "FAQ for Smoke Cali Cali Packs: minimum order 50 pcs, £0.20 per pack, UK delivery, custom orders and returns.",
+    "Smoke Cali FAQ: Cali Packs £0.20 per pack (min 50 pcs), UK delivery from £4.00, 2–3 day dispatch, returns, custom orders, and Manchester shop address and opening hours.",
   alternates: { canonical: pageUrl("/faq") },
+  openGraph: {
+    url: pageUrl("/faq"),
+    title: "Smoke Cali FAQ | Cali Packs, delivery & Manchester shop",
+    description:
+      "Answers on prices, minimum order, UK delivery, returns, custom orders and visiting the Smoke Cali shop in Manchester.",
+  },
 };
 
-const faqs = [
-  {
-    q: "What is the minimum order quantity?",
-    a: "Every Cali Pack is £0.20 per pack with a minimum order of 50 pcs. Add 50 or more of any design to your cart to check out.",
-  },
-  {
-    q: "How long does delivery take?",
-    a: "In-stock items are dispatched within 2–3 business days. UK delivery typically takes 1–2 additional days. Custom orders take 5–7 business days after design approval.",
-  },
-  {
-    q: "How much is courier delivery?",
-    a: "Every order includes UK courier service for £2.50 GBP. The fee is added at checkout and on Stripe. Dispatch is 2–3 business days, then 1–2 days in transit.",
-  },
-  {
-    q: "Can I upload my own design?",
-    a: "Absolutely. For custom orders, you can upload your artwork during the order process. We accept AI, PSD, PDF, and high-resolution PNG files.",
-  },
-  {
-    q: "Are your packaging materials child-resistant?",
-    a: "Yes, all our mylar bags and jars feature child-resistant closures that meet UK packaging regulations.",
-  },
-  {
-    q: "Do you ship internationally?",
-    a: "Currently we ship within the UK only. We're working on expanding to EU countries — register your interest via our contact page.",
-  },
-];
+
 
 export default function FAQPage() {
   return (
@@ -54,9 +37,25 @@ export default function FAQPage() {
         }}
       />
       <div className="container-site max-w-3xl">
-        <h1 className="text-3xl font-bold text-surface-900 tracking-tight mb-8">
+        <h1 className="text-3xl font-bold text-surface-900 tracking-tight mb-4">
           Frequently Asked Questions
         </h1>
+        <p className="mb-8 text-surface-800/70 leading-relaxed">
+          Quick answers about ordering Cali Packs online, UK delivery, returns and
+          visiting our Manchester shop. Can&apos;t find your answer?{" "}
+          <Link href="/contact" className="font-semibold text-brand-700 underline-offset-2 hover:underline">
+            Contact us
+          </Link>{" "}
+          or read our{" "}
+          <Link href="/shipping" className="font-semibold text-brand-700 underline-offset-2 hover:underline">
+            shipping
+          </Link>{" "}
+          and{" "}
+          <Link href="/returns" className="font-semibold text-brand-700 underline-offset-2 hover:underline">
+            returns
+          </Link>{" "}
+          policies.
+        </p>
         <div className="space-y-4">
           {faqs.map((faq) => (
             <details
@@ -64,7 +63,7 @@ export default function FAQPage() {
               className="group bg-white rounded-xl border border-surface-200 overflow-hidden"
             >
               <summary className="flex items-center justify-between px-6 py-4 cursor-pointer font-medium text-surface-900 hover:bg-surface-50 transition-colors">
-                {faq.q}
+                <h2 className="text-base font-medium">{faq.q}</h2>
                 <span className="text-surface-800/40 group-open:rotate-45 transition-transform text-xl ml-4">+</span>
               </summary>
               <div className="px-6 pb-4 text-sm text-surface-800/70 leading-relaxed">

@@ -6,7 +6,7 @@ import { pageUrl } from "@/lib/site";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date("2026-09-10");
+  const now = new Date();
 
   const productUrls = products.map((p) => ({
     url: pageUrl(`/product/${p.slug}`),

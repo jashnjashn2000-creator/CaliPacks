@@ -56,11 +56,11 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, "127.0.0.1", () => {
-  const configured = Boolean(env.STRIPE_SECRET_KEY && String(env.STRIPE_SECRET_KEY).startsWith("sk_"));
+  const configured = Boolean(env.VIVA_CLIENT_ID && env.VIVA_CLIENT_SECRET && env.VIVA_SOURCE_CODE);
   console.log(`Smoke Cali checkout on http://127.0.0.1:${PORT}`);
   console.log(
     configured
-      ? "Stripe secret loaded from .dev.vars"
-      : "Add the shop STRIPE_SECRET_KEY (sk_test_ or sk_live_) to .dev.vars"
+      ? `Viva credentials loaded from .dev.vars (mode: ${env.VIVA_ENV || "demo"})`
+      : "Add VIVA_CLIENT_ID, VIVA_CLIENT_SECRET and VIVA_SOURCE_CODE (demo) to .dev.vars — see VIVA-SETUP.md"
   );
 });

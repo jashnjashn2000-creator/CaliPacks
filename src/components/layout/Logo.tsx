@@ -32,21 +32,21 @@ function LogoMark({ id, size }: { id: string; size: number }) {
     >
       <defs>
         <linearGradient id={rim} x1="8%" y1="0%" x2="92%" y2="100%">
-          <stop offset="0%" stopColor="#fff1f7" />
-          <stop offset="38%" stopColor="#f472b6" />
-          <stop offset="72%" stopColor="#ec4899" />
-          <stop offset="100%" stopColor="#9d174d" />
+          <stop offset="0%" stopColor="#daf1de" />
+          <stop offset="38%" stopColor="#8eb69b" />
+          <stop offset="72%" stopColor="#235347" />
+          <stop offset="100%" stopColor="#0b2b26" />
         </linearGradient>
         <linearGradient id={smoke} x1="20%" y1="10%" x2="85%" y2="95%">
-          <stop offset="0%" stopColor="#ffffff" />
-          <stop offset="28%" stopColor="#f9a8d4" />
-          <stop offset="62%" stopColor="#ec4899" />
-          <stop offset="100%" stopColor="#be185d" />
+          <stop offset="0%" stopColor="#f3faf5" />
+          <stop offset="28%" stopColor="#c5e2cd" />
+          <stop offset="62%" stopColor="#8eb69b" />
+          <stop offset="100%" stopColor="#235347" />
         </linearGradient>
         <radialGradient id={glass} cx="38%" cy="32%" r="62%">
-          <stop offset="0%" stopColor="#3f3f46" />
-          <stop offset="55%" stopColor="#111113" />
-          <stop offset="100%" stopColor="#050506" />
+          <stop offset="0%" stopColor="#163832" />
+          <stop offset="55%" stopColor="#0b2b26" />
+          <stop offset="100%" stopColor="#051f20" />
         </radialGradient>
         <radialGradient id={shine} cx="32%" cy="24%" r="42%">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.28" />
@@ -72,7 +72,7 @@ function LogoMark({ id, size }: { id: string; size: number }) {
       <polygon
         points="50,14 80,32 80,68 50,86 20,68 20,32"
         fill="none"
-        stroke="#fbcfe8"
+        stroke="#c5e2cd"
         strokeWidth="1.15"
         strokeLinejoin="round"
         opacity="0.55"
@@ -103,7 +103,7 @@ function LogoMark({ id, size }: { id: string; size: number }) {
         className="logo-wisp"
         d="M66 24c6-6 5-13-2-12"
         fill="none"
-        stroke="#fce7f3"
+        stroke="#daf1de"
         strokeWidth="2.4"
         strokeLinecap="round"
       />
@@ -111,7 +111,7 @@ function LogoMark({ id, size }: { id: string; size: number }) {
         className="logo-wisp logo-wisp-delay"
         d="M30 72c-5-3-9 2-5 6"
         fill="none"
-        stroke="#f9a8d4"
+        stroke="#8eb69b"
         strokeWidth="2.2"
         strokeLinecap="round"
       />
@@ -142,13 +142,13 @@ export function Logo({
       <div className="flex min-w-0 flex-col leading-none">
         <span
           className={cn(
-            "font-sans font-black tracking-[-0.045em]",
+            "font-logo font-black tracking-[-0.045em]",
             s.text,
-            isLight ? "text-white" : "text-neutral-900"
+            isLight ? "text-white" : "text-ink"
           )}
         >
           Smoke
-          <span className="logo-word-cali bg-gradient-to-r from-pink-300 via-brand-500 to-fuchsia-600 bg-clip-text text-transparent">
+          <span className="logo-word-cali bg-gradient-to-r from-[#daf1de] via-gold to-[#8eb69b] bg-clip-text text-transparent">
             Cali
           </span>
         </span>
@@ -157,7 +157,7 @@ export function Logo({
             className={cn(
               "logo-tagline mt-1.5 font-semibold uppercase tracking-[0.28em]",
               s.tagline,
-              isLight ? "text-white/70" : "text-neutral-400"
+              isLight ? "text-white/55" : "text-graphite/60"
             )}
           >
             {SITE_TAGLINE}

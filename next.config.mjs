@@ -2,18 +2,12 @@
 const nextConfig = {
   output: "export",
   trailingSlash: true,
-  allowedDevOrigins: [
-    "localhost",
-    "127.0.0.1",
-    "192.168.1.17",
-    "192.168.1.12",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://192.168.1.17:3000",
-    "http://192.168.1.12:3000",
-  ],
+  allowedDevOrigins: ["localhost", "127.0.0.1"],
   images: {
+    // Static export (GitHub Pages) cannot run the Next image optimizer.
+    // Assets are pre-compressed WebP; keep unoptimized and rely on thumbs + sizes.
     unoptimized: true,
+    qualities: [70, 72, 75, 80, 82, 88],
   },
   experimental: {
     optimizePackageImports: ["lucide-react"],
