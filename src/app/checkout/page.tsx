@@ -3,30 +3,30 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { MessageCircle, CreditCard, ArrowLeft, Loader2 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/lib/utils";
 import { productImageClass } from "@/lib/product";
 import { whatsappOrderNumber } from "@/data/social";
-import { checkoutCreateUrl } from "@/lib/payments";
-import { openStripeCheckoutWindow, STRIPE_MESSAGE } from "@/lib/stripe-window";
-import { StripePayOverlay } from "@/components/payments/StripePayOverlay";
-import { COURIER_FEE_GBP, COURIER_LABEL, COURIER_NOTE, orderTotal } from "@/lib/shipping";
+import { checkoutCreateUrl, LAST_ORDER_KEY } from "@/lib/payments";
+import { VivaPayOverlay } from "@/components/payments/VivaPayOverlay";
+import { SecuredByViva } from "@/components/payments/VivaBadge";
+import { CheckoutLegalLinks } from "@/components/legal/LegalLinks";
+import { DELIVERY_LABEL, DELIVERY_NOTE, formatWeight, quoteForCart } from "@/lib/shipping";
 
-type OverlayStatus = "preparing" | "waiting" | "blocked" | "error";
+type OverlayStatus = "preparing" | "redirecting" | "error";
 
 export default function CheckoutPage() {
-  const { items, subtotal, clearCart, ready } = useCart();
-  const router = useRouter();
+  const { items, subtotal, ready } = useCart();
   const [submitting, setSubmitting] = useState(false);
   const [overlayOpen, setOverlayOpen] = useState(false);
   const [overlayStatus, setOverlayStatus] = useState<OverlayStatus>("preparing");
   const [overlayMessage, setOverlayMessage] = useState("");
   const [cancelNote, setCancelNote] = useState(false);
 
-  const shipping = COURIER_FEE_GBP;
-  const total = orderTotal(subtotal);
+  const delivery = quoteForCart(items);
+  const shipping = delivery.price;
+  const total = subtotal + shipping;
 
   const whatsappHref = useMemo(() => {
     const lines = items.map(
@@ -38,39 +38,27 @@ export default function CheckoutPage() {
       ...lines,
       "",
       `Subtotal: ${formatPrice(subtotal)}`,
-      `${COURIER_LABEL}: ${formatPrice(shipping)}`,
+      `${DELIVERY_LABEL}${delivery.band ? ` (${delivery.band.name})` : ""}: ${formatPrice(shipping)}`,
       `Total: ${formatPrice(total)}`,
     ].join("\n");
     return `https://wa.me/${whatsappOrderNumber}?text=${encodeURIComponent(text)}`;
-  }, [items, subtotal, shipping, total]);
+  }, [items, subtotal, shipping, total, delivery.band]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get("checkout") === "cancel") {
-      setCancelNote(true);
-      if (window.opener) {
-        window.opener.postMessage({ type: STRIPE_MESSAGE.cancel }, window.location.origin);
-        window.close();
-      }
-    }
-  }, []);
+    if (params.get("checkout") === "cancel") setCancelNote(true);
 
-  useEffect(() => {
-    function onMessage(event: MessageEvent) {
-      if (event.origin !== window.location.origin) return;
-      if (event.data?.type === STRIPE_MESSAGE.success) {
-        clearCart();
-        router.push("/checkout/success");
-      }
-      if (event.data?.type === STRIPE_MESSAGE.cancel) {
+    // If the customer presses Back from Viva.com, the browser may restore this page with the
+    // "redirecting" overlay still showing. Reset it so they can try again.
+    function onPageShow(event: PageTransitionEvent) {
+      if (event.persisted) {
         setOverlayOpen(false);
         setSubmitting(false);
-        setCancelNote(true);
       }
     }
-    window.addEventListener("message", onMessage);
-    return () => window.removeEventListener("message", onMessage);
-  }, [clearCart, router]);
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, []);
 
   if (!ready) {
     return (
@@ -85,12 +73,12 @@ export default function CheckoutPage() {
       <div className="py-20 text-center container-site">
         <h1 className="font-display text-3xl font-bold text-surface-950 mb-3">Checkout</h1>
         <p className="text-surface-800/60 mb-8 max-w-md mx-auto">
-          Add products to your cart first. Then enter your details here and Stripe&apos;s official
-          payment page will open so you can pay by card.
+          Add products to your cart first. Then enter your details here and you will be taken to
+          Viva.com&apos;s secure payment page to pay by card.
         </p>
         <Link
           href="/shop"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-brand-600 text-white font-black rounded-xl hover:bg-brand-500"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-ink text-white font-semibold rounded-xl hover:bg-graphite"
         >
           Shop now
         </Link>
@@ -116,7 +104,7 @@ export default function CheckoutPage() {
       setOverlayOpen(true);
       setOverlayStatus("error");
       setOverlayMessage(
-        "Card checkout is being connected. Add the shop Stripe secret on the checkout worker, then try again."
+        "Card checkout is being connected. Please order on WhatsApp for now, or try again soon."
       );
       return;
     }
@@ -130,7 +118,6 @@ export default function CheckoutPage() {
     const payload = {
       customerEmail: customer.email,
       notes: customer.notes,
-      domain: window.location.origin,
       shippingAddress: {
         name: customer.name,
         phone: customer.phone,
@@ -138,12 +125,11 @@ export default function CheckoutPage() {
         city: customer.city,
         postcode: customer.postcode,
       },
+      // Only product IDs and quantities are sent. Prices and delivery are worked out
+      // again on the server, so the total can never be chosen from the browser.
       items: items.map((i) => ({
-        title: i.product.name,
-        quantity: i.quantity,
-        unitPrice: i.product.price,
         productId: i.product.id,
-        minOrder: i.product.minOrder || 1,
+        quantity: i.quantity,
       })),
     };
 
@@ -155,33 +141,32 @@ export default function CheckoutPage() {
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok || data.status !== "success" || !data.url) {
-        throw new Error(data.message || "Stripe checkout is unavailable right now.");
+        throw new Error(data.message || "Card checkout is unavailable right now.");
       }
 
       sessionStorage.setItem(
-        "calipacks-last-order",
+        LAST_ORDER_KEY,
         JSON.stringify({
           name: customer.name,
           email: customer.email,
-          total,
+          total: typeof data.total === "number" ? data.total : total,
+          reference: data.reference || "",
+          orderCode: data.orderCode || "",
         })
       );
 
-      const popup = openStripeCheckoutWindow(data.url);
-      if (!popup) {
-        setOverlayStatus("blocked");
-        return;
-      }
-      setOverlayStatus("waiting");
+      // Viva recommends a normal full-page redirect (not a pop-up or iframe).
+      setOverlayStatus("redirecting");
+      window.location.assign(data.url);
     } catch (err) {
       const networkFail = err instanceof TypeError;
       setOverlayStatus("error");
       setOverlayMessage(
         networkFail
-          ? "Payment server is not running. In a second terminal run npm run checkout, then add the shop Stripe secret key to cloudflare/checkout-worker/.dev.vars"
+          ? "Payment server is not running. In a second terminal run npm run checkout, then add the Viva demo credentials to cloudflare/checkout-worker/.dev.vars (see VIVA-SETUP.md)"
           : err instanceof Error
             ? err.message
-            : "Could not start Stripe checkout."
+            : "Could not start card checkout."
       );
       setSubmitting(false);
     }
@@ -189,7 +174,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="py-10 md:py-14">
-      <StripePayOverlay
+      <VivaPayOverlay
         open={overlayOpen}
         status={overlayStatus}
         message={overlayMessage}
@@ -201,15 +186,18 @@ export default function CheckoutPage() {
       <div className="container-site max-w-5xl">
         <Link
           href="/cart"
-          className="inline-flex items-center gap-2 text-sm text-surface-800/60 hover:text-brand-600 mb-6"
+          className="inline-flex items-center gap-2 text-sm text-surface-800/60 hover:text-brand-700 mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to cart
         </Link>
 
         <h1 className="font-display text-3xl font-bold text-surface-950 mb-2">Secure checkout</h1>
-        <p className="mb-8 text-sm font-semibold text-surface-800/55">
-          Enter your delivery details, then Pay Now opens Stripe&apos;s official checkout so you can pay by card.
+        <p className="mb-4 text-sm font-semibold text-surface-800/55">
+          Enter your delivery details, then Pay Now takes you to Viva.com’s secure card payment page.
+        </p>
+        <p className="mb-8 rounded-xl border border-ink/10 bg-brand-50 px-4 py-3 text-sm font-semibold text-ink">
+          18+ only — by placing an order you confirm you are aged 18 or over.
         </p>
 
         {cancelNote && (
@@ -221,8 +209,6 @@ export default function CheckoutPage() {
         <div className="grid lg:grid-cols-5 gap-8">
           <form onSubmit={handleSubmit} className="lg:col-span-3 space-y-4">
             <div className="bg-white rounded-2xl border border-surface-200 p-6 space-y-4 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-16 h-16 bg-brand-500/20 rounded-br-full" />
-              <div className="absolute bottom-0 right-0 w-16 h-16 bg-fuchsia-500/15 rounded-tl-full" />
               <h2 className="font-semibold text-lg relative">Delivery details</h2>
               <div className="grid sm:grid-cols-2 gap-4 relative">
                 <div className="sm:col-span-2">
@@ -234,7 +220,7 @@ export default function CheckoutPage() {
                     name="name"
                     required
                     autoComplete="name"
-                    className="w-full px-4 py-3 rounded-xl border border-surface-200 focus:border-brand-300 focus:ring-2 focus:ring-brand-200 focus:outline-none text-sm"
+                    className="w-full px-4 py-3 rounded-xl border border-surface-200 focus:border-gold focus:ring-2 focus:ring-gold/25 focus:outline-none text-sm"
                   />
                 </div>
                 <div>
@@ -247,7 +233,7 @@ export default function CheckoutPage() {
                     type="email"
                     required
                     autoComplete="email"
-                    className="w-full px-4 py-3 rounded-xl border border-surface-200 focus:border-brand-300 focus:ring-2 focus:ring-brand-200 focus:outline-none text-sm"
+                    className="w-full px-4 py-3 rounded-xl border border-surface-200 focus:border-gold focus:ring-2 focus:ring-gold/25 focus:outline-none text-sm"
                   />
                 </div>
                 <div>
@@ -260,7 +246,7 @@ export default function CheckoutPage() {
                     type="tel"
                     required
                     autoComplete="tel"
-                    className="w-full px-4 py-3 rounded-xl border border-surface-200 focus:border-brand-300 focus:ring-2 focus:ring-brand-200 focus:outline-none text-sm"
+                    className="w-full px-4 py-3 rounded-xl border border-surface-200 focus:border-gold focus:ring-2 focus:ring-gold/25 focus:outline-none text-sm"
                   />
                 </div>
                 <div className="sm:col-span-2">
@@ -272,7 +258,7 @@ export default function CheckoutPage() {
                     name="address"
                     required
                     autoComplete="street-address"
-                    className="w-full px-4 py-3 rounded-xl border border-surface-200 focus:border-brand-300 focus:ring-2 focus:ring-brand-200 focus:outline-none text-sm"
+                    className="w-full px-4 py-3 rounded-xl border border-surface-200 focus:border-gold focus:ring-2 focus:ring-gold/25 focus:outline-none text-sm"
                   />
                 </div>
                 <div>
@@ -284,7 +270,7 @@ export default function CheckoutPage() {
                     name="city"
                     required
                     autoComplete="address-level2"
-                    className="w-full px-4 py-3 rounded-xl border border-surface-200 focus:border-brand-300 focus:ring-2 focus:ring-brand-200 focus:outline-none text-sm"
+                    className="w-full px-4 py-3 rounded-xl border border-surface-200 focus:border-gold focus:ring-2 focus:ring-gold/25 focus:outline-none text-sm"
                   />
                 </div>
                 <div>
@@ -296,7 +282,7 @@ export default function CheckoutPage() {
                     name="postcode"
                     required
                     autoComplete="postal-code"
-                    className="w-full px-4 py-3 rounded-xl border border-surface-200 focus:border-brand-300 focus:ring-2 focus:ring-brand-200 focus:outline-none text-sm"
+                    className="w-full px-4 py-3 rounded-xl border border-surface-200 focus:border-gold focus:ring-2 focus:ring-gold/25 focus:outline-none text-sm"
                   />
                 </div>
                 <div className="sm:col-span-2">
@@ -307,7 +293,7 @@ export default function CheckoutPage() {
                     id="notes"
                     name="notes"
                     rows={3}
-                    className="w-full px-4 py-3 rounded-xl border border-surface-200 focus:border-brand-300 focus:ring-2 focus:ring-brand-200 focus:outline-none text-sm resize-none"
+                    className="w-full px-4 py-3 rounded-xl border border-surface-200 focus:border-gold focus:ring-2 focus:ring-gold/25 focus:outline-none text-sm resize-none"
                   />
                 </div>
               </div>
@@ -316,22 +302,21 @@ export default function CheckoutPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-gradient-to-r from-[#635BFF] via-[#7A73FF] to-brand-600 text-white font-black shadow-[0_10px_28px_rgba(99,91,255,0.4)] hover:brightness-110 transition disabled:opacity-70"
+              className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-gold text-ink font-bold shadow-[0_10px_26px_rgba(142,182,155,0.3)] hover:bg-brand-400 transition disabled:opacity-70"
             >
               {submitting ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <CreditCard className="w-5 h-5" />
               )}
-              {submitting ? "Opening Stripe…" : "Pay Now"}
-              <span className="rounded-md bg-white/15 px-1.5 py-0.5 text-[10px] font-black tracking-wide">
-                Stripe
-              </span>
+              {submitting ? "Opening checkout…" : "Pay Now · 18+"}
             </button>
             <p className="text-center text-xs font-semibold text-surface-800/45">
-              Card details are entered only on checkout.stripe.com — never on this website.
-              Courier service is added on Stripe as <span className="text-brand-700">£2.50 GBP</span>.
+              For customers aged 18 and over. Card details are entered only on the payment page —
+              never on this website. Delivery is calculated by order weight and shown above.
             </p>
+            <CheckoutLegalLinks />
+            <SecuredByViva tone="light" className="justify-center" />
 
             <a
               href={whatsappHref}
@@ -350,7 +335,7 @@ export default function CheckoutPage() {
               <ul className="space-y-3 mb-4 max-h-64 overflow-y-auto">
                 {items.map((item) => (
                   <li key={item.product.id} className="flex gap-3">
-                    <div className="relative w-14 h-14 rounded-lg overflow-hidden bg-white shrink-0 ring-1 ring-brand-100">
+                    <div className="relative w-14 h-14 rounded-lg overflow-hidden bg-white shrink-0 ring-1 ring-black/5">
                       <Image
                         src={item.product.image}
                         alt=""
@@ -375,7 +360,14 @@ export default function CheckoutPage() {
                   <dd>{formatPrice(subtotal)}</dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt className="text-surface-800/60">{COURIER_LABEL}</dt>
+                  <dt className="text-surface-800/60">
+                    {DELIVERY_LABEL}
+                    {delivery.band && (
+                      <span className="block text-xs text-surface-800/45">
+                        {delivery.band.name} · approx. {formatWeight(delivery.grams)}
+                      </span>
+                    )}
+                  </dt>
                   <dd>{formatPrice(shipping)}</dd>
                 </div>
                 <div className="flex justify-between font-bold text-base pt-2">
@@ -384,10 +376,10 @@ export default function CheckoutPage() {
                 </div>
               </dl>
               <p className="text-xs font-bold text-brand-700 mt-3 rounded-lg bg-brand-50 px-3 py-2">
-                {COURIER_NOTE}
+                {DELIVERY_NOTE}
               </p>
               <p className="text-xs text-surface-800/45 mt-4">
-                Estimated delivery: 2–3 business days across the UK.
+                Dispatched within 2–3 business days, then 2–3 working days with Royal Mail Tracked 48.
               </p>
             </div>
           </aside>

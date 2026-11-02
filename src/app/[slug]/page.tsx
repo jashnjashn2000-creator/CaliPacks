@@ -1,23 +1,23 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { pageUrl } from "@/lib/site";
+import { SellerDetails } from "@/components/legal/SellerDetails";
+import { DeliveryTable } from "@/components/legal/DeliveryTable";
+import { TermsContent } from "@/components/legal/TermsContent";
+import { ReturnsContent } from "@/components/legal/ReturnsContent";
 
 const pages: Record<string, { title: string; content: string }> = {
-  privacy: {
-    title: "Privacy Policy",
-    content: "Smoke Cali is committed to protecting your privacy. We collect only the information necessary to process your orders and improve your experience. We do not sell or share your personal data with third parties except as required to fulfil your orders.",
-  },
   terms: {
-    title: "Terms of Service",
-    content: "By using the Smoke Cali website, you agree to these terms. All products are sold subject to availability. Prices are listed in GBP and exclude VAT where applicable. Smoke Cali reserves the right to modify prices and product availability without notice.",
+    title: "Terms & Conditions",
+    content: "Terms and conditions for orders from SMOKE CALI LTD: 18+ only, ordering and contract formation, pricing, card payments processed securely by Viva.com, UK delivery by weight, your 14-day right to cancel, faulty goods and governing law.",
   },
   shipping: {
     title: "Shipping Policy",
-    content: "We dispatch in-stock orders within 2–3 business days. UK courier service is £2.50 GBP on every order and is added at Stripe checkout. Tracking information is provided via email once your order ships.",
+    content: "UK delivery by Royal Mail Tracked 48 from £4.00. Delivery is charged once per order and calculated at checkout by the total weight of your basket. In-stock orders are dispatched within 2–3 business days and tracking is emailed when your order ships.",
   },
   returns: {
-    title: "Returns Policy",
-    content: "Due to the custom nature of our packaging products, we accept returns only for defective or damaged items. Please contact us within 7 days of delivery with photos of the issue. We will arrange a replacement or refund at our discretion.",
+    title: "Returns & Refunds",
+    content: "Cancel within 14 days of receiving your order for a refund on unopened, unused goods (you pay return postage), or report faulty or damaged goods and we will repair, replace or refund under the Consumer Rights Act 2015.",
   },
 };
 
@@ -37,6 +37,11 @@ export async function generateMetadata({ params }: LegalPageProps): Promise<Meta
     title: page.title,
     description: page.content.slice(0, 155),
     alternates: { canonical: pageUrl(`/${slug}`) },
+    openGraph: {
+      url: pageUrl(`/${slug}`),
+      title: `${page.title} | Smoke Cali`,
+      description: page.content.slice(0, 155),
+    },
   };
 }
 
@@ -51,7 +56,15 @@ export default async function LegalPage({ params }: LegalPageProps) {
         <h1 className="text-3xl font-bold text-surface-900 tracking-tight mb-6">
           {page.title}
         </h1>
-        <p className="text-surface-800/70 leading-relaxed">{page.content}</p>
+        {slug === "terms" ? (
+          <TermsContent />
+        ) : slug === "returns" ? (
+          <ReturnsContent />
+        ) : (
+          <p className="text-surface-800/70 leading-relaxed">{page.content}</p>
+        )}
+        {slug === "shipping" && <DeliveryTable />}
+        <SellerDetails />
       </div>
     </div>
   );

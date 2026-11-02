@@ -1,101 +1,118 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight, Clock, Layers, MapPin, Tag, Truck } from "lucide-react";
 import { Product } from "@/types";
+import { RotatingPackTiles } from "@/components/home/RotatingPackTiles";
 
 interface HeroBannerSliderProps {
   products: Product[];
 }
 
-export function HeroBannerSlider({ products }: HeroBannerSliderProps) {
-  const tiles = products.slice(0, 4);
+const HIGHLIGHTS = [
+  { icon: Tag, label: "£0.20 per pack" },
+  { icon: Layers, label: "Min 50 pcs" },
+  { icon: Truck, label: "UK delivery from £4.00" },
+  { icon: Clock, label: "2–3 day delivery" },
+];
 
+export function HeroBannerSlider({ products }: HeroBannerSliderProps) {
   return (
-    <section
-      className="relative w-full overflow-hidden bg-gradient-to-b from-brand-50 via-white to-brand-50/40 py-3 sm:py-5"
-      aria-label="Smoke Cali featured packs"
-    >
-      <div className="container-site relative">
-        <div className="relative overflow-hidden rounded-[1.5rem] border border-brand-200/40 bg-black shadow-[0_24px_70px_rgba(15,10,20,0.35)] sm:rounded-3xl">
-          <div className="absolute inset-0">
-            <picture>
-              <source
-                media="(max-width: 767px)"
-                srcSet="/hero-cali-packs-mobile.webp"
-                type="image/webp"
-              />
-              <img
-                src="/hero-cali-packs.webp"
-                alt="Smoke Cali Cali Packs wall"
-                width={1280}
-                height={720}
-                fetchPriority="high"
-                decoding="async"
-                className="absolute inset-0 h-full w-full object-cover object-center"
-              />
-            </picture>
-            <div className="absolute inset-0 bg-gradient-to-r from-black/92 via-black/70 to-black/30" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/25" />
+    <section className="relative w-full py-4 sm:py-6" aria-label="Smoke Cali featured packs">
+      <div className="container-site">
+        <div className="grid gap-3 sm:gap-4 lg:grid-cols-[1.65fr_1fr]">
+          <div className="relative isolate flex min-h-[520px] overflow-hidden rounded-[1.75rem] bg-ink text-white shadow-[0_30px_70px_rgba(5,31,32,0.28)] lg:min-h-[580px]">
+            <Image
+              src="/brand-showcase.webp"
+              alt="Smoke Cali studio product photography"
+              fill
+              priority
+              fetchPriority="high"
+              sizes="(max-width: 1023px) 100vw, 760px"
+              quality={72}
+              className="-z-20 object-cover object-[70%_center] saturate-[.78] brightness-[0.92] contrast-[1.05]"
+            />
+            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/80 to-ink/25 lg:bg-gradient-to-r lg:from-ink lg:via-ink/85 lg:to-ink/20" />
+            <div className="absolute -left-20 -top-20 -z-10 h-72 w-72 rounded-full bg-gold/20 blur-3xl" />
+
+            <span className="absolute right-4 top-4 rounded-full border border-white/20 bg-ink/40 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-cream backdrop-blur-md sm:right-6 sm:top-6">
+              111 designs in stock
+            </span>
+
+            <div className="mt-auto flex w-full flex-col px-6 pb-8 pt-24 sm:px-10 sm:pb-10 lg:my-auto lg:max-w-[34rem] lg:px-12 lg:py-14">
+              <p className="mb-5 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.3em] text-cream/90 sm:text-xs">
+                <span className="h-2 w-2 rounded-full bg-gold" />
+                Smoke Cali · Manchester
+              </p>
+              <h1 className="font-serif text-[2.6rem] font-normal leading-[1.02] tracking-tight sm:text-6xl lg:text-[4.1rem]">
+                111 Cali Packs.
+                <span className="block text-gold">
+                  Studio HD.
+                </span>
+              </h1>
+              <p className="mt-5 max-w-md text-sm leading-relaxed text-white/75 sm:text-base">
+                £0.20 per pack · Minimum 50 pcs. Smell-proof 3.5g designs photographed for the web.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Link
+                  href="/shop/cali-packs"
+                  className="group inline-flex items-center gap-3 rounded-full bg-gold py-1.5 pl-6 pr-1.5 text-sm font-bold text-ink shadow-[0_12px_30px_rgba(142,182,155,0.35)] transition hover:bg-brand-400 sm:text-base"
+                >
+                  Shop Cali Packs
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-white text-ink transition group-hover:rotate-45">
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </Link>
+                <Link
+                  href="/custom-orders"
+                  className="inline-flex items-center rounded-full border border-white/40 bg-white/5 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:border-white hover:bg-white/10 sm:text-base"
+                >
+                  Get a Quote
+                </Link>
+              </div>
+
+              <ul className="mt-9 grid grid-cols-2 gap-x-6 gap-y-3 border-t border-white/15 pt-6 sm:flex sm:flex-wrap">
+                {HIGHLIGHTS.map(({ icon: Icon, label }) => (
+                  <li
+                    key={label}
+                    className="flex items-center gap-2 whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.14em] text-white/80 sm:text-xs"
+                  >
+                    <Icon className="h-3.5 w-3.5 shrink-0 text-teal" />
+                    {label}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          <div className="relative z-10 grid min-h-[420px] lg:min-h-[500px] lg:grid-cols-[1.05fr_0.95fr]">
-            <div className="flex flex-col justify-center px-5 pb-6 pt-10 sm:px-8 sm:py-12 lg:px-11">
-              <div className="max-w-lg">
-                <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.24em] text-brand-200 sm:text-xs">
-                  Smoke Cali · Manchester
-                </p>
-                <h1 className="font-display text-3xl font-black leading-[1.08] tracking-tight text-white drop-shadow-lg sm:text-4xl lg:text-[2.85rem]">
-                  111 Cali Packs. Studio HD.
-                </h1>
-                <p className="mb-7 mt-3 max-w-md text-sm font-semibold leading-relaxed text-white/80 sm:text-base">
-                  £0.20 per pack · Minimum 50 pcs. Smell-proof 3.5g designs photographed for the web.
-                </p>
-                <div className="flex flex-wrap gap-2.5 sm:gap-3">
-                  <Link
-                    href="/shop/cali-packs"
-                    className="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-brand-600/40 transition hover:bg-brand-500 sm:text-base"
-                  >
-                    Shop Cali Packs
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <Link
-                    href="/custom-orders"
-                    className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-white/95 px-5 py-3 text-sm font-extrabold text-black transition hover:bg-white sm:text-base"
-                  >
-                    Get a Quote
-                  </Link>
+          <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-1 lg:grid-rows-[1.1fr_1fr]">
+            <Link
+              href="/contact"
+              className="group relative isolate flex min-h-[220px] overflow-hidden rounded-[1.75rem] bg-ink text-white shadow-[0_20px_50px_rgba(5,31,32,0.2)]"
+            >
+              <Image
+                src="/cali-shop-hero.webp"
+                alt="Smoke Cali shop front in Manchester at night"
+                fill
+                sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 460px"
+                quality={75}
+                className="-z-20 object-cover object-[60%_center] transition duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent" />
+              <div className="mt-auto flex w-full items-end justify-between gap-3 p-5">
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-teal">Visit the shop</p>
+                  <p className="mt-1 flex items-center gap-1.5 text-sm font-semibold sm:text-base">
+                    <MapPin className="h-4 w-4 text-gold" />
+                    5 Sagar Street · M8 8EU
+                  </p>
                 </div>
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/15 backdrop-blur-sm transition group-hover:bg-gold">
+                  <ArrowUpRight className="h-4 w-4" />
+                </span>
               </div>
-            </div>
+            </Link>
 
-            <div className="relative px-3 pb-6 pt-2 sm:p-5 lg:p-6 lg:pl-2">
-              <div className="mb-2 flex items-center justify-between px-1 text-[10px] font-black uppercase tracking-[0.16em] text-white/70 sm:text-xs">
-                <span>Featured packs</span>
-                <span>111 designs · £0.20 · min 50</span>
-              </div>
-              <div className="grid grid-cols-2 gap-2 sm:min-h-[340px] sm:gap-3.5 lg:min-h-[390px]">
-                {tiles.map((product, index) => (
-                  <Link
-                    key={product.id}
-                    href={`/product/${product.slug}`}
-                    className={`relative aspect-square overflow-hidden rounded-xl border border-white/20 bg-white sm:rounded-2xl sm:aspect-auto sm:min-h-[160px] lg:min-h-[185px]${
-                      index >= 2 ? " max-sm:hidden" : ""
-                    }`}
-                  >
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      sizes="(max-width: 639px) 42vw, (max-width: 1024px) 28vw, 250px"
-                      quality={70}
-                      loading="lazy"
-                      decoding="async"
-                      className="pack-fill"
-                    />
-                  </Link>
-                ))}
-              </div>
-            </div>
+            <RotatingPackTiles products={products} />
           </div>
         </div>
       </div>

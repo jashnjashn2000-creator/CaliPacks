@@ -81,31 +81,28 @@ export default function ContactPage() {
           "/products/pack-088.webp",
         ]}
       />
-      <div className="bg-gradient-to-b from-white via-brand-50/40 to-white py-10 md:py-14">
+      <div className="py-10 md:py-14">
         <div className="container-site">
         <div className="max-w-2xl mx-auto text-center mb-10">
-          <h2 className="font-display text-3xl md:text-4xl font-extrabold text-surface-950 tracking-tight mb-3">
-            How can we <span className="text-gradient-pink">help?</span>
+          <h2 className="font-serif text-3xl md:text-4xl font-normal text-ink tracking-tight mb-3">
+            How can we help?
           </h2>
-          <p className="text-surface-800/60 font-medium text-sm md:text-base">
+          <p className="text-graphite/65 font-medium text-sm md:text-base">
             Stock, wholesale or order questions? Call or message — Mon–Fri.
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto mb-12 items-stretch">
-          <aside className="relative overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-brand-950 via-brand-800 to-fuchsia-700 p-5 shadow-[0_22px_60px_rgba(190,24,93,0.3)] sm:p-7">
-            <div className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full bg-white/10 blur-2xl" />
-            <div className="pointer-events-none absolute -bottom-20 -left-12 h-56 w-56 rounded-full bg-brand-300/15 blur-2xl" />
-
+          <aside className="relative overflow-hidden rounded-[1.75rem] bg-ink p-5 shadow-[0_22px_60px_rgba(5,31,32,0.2)] sm:p-7">
             <div className="relative mb-6">
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-brand-100">
-                <span className="h-2 w-2 rounded-full bg-brand-300 shadow-[0_0_10px_rgba(249,168,212,0.9)]" />
+              <span className="inline-flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.26em] text-gold">
+                <span className="h-px w-8 bg-gold" />
                 Contact information
               </span>
-              <h2 className="mt-4 font-display text-3xl font-black text-white sm:text-4xl">
+              <h2 className="mt-4 font-serif text-4xl font-normal text-white sm:text-5xl">
                 Let&apos;s talk
               </h2>
-              <p className="mt-2 max-w-md text-sm font-semibold leading-relaxed text-white/70">
+              <p className="mt-2 max-w-md text-sm font-medium leading-relaxed text-white/65">
                 Call, email or visit us during opening hours. Our Manchester
                 team is ready to help with products, stock and orders.
               </p>
@@ -135,19 +132,19 @@ export default function ContactPage() {
             ].map((item) => (
               <div
                 key={item.label}
-                className="group flex items-start gap-4 rounded-2xl border border-white/15 bg-white/10 p-4 shadow-lg backdrop-blur-sm transition hover:-translate-y-0.5 hover:bg-white/15"
+                className="group flex items-start gap-4 rounded-2xl border border-white/10 bg-graphite p-4 transition hover:-translate-y-0.5 hover:border-gold/40"
               >
-                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-white text-brand-700 shadow-[0_8px_22px_rgba(0,0,0,0.18)]">
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-ink text-gold ring-1 ring-gold/30">
                   <item.icon className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-200">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gold">
                     {item.label}
                   </p>
                   {item.href ? (
                     <a
                       href={item.href}
-                      className="mt-1 block break-words text-sm font-extrabold leading-relaxed text-white transition hover:text-brand-200 sm:text-base"
+                      className="mt-1 block break-words text-sm font-extrabold leading-relaxed text-white transition hover:text-gold sm:text-base"
                       target={item.href.startsWith("http") ? "_blank" : undefined}
                       rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
                     >
@@ -174,7 +171,7 @@ export default function ContactPage() {
                   rel="noopener noreferrer"
                   aria-label={card.label}
                   title={card.handle}
-                  className="h-9 w-9 overflow-hidden rounded-full shadow-lg transition-transform hover:scale-110"
+                  className="h-9 w-9 overflow-hidden rounded-full ring-1 ring-white/15 transition hover:scale-110 hover:ring-gold"
                 >
                   <card.icon className="h-9 w-9" />
                 </a>
@@ -184,14 +181,10 @@ export default function ContactPage() {
           </aside>
 
           <form
-            className="relative bg-white rounded-2xl border-2 border-brand-200 p-5 md:p-7 space-y-3.5 overflow-hidden shadow-xl shadow-brand-100/50"
+            className="relative bg-white rounded-2xl border border-brand-200 p-5 md:p-7 space-y-3.5 overflow-hidden shadow-[0_18px_50px_rgba(5,31,32,0.06)]"
             onSubmit={handleSubmit}
           >
-            <div className="absolute top-0 left-0 w-16 h-16 bg-brand-500/25 rounded-br-[2rem]" />
-            <div className="absolute top-0 right-0 w-14 h-14 bg-fuchsia-400/20 rounded-bl-[2rem]" />
-            <div className="absolute bottom-0 right-0 w-16 h-16 bg-rose-400/20 rounded-tl-[2rem]" />
-
-            <h2 className="font-extrabold text-lg relative text-surface-950">Send a message</h2>
+            <h2 className="font-serif text-2xl font-normal relative text-ink">Send a message</h2>
             <div className="grid sm:grid-cols-2 gap-3 relative">
               <div>
                 <label htmlFor="name" className="block text-xs font-bold mb-1 text-surface-800/70">
@@ -202,7 +195,7 @@ export default function ContactPage() {
                     name="name"
                     type="text"
                     required
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-brand-100 focus:border-brand-400 focus:ring-2 focus:ring-brand-100 focus:outline-none text-sm"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-surface-200 focus:border-gold focus:ring-2 focus:ring-gold/25 focus:outline-none text-sm"
                 />
               </div>
               <div>
@@ -214,7 +207,7 @@ export default function ContactPage() {
                     name="email"
                     type="email"
                     required
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-brand-100 focus:border-brand-400 focus:ring-2 focus:ring-brand-100 focus:outline-none text-sm"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-surface-200 focus:border-gold focus:ring-2 focus:ring-gold/25 focus:outline-none text-sm"
                 />
               </div>
             </div>
@@ -227,7 +220,7 @@ export default function ContactPage() {
                   name="phone"
                   type="tel"
                   placeholder={contactInfo.phone}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-brand-100 focus:border-brand-400 focus:ring-2 focus:ring-brand-100 focus:outline-none text-sm"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-surface-200 focus:border-gold focus:ring-2 focus:ring-gold/25 focus:outline-none text-sm"
               />
             </div>
             <div className="relative">
@@ -239,7 +232,7 @@ export default function ContactPage() {
                   name="subject"
                   type="text"
                   required
-                className="w-full px-3.5 py-2.5 rounded-xl border border-brand-100 focus:border-brand-400 focus:ring-2 focus:ring-brand-100 focus:outline-none text-sm"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-surface-200 focus:border-gold focus:ring-2 focus:ring-gold/25 focus:outline-none text-sm"
               />
             </div>
             <div className="relative">
@@ -251,12 +244,12 @@ export default function ContactPage() {
                   name="message"
                   rows={4}
                   required
-                className="w-full px-3.5 py-2.5 rounded-xl border border-brand-100 focus:border-brand-400 focus:ring-2 focus:ring-brand-100 focus:outline-none text-sm resize-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-surface-200 focus:border-gold focus:ring-2 focus:ring-gold/25 focus:outline-none text-sm resize-none"
               />
             </div>
             <button
               type="submit"
-              className="relative w-full py-3 bg-brand-600 text-white font-extrabold rounded-xl hover:bg-brand-500 transition-colors shadow-md shadow-brand-200"
+              className="relative w-full py-3 bg-ink text-white font-semibold rounded-xl hover:bg-gold hover:text-ink transition-colors"
             >
               Send Message
             </button>

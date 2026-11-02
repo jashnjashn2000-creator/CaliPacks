@@ -9,6 +9,10 @@ interface ShopCategoriesNavProps {
   isNew?: boolean;
 }
 
+const pillBase = "rounded-full border px-4 py-2 text-sm font-semibold transition";
+const pillActive = "border-ink bg-ink text-white";
+const pillIdle = "border-brand-200 bg-white text-ink/70 hover:border-gold hover:text-ink";
+
 export function ShopCategoriesNav({ activeSlug, isNew = false }: ShopCategoriesNavProps) {
   return (
     <nav
@@ -18,23 +22,13 @@ export function ShopCategoriesNav({ activeSlug, isNew = false }: ShopCategoriesN
       <div className="flex min-w-max gap-2 px-1">
         <Link
           href="/shop/"
-          className={cn(
-            "rounded-full border-2 px-4 py-2 text-sm font-black transition",
-            !activeSlug && !isNew
-              ? "border-black bg-black text-white"
-              : "border-brand-200 bg-white text-black/70 hover:border-brand-400 hover:text-brand-700"
-          )}
+          className={cn(pillBase, !activeSlug && !isNew ? pillActive : pillIdle)}
         >
           All
         </Link>
         <Link
           href="/shop/?filter=new"
-          className={cn(
-            "rounded-full border-2 px-4 py-2 text-sm font-black transition",
-            isNew
-              ? "border-brand-600 bg-brand-600 text-white"
-              : "border-brand-200 bg-white text-black/70 hover:border-brand-400 hover:text-brand-700"
-          )}
+          className={cn(pillBase, isNew ? pillActive : pillIdle)}
         >
           New
         </Link>
@@ -42,12 +36,7 @@ export function ShopCategoriesNav({ activeSlug, isNew = false }: ShopCategoriesN
           <Link
             key={category.slug}
             href={`/shop/${category.slug}/`}
-            className={cn(
-              "rounded-full border-2 px-4 py-2 text-sm font-black transition",
-              activeSlug === category.slug
-                ? "border-brand-600 bg-brand-600 text-white"
-                : "border-brand-200 bg-white text-black/70 hover:border-brand-400 hover:text-brand-700"
-            )}
+            className={cn(pillBase, activeSlug === category.slug ? pillActive : pillIdle)}
           >
             {category.name}
           </Link>

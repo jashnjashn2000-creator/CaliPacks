@@ -7,7 +7,7 @@ import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/lib/utils";
 import { productImageClass, productUnit } from "@/lib/product";
 import { PayNowButton } from "@/components/payments/PayNowButton";
-import { COURIER_FEE_GBP, COURIER_LABEL, COURIER_NOTE, orderTotal } from "@/lib/shipping";
+import { DELIVERY_LABEL, DELIVERY_NOTE, formatWeight, quoteForCart } from "@/lib/shipping";
 
 export default function CartPage() {
   const { items, subtotal, updateQuantity, removeItem, clearCart, ready } = useCart();
@@ -33,7 +33,7 @@ export default function CartPage() {
           </p>
           <Link
             href="/shop"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-brand-700 text-white font-semibold rounded-xl hover:bg-brand-800 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-ink text-white font-semibold rounded-xl hover:bg-graphite transition-colors"
           >
             Shop Now
             <ArrowRight className="w-4 h-4" />
@@ -43,8 +43,9 @@ export default function CartPage() {
     );
   }
 
-  const shipping = COURIER_FEE_GBP;
-  const total = orderTotal(subtotal);
+  const delivery = quoteForCart(items);
+  const shipping = delivery.price;
+  const total = subtotal + shipping;
 
   return (
     <div className="py-8 md:py-12">
@@ -71,7 +72,7 @@ export default function CartPage() {
               >
                 <Link
                   href={`/product/${item.product.slug}`}
-                  className="relative w-24 h-24 rounded-lg overflow-hidden bg-white flex-shrink-0 ring-1 ring-brand-100"
+                  className="relative w-24 h-24 rounded-lg overflow-hidden bg-white flex-shrink-0 ring-1 ring-black/5"
                 >
                   <Image
                     src={item.product.image}
@@ -152,12 +153,19 @@ export default function CartPage() {
                   <dd className="font-medium">{formatPrice(subtotal)}</dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt className="text-surface-800/60">{COURIER_LABEL}</dt>
+                  <dt className="text-surface-800/60">
+                    {DELIVERY_LABEL}
+                    {delivery.band && (
+                      <span className="block text-xs text-surface-800/45">
+                        {delivery.band.name} · approx. {formatWeight(delivery.grams)}
+                      </span>
+                    )}
+                  </dt>
                   <dd className="font-medium">{formatPrice(shipping)}</dd>
                 </div>
               </dl>
               <p className="text-xs font-bold text-brand-700 bg-brand-50 rounded-lg p-2 mt-3">
-                {COURIER_NOTE}
+                {DELIVERY_NOTE}
               </p>
               <div className="border-t border-surface-200 pt-3 flex justify-between text-sm">
                 <span className="font-semibold">Total</span>

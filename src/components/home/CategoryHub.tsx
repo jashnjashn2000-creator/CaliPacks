@@ -6,27 +6,26 @@ import { categories } from "@/data/categories";
 export function CategoryHub() {
   return (
     <section className="relative overflow-hidden py-14 md:py-20">
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-brand-50 to-white" />
-
       <div className="container-site relative">
         <div className="mb-8 flex flex-col gap-4 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="mb-2 text-[11px] font-black uppercase tracking-[0.2em] text-brand-600">
+            <p className="mb-3 flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.26em] text-brand-700">
+              <span className="h-px w-8 bg-gold" />
               Shop by category
             </p>
-            <h2 className="font-display text-3xl font-black tracking-tight text-gradient-pink md:text-4xl">
+            <h2 className="font-serif text-3xl font-normal tracking-tight text-ink md:text-[2.75rem]">
               Cali Packs & shop stock
             </h2>
-            <p className="mt-2 max-w-xl text-sm font-semibold text-black/55 md:text-base">
+            <p className="mt-2 max-w-xl text-sm font-medium text-graphite/65 md:text-base">
               Named HD products from the Manchester floor — packs, grinders, glass, hookahs, and more.
             </p>
           </div>
           <Link
             href="/shop"
-            className="inline-flex w-fit items-center gap-2 rounded-xl bg-black px-5 py-3 text-sm font-black text-white transition hover:bg-brand-800"
+            className="group inline-flex w-fit items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_10px_24px_-12px_rgba(5,31,32,0.6)] transition hover:-translate-y-px hover:bg-graphite"
           >
             Browse all
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-4 w-4 text-gold transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>
 
@@ -35,7 +34,7 @@ export function CategoryHub() {
             <Link
               key={category.id}
               href={`/shop/${category.slug}`}
-              className="group relative overflow-hidden rounded-[1.4rem] bg-white shadow-[0_16px_40px_rgba(190,24,93,0.16)] ring-1 ring-brand-100 transition hover:shadow-[0_22px_55px_rgba(190,24,93,0.28)]"
+              className="surface-card group relative overflow-hidden rounded-[1.4rem]"
             >
               <div className="relative aspect-[4/3] bg-white">
                 <Image
@@ -45,21 +44,19 @@ export function CategoryHub() {
                   loading="lazy"
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 280px"
                   quality={72}
-                  className={
-                    category.slug === "cali-packs"
-                      ? "pack-fill transition-transform duration-300"
-                      : "product-fit transition-transform duration-300"
-                  }
+                  className={category.slug === "cali-packs" ? "pack-fill" : "product-fit"}
                 />
               </div>
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-3 sm:p-4">
-                <p className="text-[10px] font-black uppercase tracking-[0.16em] text-brand-200">
-                  {category.tagline}
-                </p>
-                <h3 className="mt-1 font-display text-base font-black leading-tight text-white sm:text-lg">
-                  {category.name}
-                </h3>
-                <p className="mt-0.5 text-[11px] font-bold text-white/70">
+              <div className="flex items-end justify-between gap-2 border-t border-black/5 px-3 py-3 sm:px-4">
+                <div className="min-w-0">
+                  <h3 className="font-display text-base font-bold leading-tight text-ink sm:text-lg">
+                    {category.name}
+                  </h3>
+                  <p className="mt-0.5 truncate text-[10px] font-bold uppercase tracking-[0.14em] text-brand-700">
+                    {category.tagline}
+                  </p>
+                </div>
+                <p className="shrink-0 text-[11px] font-semibold tabular-nums text-graphite/55">
                   {category.productCount} item{category.productCount === 1 ? "" : "s"}
                 </p>
               </div>

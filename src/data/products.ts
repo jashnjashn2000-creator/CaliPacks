@@ -1860,13 +1860,19 @@ export function getShopDisplayProducts(limit = 8): Product[] {
 export function getHomepageSections() {
   const packs = products.filter((p) => p.categorySlug === "cali-packs");
   const shopStock = products.filter((p) => p.categorySlug !== "cali-packs");
+  // Two shop-floor items, then one Cali Pack, so the belt keeps changing pace visually.
+  const beltPacks = packs.slice(60, 70);
+  const conveyor = shopStock.flatMap((item, i) =>
+    i % 2 === 1 && beltPacks[(i - 1) / 2] ? [item, beltPacks[(i - 1) / 2]] : [item]
+  ).slice(0, 14); // 14 unique items (28 images with the loop copy) keeps the homepage light.
   return {
     latest: packs.slice(0, 8),
     more: packs.slice(8, 16),
-    heroTiles: packs.slice(16, 20),
+    heroTiles: [...packs.slice(16, 20), ...packs.slice(24, 40)],
     featured: packs.slice(20, 24),
     newPacks: packs.filter((p) => p.isNew).slice(-3),
     shopStock,
+    conveyor,
   };
 }
 

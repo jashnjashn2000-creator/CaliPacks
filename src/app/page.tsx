@@ -1,19 +1,25 @@
-import { preload } from "react-dom";
+import type { Metadata } from "next";
 import { HeroBannerSlider } from "@/components/home/HeroBannerSlider";
 import { CategoryHub } from "@/components/home/CategoryHub";
 import { CategoryShowcase } from "@/components/home/CategoryShowcase";
 import { CategorySection } from "@/components/products/ProductGrid";
 import { CTASection } from "@/components/home/CTASection";
 import { HomepageMap } from "@/components/home/HomepageMap";
+import { ProductConveyor } from "@/components/home/ProductConveyor";
+import { QuickAnswers } from "@/components/home/QuickAnswers";
 import { StorefrontShowcase } from "@/components/home/StorefrontShowcase";
 import { TrustBadges } from "@/components/layout/AnnouncementBar";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getHomepageSections } from "@/data/products";
-import { SITE_URL } from "@/lib/site";
+import { pageUrl } from "@/lib/site";
+
+export const metadata: Metadata = {
+  alternates: { canonical: pageUrl("/") },
+  openGraph: { url: pageUrl("/") },
+};
 
 export default function HomePage() {
-  preload("/hero-cali-packs-mobile.webp", { as: "image", fetchPriority: "high" });
-  const { latest, more, heroTiles, featured, shopStock } = getHomepageSections();
+  const { latest, more, heroTiles, featured, shopStock, conveyor } = getHomepageSections();
 
   return (
     <>
@@ -26,12 +32,13 @@ export default function HomePage() {
           itemListElement: [...shopStock, ...latest].slice(0, 24).map((product, index) => ({
             "@type": "ListItem",
             position: index + 1,
-            url: `${SITE_URL}/product/${product.slug}`,
+            url: pageUrl(`/product/${product.slug}`),
             name: product.name,
           })),
         }}
       />
       <HeroBannerSlider products={heroTiles} />
+      <ProductConveyor products={conveyor} />
       <TrustBadges />
       <CategoryHub />
       <CategorySection
@@ -50,7 +57,8 @@ export default function HomePage() {
         viewAllHref="/shop/cali-packs"
         eagerCount={0}
         showCart={false}
-        className="py-14 md:py-20 bg-gradient-to-b from-brand-50/60 via-white to-brand-50/40"
+        tone="dark"
+        className="py-14 md:py-20 bg-gradient-to-br from-ink via-graphite to-[#163832]"
       />
       <CategorySection
         title="More Designs"
@@ -63,6 +71,7 @@ export default function HomePage() {
       />
       <CategoryShowcase products={featured} />
       <StorefrontShowcase />
+      <QuickAnswers />
       <CTASection />
       <HomepageMap />
     </>

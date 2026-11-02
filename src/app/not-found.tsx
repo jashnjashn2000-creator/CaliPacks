@@ -3,6 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Page Not Found",
+  robots: { index: false, follow: false },
 };
 
 export default function NotFound() {
@@ -13,7 +14,7 @@ export default function NotFound() {
         <p className="text-lg text-surface-800/60 mb-8">The page you&apos;re looking for doesn&apos;t exist.</p>
         <Link
           href="/"
-          className="inline-flex px-6 py-3 bg-brand-700 text-white font-semibold rounded-xl hover:bg-brand-800 transition-colors"
+          className="inline-flex px-6 py-3 bg-ink text-white font-semibold rounded-xl hover:bg-graphite transition-colors"
         >
           Back to Home
         </Link>

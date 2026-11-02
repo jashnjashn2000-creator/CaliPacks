@@ -4,6 +4,9 @@
   "compatibility_date": "2026-09-01",
   "workers_dev": true,
   "vars": {
-    "SITE_URL": "https://smokecali.co.uk"
+    "SITE_URL": "https://smokecali.co.uk",
+    // "demo" = fake test payments. Change to "live" ONLY after Viva verification is complete
+    // and you have put the LIVE credentials in as secrets (see VIVA-SETUP.md).
+    "VIVA_ENV": "demo"
   }
 }

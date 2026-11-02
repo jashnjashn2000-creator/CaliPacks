@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     title: "Shop Cali Packs & store stock | Smoke Cali",
     description:
       "111 HD Cali Packs plus named shop-floor stock. Competitive UK prices. Manchester wholesale.",
-    images: [{ url: "/hero-cali-packs.jpg", alt: "Smoke Cali shop catalogue" }],
+    images: [{ url: "/hero-cali-packs.webp", alt: "Smoke Cali shop catalogue" }],
   },
 };
 

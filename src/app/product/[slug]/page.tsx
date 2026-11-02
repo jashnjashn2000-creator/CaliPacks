@@ -8,7 +8,8 @@ import { ProductCard } from "@/components/products/ProductCard";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { formatPrice } from "@/lib/utils";
 import { SITE_NAME, SITE_URL, pageUrl } from "@/lib/site";
-import { isCaliPack, productUnit } from "@/lib/product";
+import { offerShippingAndReturns } from "@/lib/local-business";
+import { isCaliPack, productUnit, savingPercent } from "@/lib/product";
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
@@ -31,13 +32,13 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
   return {
     title: titleName,
-    description: `Buy ${product.name} from Smoke Cali. ${priceLabel}. HD photo, UK delivery in 2–3 days.`,
+    description: `Buy ${product.name} from Smoke Cali, Manchester. ${priceLabel}. UK delivery from £4.00, dispatched in 2–3 business days.`,
     openGraph: {
       type: "website",
       url: pageUrl(`/product/${product.slug}`),
       title: `${product.name} — ${formatPrice(product.price)} ${productUnit(product)} | Smoke Cali`,
       description: product.shortDescription,
-      images: [{ url: product.image, alt: product.name }],
+      images: [{ url: product.image, alt: `${titleName} — Smoke Cali` }],
     },
     twitter: {
       card: "summary_large_image",
@@ -69,7 +70,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
             "@context": "https://schema.org",
             "@type": "Product",
             name: isCaliPack(product) ? `${product.name} Cali Pack` : product.name,
-            image: `${SITE_URL}${product.image}`,
+            "@id": `${pageUrl(`/product/${product.slug}`)}#product`,
+            url: pageUrl(`/product/${product.slug}`),
+            image: (product.images?.length ? product.images : [product.image]).map((img) => `${SITE_URL}${img}`),
+            ...(category ? { category: category.name } : {}),
             description: product.description,
             sku: product.sku,
             brand: { "@type": "Brand", name: SITE_NAME },
@@ -82,7 +86,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 ? "https://schema.org/InStock"
                 : "https://schema.org/OutOfStock",
               priceValidUntil: "2027-12-31",
-              seller: { "@type": "Organization", name: SITE_NAME },
+              itemCondition: "https://schema.org/NewCondition",
+              ...(product.minOrder && product.minOrder > 1
+                ? {
+                    eligibleQuantity: {
+                      "@type": "QuantitativeValue",
+                      minValue: product.minOrder,
+                      unitCode: "C62",
+                    },
+                  }
+                : {}),
+              seller: { "@id": `${SITE_URL}/#organization` },
+              ...offerShippingAndReturns(product),
             },
           },
           {
@@ -101,9 +116,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 name: "Shop",
                 item: pageUrl("/shop"),
               },
+              ...(category
+                ? [
+                    {
+                      "@type": "ListItem",
+                      position: 3,
+                      name: category.name,
+                      item: pageUrl(`/shop/${category.slug}`),
+                    },
+                  ]
+                : []),
               {
                 "@type": "ListItem",
-                position: 3,
+                position: category ? 4 : 3,
                 name: product.name,
                 item: pageUrl(`/product/${product.slug}`),
               },
@@ -112,7 +137,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         ]}
       />
       <div className="container-site">
-        <nav className="text-sm text-surface-800/40 mb-8">
+        <nav aria-label="Breadcrumb" className="text-sm text-surface-800/40 mb-8">
           <Link href="/" className="hover:text-brand-700">Home</Link>
           <span className="mx-2">/</span>
           <Link href={category ? `/shop/${category.slug}` : "/shop"} className="hover:text-brand-700">
@@ -127,26 +152,29 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
           <div>
             {product.isNew && (
-              <span className="inline-block px-2.5 py-1 bg-brand-100 text-brand-700 text-xs font-semibold rounded-full mb-3">
+              <span className="inline-block px-2.5 py-1 bg-ink text-brand-300 text-[10px] font-bold uppercase tracking-[0.18em] rounded-full mb-3">
                 New Arrival
               </span>
             )}
-            <h1 className="text-2xl md:text-3xl font-black tracking-tight mb-3 text-gradient-pink">
+            <h1 className="font-serif text-3xl md:text-[2.6rem] font-normal leading-tight tracking-tight mb-3 text-ink">
               {product.name}
             </h1>
-            <div className="flex items-center gap-3 mb-6">
-              <span className="text-2xl font-black text-black">
+            <div className="flex flex-wrap items-center gap-3 mb-6 tabular-nums">
+              <span className="text-2xl font-extrabold text-ink">
                 {formatPrice(product.price)}
               </span>
               {product.originalPrice && (
-                <span className="text-lg text-black/35 line-through">
+                <span className="price-was text-lg font-semibold">
                   {formatPrice(product.originalPrice)}
                 </span>
               )}
-              <span className="text-sm text-brand-600 font-bold">{productUnit(product)}</span>
+              <span className="text-sm text-brand-700 font-bold">{productUnit(product)}</span>
+              {savingPercent(product) ? (
+                <span className="save-tag">Save {savingPercent(product)}%</span>
+              ) : null}
             </div>
 
-            <p className="text-black/70 leading-relaxed mb-8 font-semibold">
+            <p className="text-graphite/75 leading-relaxed mb-8 font-medium">
               {product.description}
             </p>
 
@@ -187,7 +215,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         {related.length > 0 && (
           <section className="mt-16 pt-12 border-t border-surface-200">
-            <h2 className="text-xl font-bold text-surface-900 mb-6">Related Products</h2>
+            <h2 className="font-serif text-2xl md:text-3xl font-normal text-ink mb-6">Related Products</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {related.map((p) => (
                 <ProductCard key={p.id} product={p} />

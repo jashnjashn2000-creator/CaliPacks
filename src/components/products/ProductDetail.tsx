@@ -60,7 +60,7 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
       <button
         onClick={handleAdd}
         disabled={!product.inStock}
-        className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-brand-600 text-white font-semibold rounded-xl hover:bg-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg shadow-brand-200"
+        className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-ink text-white font-semibold rounded-xl hover:bg-gold hover:text-ink disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         {added ? (
           <>
@@ -92,7 +92,7 @@ export function ProductGallery({ product }: ProductGalleryProps) {
 
   return (
     <div className="space-y-4">
-        <div className="relative aspect-square rounded-2xl overflow-hidden bg-white ring-1 ring-brand-100">
+        <div className="relative aspect-square rounded-2xl overflow-hidden bg-white ring-1 ring-black/5 shadow-[0_10px_30px_rgba(5,31,32,0.06)]">
         <Image
           src={images[activeImage]}
           alt={product.name}
@@ -110,7 +110,7 @@ export function ProductGallery({ product }: ProductGalleryProps) {
               key={i}
               onClick={() => setActiveImage(i)}
               className={`relative w-20 h-20 rounded-lg overflow-hidden bg-white border-2 transition-colors ${
-                i === activeImage ? "border-brand-600" : "border-brand-100"
+                i === activeImage ? "border-gold" : "border-black/5"
               }`}
             >
               <Image src={img} alt="" fill sizes="80px" quality={70} loading="lazy" className="object-contain p-1" />

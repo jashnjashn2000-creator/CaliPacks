@@ -7,64 +7,52 @@ export function CTASection() {
       icon: ShoppingBag,
       title: "Select Product",
       description: "Pick a Cali Pack — £0.20 each, min 50 pcs.",
-      wrap: "from-brand-500 to-brand-700",
-      bar: "bg-brand-500",
     },
     {
       icon: CreditCard,
       title: "Pay Online",
       description: "Checkout online or order via WhatsApp in one tap.",
-      wrap: "from-fuchsia-500 to-pink-600",
-      bar: "bg-fuchsia-500",
     },
     {
       icon: PackageCheck,
       title: "Get Delivery",
       description: "UK delivery in 2–3 business days.",
-      wrap: "from-rose-500 to-brand-600",
-      bar: "bg-rose-500",
     },
   ];
 
   return (
-    <section className="py-14 md:py-18 bg-gradient-to-b from-white via-brand-50 to-white">
+    <section className="py-14 md:py-20">
       <div className="container-site">
-        <div className="rounded-3xl bg-white border-2 border-brand-200 p-7 md:p-10 lg:p-12 relative overflow-hidden shadow-xl shadow-brand-100/60">
-          <div className="absolute top-0 left-0 w-28 h-28 bg-brand-400/30 rounded-br-[3rem]" />
-          <div className="absolute top-0 right-0 w-24 h-24 bg-fuchsia-400/25 rounded-bl-[3rem]" />
-          <div className="absolute bottom-0 left-0 w-20 h-20 bg-rose-300/30 rounded-tr-[2.5rem]" />
-          <div className="absolute bottom-0 right-0 w-28 h-28 bg-brand-500/20 rounded-tl-[3rem]" />
-
-          <div className="relative text-center max-w-2xl mx-auto mb-8">
-            <span className="inline-block text-brand-600 text-xs font-extrabold uppercase tracking-widest mb-3">
+        <div className="surface-card rounded-3xl p-7 md:p-10 lg:p-12 relative overflow-hidden">
+          <div className="relative text-center max-w-2xl mx-auto mb-10">
+            <span className="mb-4 inline-flex items-center gap-3 text-brand-700 text-xs font-bold uppercase tracking-[0.26em]">
+              <span className="h-px w-8 bg-gold" />
               Why Smoke Cali
+              <span className="h-px w-8 bg-gold" />
             </span>
-            <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-surface-950 mb-2">
-              UK&apos;s{" "}
-              <span className="text-gradient-pink">Best Sellers</span> of Cali Packs
+            <h2 className="font-serif text-3xl md:text-4xl font-normal tracking-tight text-ink mb-2">
+              UK&apos;s Best Sellers of Cali Packs
             </h2>
-            <p className="text-surface-800/65 font-semibold text-sm md:text-base">
+            <p className="text-graphite/65 font-medium text-sm md:text-base">
               Real stock. Bold designs. Fast UK delivery.
             </p>
           </div>
 
-          <div className="relative grid md:grid-cols-3 gap-4 mb-8">
+          <div className="relative grid md:grid-cols-3 gap-4 mb-10">
             {steps.map((step, i) => (
               <div
                 key={step.title}
-                className="relative p-5 rounded-2xl bg-gradient-to-br from-white to-brand-50 border border-brand-100 overflow-hidden"
+                className="relative p-6 rounded-2xl bg-gradient-to-b from-surface-100 to-white border border-ink/[0.06] overflow-hidden"
               >
-                <div className={`absolute top-0 left-0 right-0 h-1.5 ${step.bar}`} />
-                <div
-                  className={`w-11 h-11 rounded-xl bg-gradient-to-br ${step.wrap} flex items-center justify-center mb-3 shadow-md`}
-                >
-                  <step.icon className="w-5 h-5 text-white" />
+                <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
+                <div className="icon-tile w-11 h-11 rounded-xl flex items-center justify-center mb-4">
+                  <step.icon className="w-5 h-5 text-gold" />
                 </div>
-                <p className="text-[10px] text-brand-600 font-extrabold uppercase tracking-widest mb-1">
+                <p className="text-[10px] text-brand-700 font-bold uppercase tracking-[0.22em] mb-1">
                   Step {i + 1}
                 </p>
-                <p className="font-extrabold text-base text-surface-950 mb-1">{step.title}</p>
-                <p className="text-sm font-medium text-surface-800/60 leading-snug">
+                <p className="font-bold text-base text-ink mb-1">{step.title}</p>
+                <p className="text-sm font-medium text-graphite/65 leading-snug">
                   {step.description}
                 </p>
               </div>
@@ -74,26 +62,26 @@ export function CTASection() {
           <div className="relative flex flex-wrap justify-center gap-3">
             <Link
               href="/shop"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-brand-600 text-white font-extrabold rounded-xl hover:bg-brand-500 transition-colors shadow-lg shadow-brand-200"
+              className="btn-glow inline-flex items-center gap-2 px-6 py-3 bg-gold text-ink font-bold rounded-full hover:bg-brand-400"
             >
               Start Shopping
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/checkout"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#635BFF] to-[#0A2540] text-white font-extrabold rounded-xl hover:brightness-110 transition-colors shadow-lg"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-ink text-white font-semibold rounded-full hover:bg-graphite transition-colors"
             >
               Pay Now
             </Link>
             <Link
               href="/custom-orders"
-              className="btn-shine-white inline-flex items-center gap-2 px-6 py-3 font-extrabold rounded-xl text-black"
+              className="btn-shine-white inline-flex items-center gap-2 px-6 py-3 font-semibold rounded-full text-ink"
             >
               Get a Quote
             </Link>
             <Link
               href="/custom-orders"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white font-extrabold rounded-xl hover:bg-surface-800 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-graphite text-white font-semibold rounded-full hover:bg-ink transition-colors"
             >
               Custom Order
             </Link>

@@ -14,3 +14,15 @@ export function productImageClass(product: Product) {
   if (isCaliPack(product) && !framedPackIds.has(product.id)) return "pack-fill";
   return "product-fit";
 }
+
+/** Whole-number % saved against the crossed-out price, or 0 when there is no saving. */
+export function savingPercent(product: Product) {
+  const was = product.originalPrice ?? 0;
+  if (was <= product.price) return 0;
+  return Math.round(((was - product.price) / was) * 100);
+}
+
+/** Small copies made by scripts/make-thumbs.mjs for tiles and the conveyor strip. */
+export function thumbSrc(src: string) {
+  return src.replace(/^\/(products|shop)\/([^/]+\.webp)$/, "/$1/thumbs/$2");
+}
