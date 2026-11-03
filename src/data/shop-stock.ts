@@ -53,8 +53,7 @@ export const shopStockProducts: Product[] = [
     description:
       "Compact household vacuum sealer boxed as sold in store. Keeps product fresh and smell-contained. A regular UK smoke-shop counter seller.",
     shortDescription: "Compact boxed vacuum sealer for airtight packing.",
-    price: 14.99,
-    originalPrice: 19.99,
+    price: 24.99,
     categoryId: "accessories",
     categorySlug: "accessories",
     image: "/shop/vacuum-sealer.webp",
