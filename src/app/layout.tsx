@@ -48,10 +48,17 @@ export const metadata: Metadata = {
   creator: SITE_NAME,
   publisher: SITE_NAME,
   category: "shopping",
+  manifest: "/manifest.webmanifest",
   icons: {
-    icon: [{ url: SITE_LOGO, type: "image/svg+xml" }],
-    shortcut: SITE_LOGO,
-    apple: SITE_LOGO,
+    icon: [
+      { url: "/favicon.ico?v=2", sizes: "48x48" },
+      { url: "/favicon.svg?v=2", type: "image/svg+xml" },
+      { url: "/icon-32.png?v=2", type: "image/png", sizes: "32x32" },
+      { url: "/icon-192.png?v=2", type: "image/png", sizes: "192x192" },
+      { url: "/icon-512.png?v=2", type: "image/png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.ico?v=2",
+    apple: [{ url: "/apple-touch-icon.png?v=2", sizes: "180x180", type: "image/png" }],
   },
   title: {
     default: `Smoke Cali | Cali Packs £0.20 · Manchester`,
