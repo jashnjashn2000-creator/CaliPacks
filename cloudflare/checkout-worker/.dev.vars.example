@@ -10,6 +10,6 @@ VIVA_API_KEY=
 # Optional order notifications:
 ZAPIER_WEBHOOK_URL=
 RESEND_API_KEY=
-OWNER_NOTIFY_EMAIL=hello@calipacks.co.uk
+OWNER_NOTIFY_EMAIL=smokecaliltd@gmail.com
 RESEND_FROM_EMAIL=Smoke Cali <orders@smokecali.co.uk>
 SITE_URL=https://smokecali.co.uk
