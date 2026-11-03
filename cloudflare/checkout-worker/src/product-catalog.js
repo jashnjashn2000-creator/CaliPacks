@@ -684,7 +684,7 @@ export const PRODUCT_CATALOG = {
  },
  "shop-vacuum-sealer": {
   "name": "Compact Vacuum Sealer",
-  "pricePence": 1499,
+  "pricePence": 2499,
   "minOrder": 1,
   "inStock": true
  },
