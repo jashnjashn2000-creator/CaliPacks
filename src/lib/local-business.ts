@@ -177,7 +177,7 @@ export function localBusinessJsonLd() {
         image: [LOCAL_BUSINESS.image, `${SITE_URL}/brand-showcase.webp`],
         logo: LOCAL_BUSINESS.logo,
         description:
-          "Manchester smoke shop supplying wholesale Cali Packs at £0.20 per pack, minimum 50 pcs, plus grinders, glass, hookahs and accessories.",
+          "Manchester smoke shop supplying wholesale Cali Packs at £0.22 each, minimum 25 pcs, or £0.20 each from 50, plus grinders, glass, hookahs and accessories.",
         priceRange: LOCAL_BUSINESS.priceRange,
         telephone: LOCAL_BUSINESS.telephone,
         email: LOCAL_BUSINESS.email,

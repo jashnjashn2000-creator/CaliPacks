@@ -11,7 +11,7 @@ export function GET() {
   const lines = [
     "# Smoke Cali (SMOKE CALI LTD)",
     "",
-    "> Manchester smoke shop and UK online store. 111 HD Cali Pack designs at £0.20 per pack (minimum 50 pcs), plus grinders, glass, hookahs, scales and smoking accessories. Customers must be 18+.",
+    "> Manchester smoke shop and UK online store. 111 HD Cali Pack designs at £0.22 each (minimum 25 pcs, or £0.20 each when you buy 50 or more of the same design), plus grinders, glass, hookahs, scales and smoking accessories. Customers must be 18+.",
     "",
     "## Key facts",
     `- Legal name: ${LOCAL_BUSINESS.legalName}`,

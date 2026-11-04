@@ -7,7 +7,7 @@ const steps = [
   {
     icon: ShoppingBag,
     title: "Place Your Order",
-    desc: "Tell us which Cali Packs you need — £0.20 per pack, 50 pcs minimum, or a mixed wholesale refill.",
+    desc: "Tell us which Cali Packs you need — £0.22 each, 25 pcs minimum, or £0.20 each from 50 of the same design.",
   },
   {
     icon: CreditCard,

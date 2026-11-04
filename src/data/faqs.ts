@@ -15,12 +15,12 @@ export const faqs: Faq[] = [
   {
     group: "Ordering",
     q: "How much are Cali Packs at Smoke Cali?",
-    a: "Every Cali Pack design is £0.20 per pack with a minimum order of 50 pcs. Choose from 111 HD designs, add them to the online cart and pay securely by card through Viva.com, or order on WhatsApp.",
+    a: "Every Cali Pack design is £0.22 each, with a minimum order of 25 pcs. Buy 50 or more of the same design and the price drops to £0.20 each. Choose from 111 HD designs and pay by card through Viva.com, or order on WhatsApp.",
   },
   {
     group: "Ordering",
     q: "What is the minimum order quantity?",
-    a: "Every Cali Pack is £0.20 per pack with a minimum order of 50 pcs. Add 50 or more of any design to your cart to check out.",
+    a: "The minimum order is 25 pcs of a Cali Pack design, at £0.22 each. When that line reaches 50 or more, the unit price drops to £0.20 each. Different designs are counted separately.",
   },
   {
     group: "Ordering",

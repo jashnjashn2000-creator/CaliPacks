@@ -305,13 +305,17 @@ function buildTotals(items) {
     }
     const postagePence =
       product.postagePence == null ? DEFAULT_POSTAGE_PENCE : product.postagePence;
-    const linePence = quantity * product.pricePence;
+    const unitPence =
+      product.bulkPricePence != null && product.bulkMinQty != null && quantity >= product.bulkMinQty
+        ? product.bulkPricePence
+        : product.pricePence;
+    const linePence = quantity * unitPence;
     subtotalPence += linePence;
     lines.push({
       productId,
       title: product.name,
       quantity,
-      unitPence: product.pricePence,
+      unitPence,
       linePence,
       postagePence,
     });

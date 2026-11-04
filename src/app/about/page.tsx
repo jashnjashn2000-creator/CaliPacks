@@ -8,7 +8,7 @@ import { SITE_URL, pageUrl } from "@/lib/site";
 
 const highlights = [
   "111 HD Cali Pack designs, each named and photographed",
-  "£0.20 per pack · minimum order 50 pcs",
+  "£0.22 each · minimum 25 pcs · 50+ for £0.20 each",
   "Online cart and WhatsApp ordering",
   "Dispatched in 2–3 business days · postage shown on each product",
 ];
@@ -30,7 +30,7 @@ export default function AboutPage() {
         eyebrow="Real Manchester stock"
         title="About"
         accent="Smoke Cali"
-        description="A real Manchester shop supplying 111 HD Cali Packs. £0.20 per pack, minimum 50 pcs — shop online or visit us on Sagar Street."
+        description="A real Manchester shop supplying 111 HD Cali Packs. £0.22 each, minimum 25 pcs, or £0.20 each from 50 — shop online or visit us on Sagar Street."
         images={[
           "/cali-shop-hero.webp",
           "/products/pack-030.webp",
@@ -46,7 +46,7 @@ export default function AboutPage() {
             <div>
               <p className="font-serif text-2xl leading-snug text-ink sm:text-[1.75rem]">
                 Smoke Cali supplies UK shops and buyers with Cali Packs selected
-                from our real Manchester shelves — £0.20 per pack, 50 pcs minimum.
+                from our real Manchester shelves — £0.22 each, 25 pcs minimum, or £0.20 each from 50.
               </p>
               <p className="mt-4 font-medium leading-relaxed text-graphite/65">
                 Browse online, add products to your cart, or contact us through

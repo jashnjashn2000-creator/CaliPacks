@@ -9,8 +9,8 @@ interface HeroBannerSliderProps {
 }
 
 const HIGHLIGHTS = [
-  { icon: Tag, label: "£0.20 per pack" },
-  { icon: Layers, label: "Min 50 pcs" },
+  { icon: Tag, label: "£0.22 each" },
+  { icon: Layers, label: "Min 25 pcs" },
   { icon: Truck, label: "Postage shown per product" },
   { icon: Clock, label: "2–3 day delivery" },
 ];
@@ -50,7 +50,7 @@ export function HeroBannerSlider({ products }: HeroBannerSliderProps) {
                 </span>
               </h1>
               <p className="mt-5 max-w-md text-sm leading-relaxed text-white/75 sm:text-base">
-                £0.20 per pack · Minimum 50 pcs. Smell-proof 3.5g designs photographed for the web.
+                £0.22 each · minimum 25 pcs · 50+ for £0.20 each. Smell-proof 3.5g designs photographed for the web.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link

@@ -18,7 +18,7 @@ export function CategoryShowcase({ products }: { products: Product[] }) {
                 Designs that <span className="heading-accent">sell</span>
               </h2>
               <p className="mt-4 max-w-2xl text-sm font-medium leading-relaxed text-white/65 md:text-base">
-                £0.20 per pack · minimum 50 pcs. Every pack is named and shot in HD.
+                £0.22 each · minimum 25 pcs · 50+ for £0.20 each. Every pack is named and shot in HD.
               </p>
             </div>
             <Link
@@ -55,7 +55,7 @@ export function CategoryShowcase({ products }: { products: Product[] }) {
                 {product.name}
               </h3>
               <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-700">
-                £0.20 · min 50
+                £0.22 · min 25 · 50+ £0.20
               </p>
             </div>
           </Link>

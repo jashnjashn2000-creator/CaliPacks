@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
-import { displayPostageLabel, displayPrice, productImageClass, productUnit, savingPercent, thumbSrc } from "@/lib/product";
+import { displayPostageLabel, displayPrice, packOfferText, productImageClass, productUnit, savingPercent, thumbSrc } from "@/lib/product";
 import { AddToCartMini } from "./AddToCartMini";
 
 interface ProductCardProps {
@@ -56,6 +56,9 @@ export function ProductCard({
           ) : null}
         </div>
         <p className="mt-1 text-[11px] font-bold text-brand-800">{displayPostageLabel(product)}</p>
+        {packOfferText(product) ? (
+          <p className="mt-1 text-[11px] font-bold leading-snug text-ink">{packOfferText(product)}</p>
+        ) : null}
         {product.minOrder && product.minOrder > 1 ? (
           <p className="mt-1 text-[11px] font-extrabold uppercase tracking-wide text-brand-700">
             Min. {product.minOrder} pcs

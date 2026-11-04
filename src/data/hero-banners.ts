@@ -18,7 +18,7 @@ export const heroBanners: HeroBanner[] = [
     mood: "pink",
     headline: "111 Cali Packs. Studio HD.",
     subline:
-      "£0.20 per pack · Minimum 50 pcs. Smell-proof 3.5g designs photographed for the web.",
+      "£0.22 each · minimum 25 pcs · 50+ for £0.20 each. Smell-proof 3.5g designs photographed for the web.",
     ctaLabel: "Shop Cali Packs",
     ctaHref: "/shop/cali-packs",
     floatingImages: [],
@@ -30,7 +30,7 @@ export const heroBanners: HeroBanner[] = [
     mood: "purple",
     headline: "Packs That Stop the Scroll.",
     subline:
-      "Loud die-cut Cali Packs from £0.20 each. Wholesale minimum 50 pcs — UK dispatch in 2–3 days.",
+      "Loud die-cut Cali Packs at £0.22 each. Minimum 25 pcs, or £0.20 each from 50 — UK dispatch in 2–3 days.",
     ctaLabel: "Browse the Catalogue",
       ctaHref: "/shop/cali-packs",
     floatingImages: [],
@@ -40,9 +40,9 @@ export const heroBanners: HeroBanner[] = [
     image: "/products/pack-008.webp",
     imageAlt: "Blue Guava Gelato Cali Pack",
     mood: "teal",
-    headline: "Wholesale Ready. £0.20 a Pack.",
+    headline: "Wholesale Ready. £0.22 a Pack.",
     subline:
-      "Every design is named, priced and photographed in HD. Order 50+ pcs and we ship across the UK.",
+      "Every design is named, priced and photographed in HD. Minimum 25 pcs, and £0.20 each from 50. We ship across the UK.",
     ctaLabel: "View All 111 Packs",
     ctaHref: "/shop/cali-packs",
     floatingImages: [],

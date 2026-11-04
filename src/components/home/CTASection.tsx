@@ -6,7 +6,7 @@ export function CTASection() {
     {
       icon: ShoppingBag,
       title: "Select Product",
-      description: "Pick a Cali Pack — £0.20 each, min 50 pcs.",
+      description: "Pick a Cali Pack — £0.22 each, min 25 pcs. 50+ for £0.20.",
     },
     {
       icon: CreditCard,

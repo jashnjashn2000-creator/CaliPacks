@@ -6,7 +6,7 @@ import Image from "next/image";
 import { MessageCircle, CreditCard, ArrowLeft, Loader2 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/lib/utils";
-import { productImageClass } from "@/lib/product";
+import { lineTotalGbp, productImageClass } from "@/lib/product";
 import { whatsappOrderNumber } from "@/data/social";
 import { checkoutCreateUrl, LAST_ORDER_KEY } from "@/lib/payments";
 import { VivaPayOverlay } from "@/components/payments/VivaPayOverlay";
@@ -30,7 +30,7 @@ export default function CheckoutPage() {
 
   const whatsappHref = useMemo(() => {
     const lines = items.map(
-      (i) => `• ${i.product.name} × ${i.quantity} = ${formatPrice(i.product.price * i.quantity)}`
+      (i) => `• ${i.product.name} × ${i.quantity} = ${formatPrice(lineTotalGbp(i.product, i.quantity))}`
     );
     const text = [
       "Hi Smoke Cali — I'd like to place an order:",
@@ -348,7 +348,7 @@ export default function CheckoutPage() {
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium line-clamp-2">{item.product.name}</p>
                       <p className="text-xs text-surface-800/50">
-                        × {item.quantity} · {formatPrice(item.product.price * item.quantity)}
+                        × {item.quantity} · {formatPrice(lineTotalGbp(item.product, item.quantity))}
                       </p>
                     </div>
                   </li>

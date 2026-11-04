@@ -52,7 +52,7 @@ export default function HomePage() {
       />
       <CategorySection
         title="Latest Cali Packs"
-        subtitle="HD studio photography. £0.20 per pack · minimum 50 pcs."
+        subtitle="HD studio photography. £0.22 each · minimum 25 pcs · 50+ for £0.20 each."
         products={latest}
         viewAllHref="/shop/cali-packs"
         eagerCount={0}

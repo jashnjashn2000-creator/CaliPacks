@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const titleName = pack ? `${product.name} Cali Pack` : product.name;
   const shown = displayPrice(product);
   const priceLabel = pack
-    ? "£0.20 per pack, minimum 50 pcs"
+    ? "£0.22 each, minimum 25 pcs. Buy 50 or more for £0.20 each"
     : shown.from
       ? `from ${formatPrice(shown.amount)}`
       : `${formatPrice(product.price)} each`;
@@ -125,6 +125,33 @@ export default async function ProductPage({ params }: ProductPageProps) {
                           minValue: product.minOrder,
                           unitCode: "C62",
                         },
+                      }
+                    : {}),
+                  ...(product.bulkPrice != null && product.bulkMinQty
+                    ? {
+                        priceSpecification: [
+                          {
+                            "@type": "UnitPriceSpecification",
+                            price: product.price.toFixed(2),
+                            priceCurrency: "GBP",
+                            eligibleQuantity: {
+                              "@type": "QuantitativeValue",
+                              minValue: product.minOrder || 1,
+                              maxValue: product.bulkMinQty - 1,
+                              unitCode: "C62",
+                            },
+                          },
+                          {
+                            "@type": "UnitPriceSpecification",
+                            price: product.bulkPrice.toFixed(2),
+                            priceCurrency: "GBP",
+                            eligibleQuantity: {
+                              "@type": "QuantitativeValue",
+                              minValue: product.bulkMinQty,
+                              unitCode: "C62",
+                            },
+                          },
+                        ],
                       }
                     : {}),
                   seller: { "@id": `${SITE_URL}/#organization` },

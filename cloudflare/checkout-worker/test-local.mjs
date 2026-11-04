@@ -157,7 +157,12 @@ expectSku("shop-colour-hookah", 5499, 399, /Pink AK-47 Hookah/);
 expectSku("shop-mini-bubblers", 1699, 399, /^Mini Glass Bubblers$/);
 expectSku("shop-spiral-bubblers", 799, 299, /Spiral Perc Glass Bubbler/);
 expectSku("shop-swan-pipe", 999, 299, /Swan Shape Glass Pipe/);
-expectSku("pack-001", 20, 399);
+expectSku("pack-001", 22, 399);
+assert.equal(PRODUCT_CATALOG["pack-001"].bulkPricePence, 20);
+assert.equal(PRODUCT_CATALOG["pack-001"].bulkMinQty, 50);
+assert.equal(PRODUCT_CATALOG["pack-001"].minOrder, 25);
+assert.equal(PRODUCT_CATALOG["pack-111"].pricePence, 22);
+assert.equal(PRODUCT_CATALOG["pack-111"].minOrder, 25);
 expectSku("shop-gold-grinder", 799, 399);
 
 // Browser postage is ignored. Bundle alone is free. Highest postage wins across lines.
@@ -198,5 +203,44 @@ const rolls = buildTotals([
 ]);
 assert.equal(rolls.subtotalPence, 599 + 699 + 799);
 assert.equal(rolls.shippingPence, 399);
+
+// 10. Cali Packs: £0.22 from 25, £0.20 once that line is 50+. Postage stays £3.99.
+assert.throws(() => buildTotals([{ productId: "pack-001", quantity: 24 }]), /minimum order/);
+const pack25 = buildTotals([{ productId: "pack-001", quantity: 25, unitPrice: 0.01 }]);
+assert.equal(pack25.lines[0].unitPence, 22);
+assert.equal(pack25.subtotalPence, 550);
+assert.equal(pack25.shippingPence, 399);
+assert.equal(pack25.totalPence, 949);
+const pack49 = buildTotals([{ productId: "pack-001", quantity: 49, unitPrice: 0.2 }]);
+assert.equal(pack49.lines[0].unitPence, 22);
+assert.equal(pack49.subtotalPence, 1078);
+assert.equal(pack49.shippingPence, 399);
+assert.equal(pack49.totalPence, 1477);
+const pack50 = buildTotals([{ productId: "pack-002", quantity: 50, unitPrice: 0.22 }]);
+assert.equal(pack50.lines[0].unitPence, 20);
+assert.equal(pack50.subtotalPence, 1000);
+assert.equal(pack50.shippingPence, 399);
+assert.equal(pack50.totalPence, 1399);
+const pack100 = buildTotals([{ productId: "pack-001", quantity: 100 }]);
+assert.equal(pack100.lines[0].unitPence, 20);
+assert.equal(pack100.subtotalPence, 2000);
+assert.equal(pack100.shippingPence, 399);
+assert.equal(pack100.totalPence, 2399);
+// 25 + 25 of the same design merges to 50 and takes the £0.20 price.
+const merged = buildTotals([
+  { productId: "pack-003", quantity: 25 },
+  { productId: "pack-003", quantity: 25 },
+]);
+assert.equal(merged.lines.length, 1);
+assert.equal(merged.lines[0].unitPence, 20);
+assert.equal(merged.subtotalPence, 1000);
+// Two different designs stay at £0.22 even though the basket has 50 packs.
+const split = buildTotals([
+  { productId: "pack-001", quantity: 25 },
+  { productId: "pack-002", quantity: 25 },
+]);
+assert.equal(split.subtotalPence, 1100);
+assert.equal(split.shippingPence, 399);
+assert.equal(split.totalPence, 1499);
 
 console.log("All worker checks passed.");

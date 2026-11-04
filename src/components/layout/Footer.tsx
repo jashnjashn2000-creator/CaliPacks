@@ -87,7 +87,7 @@ export function Footer() {
             </Link>
             <p className="mb-6 text-sm font-medium leading-relaxed text-white/60">
             Smoke Cali — Manchester&apos;s destination for wholesale Cali Packs.
-            £0.20 per pack · min 50 pcs. Shop online or visit us in store.
+            £0.22 each · min 25 pcs · 50+ for £0.20. Shop online or visit us in store.
             </p>
             <div className="flex gap-2.5">
               {socialItems.map((item) => (

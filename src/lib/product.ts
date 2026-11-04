@@ -6,6 +6,60 @@ export function isCaliPack(product: Product) {
   return product.categorySlug === "cali-packs";
 }
 
+function toPence(gbp: number) {
+  return Math.round(gbp * 100);
+}
+
+/** Unit price in pence. The bulk price applies only to this line's quantity. */
+export function unitPricePence(
+  product: { price: number; bulkPrice?: number; bulkMinQty?: number },
+  quantity: number
+) {
+  const qty = Math.max(0, Math.floor(quantity));
+  if (product.bulkPrice != null && product.bulkMinQty != null && qty >= product.bulkMinQty) {
+    return toPence(product.bulkPrice);
+  }
+  return toPence(product.price);
+}
+
+export function unitPriceGbp(
+  product: { price: number; bulkPrice?: number; bulkMinQty?: number },
+  quantity: number
+) {
+  return unitPricePence(product, quantity) / 100;
+}
+
+export function lineTotalPence(
+  product: { price: number; bulkPrice?: number; bulkMinQty?: number },
+  quantity: number
+) {
+  const qty = Math.max(0, Math.floor(quantity));
+  return unitPricePence(product, qty) * qty;
+}
+
+export function lineTotalGbp(
+  product: { price: number; bulkPrice?: number; bulkMinQty?: number },
+  quantity: number
+) {
+  return lineTotalPence(product, quantity) / 100;
+}
+
+/** Saving against the standard unit price, in GBP. 0 until the bulk quantity is reached. */
+export function bulkSavingGbp(
+  product: { price: number; bulkPrice?: number; bulkMinQty?: number },
+  quantity: number
+) {
+  const qty = Math.max(0, Math.floor(quantity));
+  if (product.bulkPrice == null || product.bulkMinQty == null || qty < product.bulkMinQty) return 0;
+  return (toPence(product.price) * qty - lineTotalPence(product, qty)) / 100;
+}
+
+/** "£0.22 each · Buy 50+ for £0.20 each", or null when the product has no quantity offer. */
+export function packOfferText(product: { price: number; bulkPrice?: number; bulkMinQty?: number }) {
+  if (product.bulkPrice == null || product.bulkMinQty == null) return null;
+  return `${formatPrice(product.price)} each · Buy ${product.bulkMinQty}+ for ${formatPrice(product.bulkPrice)} each`;
+}
+
 export function productUnit(product: Product) {
   return isCaliPack(product) ? "per pack" : "each";
 }

@@ -29,6 +29,10 @@ export interface Product {
   shortDescription: string;
   price: number;
   originalPrice?: number;
+  /** Cheaper unit price once quantity reaches bulkMinQty. Cali Packs: £0.20 from 50. */
+  bulkPrice?: number;
+  /** Quantity on this line at which bulkPrice replaces price. */
+  bulkMinQty?: number;
   /**
    * UK postage in GBP, charged once per basket at the highest item rate.
    * Omit to use the £3.99 default. 0 = free UK delivery.

@@ -5,7 +5,16 @@ import Image from "next/image";
 import { Minus, Plus, ShoppingBag, Check } from "lucide-react";
 import { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
-import { flattenOption, productImageClass, productUnit, savingPercent } from "@/lib/product";
+import {
+  bulkSavingGbp,
+  flattenOption,
+  lineTotalGbp,
+  packOfferText,
+  productImageClass,
+  productUnit,
+  savingPercent,
+  unitPriceGbp,
+} from "@/lib/product";
 import { DELIVERY_NOTE, postageLabel, productPostageGbp } from "@/lib/shipping";
 import { useCart } from "@/context/CartContext";
 
@@ -33,6 +42,9 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
       </div>
       <p className="mb-2 text-sm font-bold text-brand-800">{postageLabel(postage)}</p>
       <p className="mb-2 text-xs font-semibold text-surface-800/50">SKU {selling.sku}</p>
+      {packOfferText(selling) ? (
+        <p className="mb-4 text-sm font-bold text-ink">{packOfferText(selling)}</p>
+      ) : null}
       <p className="mb-6 text-xs font-semibold leading-relaxed text-graphite/70">{DELIVERY_NOTE}</p>
 
       {options.length > 0 && (
@@ -86,9 +98,13 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
     setTimeout(() => setAdded(false), 2000);
   };
 
+  const total = lineTotalGbp(product, quantity);
+  const saving = bulkSavingGbp(product, quantity);
+  const unit = unitPriceGbp(product, quantity);
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-4">
         <div className="flex items-center border border-surface-200 rounded-xl overflow-hidden">
           <button
             onClick={() => setQuantity(Math.max(min, quantity - 1))}
@@ -112,10 +128,11 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
           {min > 1 ? (
             <span className="mr-3 font-bold text-brand-700">Min. {min} pcs</span>
           ) : null}
-          Total:{" "}
-          <span className="font-semibold text-surface-900">
-            {formatPrice(product.price * quantity)}
-          </span>
+          {formatPrice(unit)} each · Total:{" "}
+          <span className="font-semibold text-surface-900">{formatPrice(total)}</span>
+          {saving > 0 ? (
+            <span className="ml-2 font-bold text-brand-700">You save {formatPrice(saving)}</span>
+          ) : null}
         </p>
       </div>
 

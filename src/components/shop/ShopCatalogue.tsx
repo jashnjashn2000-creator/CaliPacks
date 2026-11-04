@@ -66,8 +66,8 @@ function ShopView({ categorySlug, query, isNew }: ShopViewProps) {
       ? `Search results across named HD products.`
       : category?.description ??
         (isNew
-          ? "Latest drops from the Manchester shop — Cali Packs at £0.20 (min 50) plus new shop-floor stock."
-          : "Cali Packs at £0.20 per pack (min 50 pcs) plus grinders, glass, hookahs, scales, and accessories from the shop floor.");
+          ? "Latest drops from the Manchester shop — Cali Packs at £0.22 (min 25, 50+ for £0.20) plus new shop-floor stock."
+          : "Cali Packs at £0.22 each (min 25 pcs, 50+ for £0.20) plus grinders, glass, hookahs, scales, and accessories from the shop floor.");
 
   const heroImages = category
     ? [category.image, ...displayProducts.slice(0, 2).map((p) => p.image)]
@@ -125,7 +125,7 @@ function ShopView({ categorySlug, query, isNew }: ShopViewProps) {
               </h2>
               <p className="mt-1 text-sm font-semibold text-black/50">
                 {displayProducts.length} item{displayProducts.length !== 1 ? "s" : ""}
-                {categorySlug === "cali-packs" ? " · £0.20 each · min 50 pcs" : ""}
+                {categorySlug === "cali-packs" ? " · £0.22 each · min 25 · 50+ for £0.20" : ""}
                 {category?.tagline && categorySlug !== "cali-packs" ? ` · ${category.tagline}` : ""}
               </p>
             </div>
