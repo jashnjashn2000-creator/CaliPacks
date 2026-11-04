@@ -6,6 +6,8 @@ export interface Category {
   tagline: string;
   image: string;
   productCount: number;
+  /** Set on a subcategory. The parent page lists every child category's products. */
+  parentSlug?: string;
 }
 
 /** A purchasable size or bundle. Each option is its own catalog id so the worker can price it. */
@@ -18,6 +20,11 @@ export interface ProductOption {
   price: number;
   /** UK postage in GBP. 0 = free delivery. */
   postage: number;
+  /**
+   * What the same choice costs bought separately, including the postage
+   * that basket would pay. Used to show "Save £X" on bundles.
+   */
+  originalPrice?: number;
   sku: string;
 }
 
@@ -40,6 +47,8 @@ export interface Product {
   postage?: number;
   /** Size or bundle choices. When set, each option is what gets added to the cart. */
   options?: ProductOption[];
+  /** Show the saving as "Save £X" against originalPrice, instead of a percent. */
+  saveAsAmount?: boolean;
   categoryId: string;
   categorySlug: string;
   image: string;
@@ -60,5 +69,5 @@ export interface CartItem {
 export interface NavItem {
   label: string;
   href: string;
-  children?: { label: string; href: string; description?: string }[];
+  children?: { label: string; href: string; description?: string; indent?: boolean }[];
 }

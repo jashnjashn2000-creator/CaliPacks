@@ -43,7 +43,7 @@ export default function HomePage() {
       <CategoryHub />
       <CategorySection
         title="Shop-floor stock"
-        subtitle="Named HD photos from the Manchester shop — grinders, glass, hookahs, scales, and accessories at UK-competitive prices."
+        subtitle="Named HD photos from the Manchester shop — grinders, bongs, hookahs, scales, and accessories at UK-competitive prices."
         products={shopStock}
         viewAllHref="/shop"
         eagerCount={0}

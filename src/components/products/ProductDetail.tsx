@@ -7,11 +7,13 @@ import { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
 import {
   bulkSavingGbp,
+  bundleSavingLabel,
   flattenOption,
   lineTotalGbp,
   packOfferText,
   productImageClass,
   productUnit,
+  savingAmountGbp,
   savingPercent,
   unitPriceGbp,
 } from "@/lib/product";
@@ -38,7 +40,11 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
           <span className="price-was text-lg font-semibold">{formatPrice(selling.originalPrice)}</span>
         ) : null}
         <span className="text-sm text-brand-700 font-bold">{productUnit(selling)}</span>
-        {savingPercent(selling) ? <span className="save-tag">Save {savingPercent(selling)}%</span> : null}
+        {bundleSavingLabel(selling) ? (
+          <span className="save-tag">{bundleSavingLabel(selling)}</span>
+        ) : savingPercent(selling) ? (
+          <span className="save-tag">Save {savingPercent(selling)}%</span>
+        ) : null}
       </div>
       <p className="mb-2 text-sm font-bold text-brand-800">{postageLabel(postage)}</p>
       <p className="mb-2 text-xs font-semibold text-surface-800/50">SKU {selling.sku}</p>
@@ -70,6 +76,11 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
                   <span className="mt-0.5 block text-[11px] font-bold text-brand-800">
                     {postageLabel(option.postage)}
                   </span>
+                  {savingAmountGbp(option.price, option.originalPrice) > 0 ? (
+                    <span className="mt-0.5 block text-[11px] font-bold text-brand-800">
+                      Save {formatPrice(savingAmountGbp(option.price, option.originalPrice))}
+                    </span>
+                  ) : null}
                 </button>
               );
             })}

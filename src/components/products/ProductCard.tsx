@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
-import { displayPostageLabel, displayPrice, packOfferText, productImageClass, productUnit, savingPercent, thumbSrc } from "@/lib/product";
+import { bundleSavingLabel, displayPostageLabel, displayPrice, packOfferText, productImageClass, productUnit, savingPercent, thumbSrc } from "@/lib/product";
 import { AddToCartMini } from "./AddToCartMini";
 
 interface ProductCardProps {
@@ -51,7 +51,9 @@ export function ProductCard({
             </span>
           ) : null}
           <span className="text-[11px] font-bold text-black/45">{productUnit(product)}</span>
-          {savingPercent(product) && !product.options?.length ? (
+          {bundleSavingLabel(product) ? (
+            <span className="save-tag ml-auto self-center">{bundleSavingLabel(product)}</span>
+          ) : savingPercent(product) && !product.options?.length ? (
             <span className="save-tag ml-auto self-center">Save {savingPercent(product)}%</span>
           ) : null}
         </div>

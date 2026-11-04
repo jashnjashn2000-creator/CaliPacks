@@ -29,7 +29,7 @@ export function StorefrontShowcase() {
             </h2>
             <p className="mt-4 max-w-md text-base font-medium leading-relaxed text-white/70 sm:text-lg">
               Browse HD product photos, pick your packs, and order online —
-              £0.22 each, minimum 25 pcs, or £0.20 each from 50, plus grinders, glass, hookahs,
+              £0.22 each, minimum 25 pcs, or £0.20 each from 50, plus grinders, bongs, hookahs,
               and more.
             </p>
 

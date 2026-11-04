@@ -10,7 +10,8 @@ import { ShopCategoriesNav } from "@/components/shop/ShopCategoriesNav";
 import { LoadMoreGrid } from "@/components/shop/LoadMoreGrid";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { products, searchProducts } from "@/data/products";
-import { getCategoryBySlug } from "@/data/categories";
+import { productsForCategory } from "@/lib/catalogue";
+import { getCategoryBySlug, listingSlugs } from "@/data/categories";
 import { SITE_URL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -28,7 +29,7 @@ function ShopView({ categorySlug, query, isNew }: ShopViewProps) {
   const category = categorySlug ? getCategoryBySlug(categorySlug) : undefined;
 
   const scoped = useMemo(() => {
-    if (categorySlug) return products.filter((p) => p.categorySlug === categorySlug);
+    if (categorySlug) return productsForCategory(categorySlug);
     return products;
   }, [categorySlug]);
 
@@ -40,7 +41,9 @@ function ShopView({ categorySlug, query, isNew }: ShopViewProps) {
   const displayProducts = useMemo(() => {
     if (query) {
       const hits = searchProducts(query);
-      return categorySlug ? hits.filter((p) => p.categorySlug === categorySlug) : hits;
+      if (!categorySlug) return hits;
+      const slugs = new Set(listingSlugs(categorySlug));
+      return hits.filter((p) => slugs.has(p.categorySlug));
     }
     if (isNew) return scoped.filter((p) => p.isNew);
     if (!categorySlug) {
@@ -67,7 +70,7 @@ function ShopView({ categorySlug, query, isNew }: ShopViewProps) {
       : category?.description ??
         (isNew
           ? "Latest drops from the Manchester shop — Cali Packs at £0.22 (min 25, 50+ for £0.20) plus new shop-floor stock."
-          : "Cali Packs at £0.22 each (min 25 pcs, 50+ for £0.20) plus grinders, glass, hookahs, scales, and accessories from the shop floor.");
+          : "Cali Packs at £0.22 each (min 25 pcs, 50+ for £0.20) plus grinders, bongs, hookahs, scales, and accessories from the shop floor.");
 
   const heroImages = category
     ? [category.image, ...displayProducts.slice(0, 2).map((p) => p.image)]

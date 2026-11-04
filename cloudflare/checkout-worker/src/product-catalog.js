@@ -1047,6 +1047,69 @@ export const PRODUCT_CATALOG = {
   "minOrder": 1,
   "inStock": true
  },
+ "shop-bnd-vac-rolls": {
+  "name": "Vacuum Sealer + 3 Black Rolls Bundle",
+  "pricePence": 3699,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bnd-gr-gold-mz": {
+  "name": "Grinder + Digital Scale Bundle — Gold Honeycomb Grinder and On Balance MZ-100 Digital Scale",
+  "pricePence": 1699,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bnd-gr-gold-t3": {
+  "name": "Grinder + Digital Scale Bundle — Gold Honeycomb Grinder and My Weigh Triton T3 Digital Scale",
+  "pricePence": 1699,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bnd-gr-teal-mz": {
+  "name": "Grinder + Digital Scale Bundle — Teal 4-Piece Grinder and On Balance MZ-100 Digital Scale",
+  "pricePence": 1699,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bnd-gr-teal-t3": {
+  "name": "Grinder + Digital Scale Bundle — Teal 4-Piece Grinder and My Weigh Triton T3 Digital Scale",
+  "pricePence": 1699,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bnd-gr-clover-mz": {
+  "name": "Grinder + Digital Scale Bundle — Crystal Clover Grinder and On Balance MZ-100 Digital Scale",
+  "pricePence": 1699,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bnd-gr-clover-t3": {
+  "name": "Grinder + Digital Scale Bundle — Crystal Clover Grinder and My Weigh Triton T3 Digital Scale",
+  "pricePence": 1699,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bnd-gr-charm-mz": {
+  "name": "Grinder + Digital Scale Bundle — Crystal Charm Grinder and On Balance MZ-100 Digital Scale",
+  "pricePence": 1699,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bnd-gr-charm-t3": {
+  "name": "Grinder + Digital Scale Bundle — Crystal Charm Grinder and My Weigh Triton T3 Digital Scale",
+  "pricePence": 1699,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
  "shop-travel-kit": {
   "name": "Cartoon Smoking Travel Kit",
   "pricePence": 1599,
@@ -1159,9 +1222,170 @@ export const PRODUCT_CATALOG = {
   "minOrder": 1,
   "inStock": true
  },
- "shop-gummy-beaker": {
-  "name": "Gummy Cluster Beaker",
-  "pricePence": 2999,
+ "shop-bong-m-7461": {
+  "name": "Medium Runtz Green Apple Glass Beaker Bong with Ice Catcher",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-7462": {
+  "name": "Medium Nerds Big Chewy Glass Beaker Bong with Ice Catcher",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-7463": {
+  "name": "Medium Nerds Gummy Clusters Rainbow Glass Beaker Bong with Ice Catcher",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-7464": {
+  "name": "Medium Skittles Glass Beaker Bong with Ice Catcher",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-7467": {
+  "name": "Medium Nerds Gummy Clusters Blue Glass Beaker Bong with Ice Catcher",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-7468": {
+  "name": "Medium Bob Marley Glass Beaker Bong with Ice Catcher",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-7469": {
+  "name": "Medium Orange Rick and Morty Honeycomb Glass Beaker Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-7471": {
+  "name": "Medium Blue Rick and Morty Honeycomb Glass Beaker Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-l-7474": {
+  "name": "Large Skittles Glass Beaker Bong with Ice Catcher",
+  "pricePence": 2499,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-l-7475": {
+  "name": "Large Green Rick and Morty Honeycomb Glass Beaker Bong",
+  "pricePence": 2499,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-l-7476": {
+  "name": "Large Bob Marley Glass Beaker Bong with Ice Catcher",
+  "pricePence": 2499,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-l-7477": {
+  "name": "Large Red Rick and Morty Skull Honeycomb Glass Beaker Bong",
+  "pricePence": 2499,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-l-7479": {
+  "name": "Large Pink Runtz Glass Beaker Bong with Ice Catcher",
+  "pricePence": 2499,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-l-7481": {
+  "name": "Large Pink Sculpted Face Glass Bong",
+  "pricePence": 2499,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-l-7483": {
+  "name": "Large Blue Mushroom Monster Glass Bong",
+  "pricePence": 2499,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-l-7485": {
+  "name": "Large Purple Galaxy Sculpted Glass Bong",
+  "pricePence": 2499,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-l-7486": {
+  "name": "Large Clown Wizard Glass Bong",
+  "pricePence": 2499,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-l-7487": {
+  "name": "Large Lime Green Black Cat Glass Bong",
+  "pricePence": 2499,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-l-7490": {
+  "name": "Large Mushroom Drip Glass Bong",
+  "pricePence": 2499,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-l-7491": {
+  "name": "Large Cosmic Planets Glass Bong",
+  "pricePence": 2499,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-l-7493": {
+  "name": "Large Brown Tree Eye Glass Bong",
+  "pricePence": 2499,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-l-7495": {
+  "name": "Large Ocean Starfish Glass Bong",
+  "pricePence": 2499,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-l-7496": {
+  "name": "Large Green Slime Eyeball Glass Bong",
+  "pricePence": 2499,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-l-7502": {
+  "name": "Large Blue Octopus Glass Bong",
+  "pricePence": 2499,
   "postagePence": 399,
   "minOrder": 1,
   "inStock": true

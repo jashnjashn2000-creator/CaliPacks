@@ -74,7 +74,36 @@ export function productImageClass(product: Product) {
 /** Lowest price, and whether the card should say "From". */
 export function displayPrice(product: Product): { amount: number; from: boolean } {
   if (!product.options?.length) return { amount: product.price, from: false };
-  return { amount: Math.min(...product.options.map((o) => o.price)), from: true };
+  const amounts = product.options.map((o) => o.price);
+  const amount = Math.min(...amounts);
+  const highest = Math.max(...amounts);
+  return { amount, from: highest - amount > 0.001 };
+}
+
+/** Pounds saved against the crossed-out separate-purchase price, or 0. */
+export function savingAmountGbp(price: number, originalPrice?: number) {
+  if (originalPrice == null || originalPrice <= price) return 0;
+  return Math.round((originalPrice - price) * 100) / 100;
+}
+
+/**
+ * "Save £7.96" or "Save from £2.98" for bundles that compare against
+ * buying the same items separately (prices plus the highest postage once).
+ */
+export function bundleSavingLabel(product: Product): string | null {
+  if (!product.saveAsAmount) return null;
+  if (product.options?.length) {
+    const saves = product.options
+      .map((option) => savingAmountGbp(option.price, option.originalPrice))
+      .filter((amount) => amount > 0);
+    if (!saves.length) return null;
+    const lowest = Math.min(...saves);
+    const highest = Math.max(...saves);
+    if (Math.round(lowest * 100) === Math.round(highest * 100)) return `Save ${formatPrice(lowest)}`;
+    return `Save from ${formatPrice(lowest)}`;
+  }
+  const save = savingAmountGbp(product.price, product.originalPrice);
+  return save > 0 ? `Save ${formatPrice(save)}` : null;
 }
 
 /**
@@ -105,7 +134,7 @@ export function flattenOption(product: Product, option: ProductOption): Product 
     price: option.price,
     postage: option.postage,
     sku: option.sku,
-    originalPrice: undefined,
+    originalPrice: option.originalPrice,
     options: undefined,
   };
 }
