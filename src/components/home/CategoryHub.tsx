@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { categories } from "@/data/categories";
+import { topLevelCategories } from "@/data/categories";
 
 export function CategoryHub() {
   return (
@@ -17,7 +17,7 @@ export function CategoryHub() {
               Cali Packs & shop stock
             </h2>
             <p className="mt-2 max-w-xl text-sm font-medium text-graphite/65 md:text-base">
-              Named HD products from the Manchester floor — packs, grinders, glass, hookahs, and more.
+              Named HD products from the Manchester floor — packs, grinders, bongs, hookahs, and more.
             </p>
           </div>
           <Link
@@ -30,7 +30,7 @@ export function CategoryHub() {
         </div>
 
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          {categories.map((category) => (
+          {topLevelCategories().map((category) => (
             <Link
               key={category.id}
               href={`/shop/${category.slug}`}

@@ -3,13 +3,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
-import { displayPostageLabel, displayPrice, productImageClass, savingPercent, thumbSrc } from "@/lib/product";
+import { bundleSavingLabel, displayPostageLabel, displayPrice, productImageClass, savingPercent, thumbSrc } from "@/lib/product";
 
 /** Roughly 55px a second, whatever the number of products. */
 const SECONDS_PER_ITEM = 3.2;
 
 function BeltItem({ product, hidden }: { product: Product; hidden?: boolean }) {
+  const poundSave = bundleSavingLabel(product);
   const saving = savingPercent(product);
+  const badge = poundSave ? poundSave.replace(/^Save /, "−") : saving ? `−${saving}%` : null;
   return (
     <li className="shrink-0">
       <Link
@@ -27,9 +29,9 @@ function BeltItem({ product, hidden }: { product: Product; hidden?: boolean }) {
             decoding="async"
             className={productImageClass(product)}
           />
-          {saving ? (
+          {badge ? (
             <span className="absolute right-1.5 top-1.5 rounded-md bg-ink/90 px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-cream tabular-nums">
-              −{saving}%
+              {badge}
             </span>
           ) : null}
         </div>

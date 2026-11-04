@@ -60,7 +60,7 @@ export const faqs: Faq[] = [
   {
     group: "Visiting the shop",
     q: "What else does the Manchester shop sell?",
-    a: "Alongside Cali Packs, the shop floor stocks grinders, glass, hookahs, scales and smoking accessories at UK-competitive prices.",
+    a: "Alongside Cali Packs, the shop floor stocks grinders, bongs, hookahs, scales and smoking accessories at UK-competitive prices.",
   },
   {
     group: "Custom orders",

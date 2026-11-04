@@ -62,14 +62,47 @@ export const categories: Category[] = [
     productCount: 3,
   },
   {
-    id: "glass",
-    name: "Glass",
-    slug: "glass",
-    tagline: "From £16.99",
+    id: "bongs",
+    name: "Bongs",
+    slug: "bongs",
+    tagline: "From £7.99",
     description:
-      "Mini bubblers, spiral perc pieces, swan pipes, and beaker bongs. HD shop-floor photography.",
+      "Large, medium and small glass bongs from the Manchester shop. Beakers and sculpted pieces, each photographed, with postage shown on the product.",
+    image: "/shop/bong-l-7502-blue-octopus.webp",
+    productCount: 27,
+  },
+  {
+    id: "large-bongs",
+    name: "Large Bongs",
+    slug: "large-bongs",
+    parentSlug: "bongs",
+    tagline: "£24.99 · postage £3.99",
+    description:
+      "Large glass bongs at £24.99 each, postage £3.99. Beakers and sculpted pieces from shop stock, sold individually.",
+    image: "/shop/bong-l-7502-blue-octopus.webp",
+    productCount: 16,
+  },
+  {
+    id: "medium-bongs",
+    name: "Medium Bongs",
+    slug: "medium-bongs",
+    parentSlug: "bongs",
+    tagline: "£14.99 · postage £3.50",
+    description:
+      "Medium glass beaker bongs at £14.99 each, postage £3.50. Printed candy, cartoon and portrait designs, sold individually.",
+    image: "/shop/bong-m-7461-runtz-green-apple.webp",
+    productCount: 8,
+  },
+  {
+    id: "small-bongs",
+    name: "Small Bongs",
+    slug: "small-bongs",
+    parentSlug: "bongs",
+    tagline: "From £7.99",
+    description:
+      "Small glass bubblers and a hand pipe from the Manchester shop. Compact pieces, sold each, with postage shown on the product.",
     image: "/shop/mini-glass-bubblers.webp",
-    productCount: 4,
+    productCount: 3,
   },
   {
     id: "accessories",
@@ -77,12 +110,30 @@ export const categories: Category[] = [
     slug: "accessories",
     tagline: "From £7.99",
     description:
-      "Vacuum sealers, travel kits, and ashtrays from real Smoke Cali shop stock.",
+      "Vacuum sealers, sealer and grinder bundles, travel kits, and ashtrays from real Smoke Cali shop stock.",
     image: "/shop/vacuum-sealer.webp",
-    productCount: 4,
+    productCount: 6,
   },
 ];
 
 export function getCategoryBySlug(slug: string): Category | undefined {
   return categories.find((c) => c.slug === slug);
+}
+
+/** Categories shown as top-level shop filters. Subcategories stay under their parent. */
+export function topLevelCategories(): Category[] {
+  return categories.filter((category) => !category.parentSlug);
+}
+
+export function childCategories(parentSlug: string): Category[] {
+  return categories.filter((category) => category.parentSlug === parentSlug);
+}
+
+/**
+ * Slugs whose products belong on this category page.
+ * A parent with children lists those children and does not have products of its own.
+ */
+export function listingSlugs(slug: string): string[] {
+  const children = childCategories(slug).map((category) => category.slug);
+  return children.length ? children : [slug];
 }

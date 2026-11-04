@@ -164,6 +164,18 @@ assert.equal(PRODUCT_CATALOG["pack-001"].minOrder, 25);
 assert.equal(PRODUCT_CATALOG["pack-111"].pricePence, 22);
 assert.equal(PRODUCT_CATALOG["pack-111"].minOrder, 25);
 expectSku("shop-gold-grinder", 799, 399);
+assert.equal(PRODUCT_CATALOG["shop-gummy-beaker"], undefined);
+expectSku("shop-bong-m-7461", 1499, 350, /Runtz Green Apple/);
+expectSku("shop-bong-m-7462", 1499, 350, /Nerds Big Chewy/);
+expectSku("shop-bong-m-7463", 1499, 350, /Rainbow/);
+expectSku("shop-bong-m-7467", 1499, 350, /Blue/);
+expectSku("shop-bong-l-7474", 2499, 399, /Skittles/);
+expectSku("shop-bong-l-7502", 2499, 399, /Octopus/);
+expectSku("shop-bnd-vac-rolls", 3699, 0, /3 Black Rolls/);
+expectSku("shop-bnd-gr-gold-mz", 1699, 0, /Gold Honeycomb/);
+expectSku("shop-bnd-gr-teal-mz", 1699, 0, /Teal 4-Piece/);
+expectSku("shop-bnd-gr-charm-t3", 1699, 0, /Crystal Charm/);
+assert.equal(PRODUCT_CATALOG["shop-bnd-gr-gold-mz"].name.includes("Grinder + Digital Scale Bundle"), true);
 
 // Browser postage is ignored. Bundle alone is free. Highest postage wins across lines.
 const bundleOnly = buildTotals([{ productId: "shop-vacuum-rolls-all", quantity: 2, postagePence: 9999 }]);

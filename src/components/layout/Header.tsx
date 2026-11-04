@@ -66,12 +66,15 @@ export function Header() {
                   </button>
                   {shopOpen && (
                     <div className="absolute top-full left-0 pt-3 w-72">
-                      <div className="bg-graphite rounded-xl shadow-2xl border border-white/10 p-2">
+                      <div className="max-h-[min(70vh,640px)] overflow-y-auto bg-graphite rounded-xl shadow-2xl border border-white/10 p-2">
                         {item.children.map((child) => (
                           <Link
                             key={child.href}
                             href={child.href}
-                            className="block px-4 py-3 rounded-lg hover:bg-white/5 transition-colors group"
+                            className={cn(
+                              "block px-4 py-3 rounded-lg hover:bg-white/5 transition-colors group",
+                              child.indent && "py-2 pl-7"
+                            )}
                           >
                             <span className="font-bold text-sm text-white group-hover:text-gold">
                               {child.label}
@@ -166,7 +169,10 @@ export function Header() {
                       key={child.href}
                       href={child.href}
                       onClick={() => setMobileOpen(false)}
-                      className="block px-4 py-2.5 text-base font-semibold text-white hover:text-gold hover:bg-white/5 rounded-lg"
+                      className={cn(
+                        "block px-4 py-2.5 text-base font-semibold text-white hover:text-gold hover:bg-white/5 rounded-lg",
+                        child.indent && "py-2 pl-8 text-sm"
+                      )}
                     >
                       {child.label}
                     </Link>

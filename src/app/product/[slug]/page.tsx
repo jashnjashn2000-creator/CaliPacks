@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getProductBySlug, products } from "@/data/products";
 import { getCategoryBySlug } from "@/data/categories";
 import { ProductGallery, ProductPurchase } from "@/components/products/ProductDetail";
+import { ShopLegacyRedirect } from "@/components/shop/ShopLegacyRedirect";
 import { ProductCard } from "@/components/products/ProductCard";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { formatPrice } from "@/lib/utils";
@@ -16,12 +17,31 @@ interface ProductPageProps {
   params: Promise<{ slug: string }>;
 }
 
+/** The old Glass Nerds beaker is no longer sold. Medium Nerds bongs replace it. */
+const RETIRED_PRODUCTS: Record<string, { href: string; message: string }> = {
+  "gummy-cluster-beaker": {
+    href: "/shop/medium-bongs/",
+    message: "This Nerds beaker has been replaced by the Medium Nerds bongs. Taking you there…",
+  },
+};
+
 export async function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+  return [
+    ...products.map((p) => ({ slug: p.slug })),
+    ...Object.keys(RETIRED_PRODUCTS).map((slug) => ({ slug })),
+  ];
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
+  const retired = RETIRED_PRODUCTS[slug];
+  if (retired) {
+    return {
+      title: "Moved",
+      robots: { index: false, follow: true },
+      alternates: { canonical: pageUrl(retired.href) },
+    };
+  }
   const product = getProductBySlug(slug);
   if (!product) return { title: "Product Not Found" };
 
@@ -33,9 +53,12 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     : shown.from
       ? `from ${formatPrice(shown.amount)}`
       : `${formatPrice(product.price)} each`;
-  const postageBit = product.options?.length
-    ? "Each size shows its postage. The all-3-sizes bundle includes free UK delivery. Ordering several items, you pay the highest postage once."
-    : `${postageLabel(productPostageGbp(product))}. Ordering several items, you pay the highest postage once.`;
+  const postageBit =
+    product.slug === "vacuum-sealer-rolls"
+      ? "Each size shows its postage. The all-3-sizes bundle includes free UK delivery. Ordering several items, you pay the highest postage once."
+      : product.options?.length
+        ? `${postageLabel(productPostageGbp({ postage: product.options[0].postage }))}. Ordering several items, you pay the highest postage once.`
+        : `${postageLabel(productPostageGbp(product))}. Ordering several items, you pay the highest postage once.`;
 
   return {
     title: titleName,
@@ -61,10 +84,14 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
+  const retired = RETIRED_PRODUCTS[slug];
+  if (retired) return <ShopLegacyRedirect href={retired.href} message={retired.message} />;
+
   const product = getProductBySlug(slug);
   if (!product) notFound();
 
   const category = getCategoryBySlug(product.categorySlug);
+  const parent = category?.parentSlug ? getCategoryBySlug(category.parentSlug) : undefined;
   const related = products
     .filter((p) => p.categorySlug === product.categorySlug && p.id !== product.id)
     .slice(0, 4);
@@ -174,11 +201,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 name: "Shop",
                 item: pageUrl("/shop"),
               },
-              ...(category
+              ...(parent
                 ? [
                     {
                       "@type": "ListItem",
                       position: 3,
+                      name: parent.name,
+                      item: pageUrl(`/shop/${parent.slug}`),
+                    },
+                  ]
+                : []),
+              ...(category
+                ? [
+                    {
+                      "@type": "ListItem",
+                      position: parent ? 4 : 3,
                       name: category.name,
                       item: pageUrl(`/shop/${category.slug}`),
                     },
@@ -186,7 +223,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 : []),
               {
                 "@type": "ListItem",
-                position: category ? 4 : 3,
+                position: (parent ? 1 : 0) + (category ? 4 : 3),
                 name: product.name,
                 item: pageUrl(`/product/${product.slug}`),
               },
@@ -198,6 +235,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <nav aria-label="Breadcrumb" className="text-sm text-surface-800/40 mb-8">
           <Link href="/" className="hover:text-brand-700">Home</Link>
           <span className="mx-2">/</span>
+          {parent ? (
+            <>
+              <Link href={`/shop/${parent.slug}`} className="hover:text-brand-700">
+                {parent.name}
+              </Link>
+              <span className="mx-2">/</span>
+            </>
+          ) : null}
           <Link href={category ? `/shop/${category.slug}` : "/shop"} className="hover:text-brand-700">
             {category?.name ?? "Shop"}
           </Link>

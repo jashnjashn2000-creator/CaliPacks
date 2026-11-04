@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ShopCatalogue } from "@/components/shop/ShopCatalogue";
 import { getCategoryBySlug, categories } from "@/data/categories";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { products } from "@/data/products";
+import { productsForCategory } from "@/lib/catalogue";
 import { pageUrl } from "@/lib/site";
 
 interface CategoryPageProps {
@@ -36,7 +36,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category: slug } = await params;
   const category = getCategoryBySlug(slug);
   if (!category) notFound();
-  const items = products.filter((p) => p.categorySlug === category.slug);
+  const items = productsForCategory(category.slug);
+  const parent = category.parentSlug ? getCategoryBySlug(category.parentSlug) : undefined;
+  const crumbs = [
+    { name: "Home", item: pageUrl("/") },
+    { name: "Shop", item: pageUrl("/shop") },
+    ...(parent ? [{ name: parent.name, item: pageUrl(`/shop/${parent.slug}`) }] : []),
+    { name: category.name, item: pageUrl(`/shop/${category.slug}`) },
+  ];
 
   return (
     <>
@@ -64,11 +71,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           {
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Home", item: pageUrl("/") },
-              { "@type": "ListItem", position: 2, name: "Shop", item: pageUrl("/shop") },
-              { "@type": "ListItem", position: 3, name: category.name, item: pageUrl(`/shop/${category.slug}`) },
-            ],
+            itemListElement: crumbs.map((crumb, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              name: crumb.name,
+              item: crumb.item,
+            })),
           },
         ]}
       />
