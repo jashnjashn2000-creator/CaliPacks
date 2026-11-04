@@ -39,26 +39,26 @@ const products = names.map(([name, blurb], i) => {
 });
 
 const WHOLESALE =
-  "£0.20 per pack. Minimum order 50 pcs. Smell-proof 3.5g Cali Pack with HD studio photography.";
+  "£0.22 per pack. Minimum order 25 pcs. Buy 50 or more of this design for £0.20 each. Smell-proof 3.5g Cali Pack with HD studio photography.";
 
 const productBlocks = products
   .map((p) => {
     const description = p.blurb + ". " + WHOLESALE;
-    const shortDescription = p.blurb + " — £0.20 per pack, min 50 pcs.";
+    const shortDescription = p.blurb + " — £0.22 each, minimum 25, or £0.20 each when you buy 50 or more.";
     return `  {
     id: "pack-${p.pad}",
     name: ${JSON.stringify(p.name)},
     slug: ${JSON.stringify(p.slug)},
     description: ${JSON.stringify(description)},
     shortDescription: ${JSON.stringify(shortDescription)},
-    price: 0.2,
+    price: 0.22,
     categoryId: "cali-packs",
     categorySlug: "cali-packs",
     image: ${JSON.stringify(p.image)},
     images: [${JSON.stringify(p.image)}],
     tags: ["cali-packs", "mylar", "wholesale"],
     inStock: true,${p.isNew ? "\n    isNew: true," : ""}${p.isFeatured ? "\n    isFeatured: true," : ""}
-    minOrder: 50,
+    minOrder: 25,
     sku: "CP-${p.pad}",
   }`;
   })

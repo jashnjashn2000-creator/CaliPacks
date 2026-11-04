@@ -5,8 +5,82 @@ import Image from "next/image";
 import { Minus, Plus, ShoppingBag, Check } from "lucide-react";
 import { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
-import { productImageClass } from "@/lib/product";
+import {
+  bulkSavingGbp,
+  flattenOption,
+  lineTotalGbp,
+  packOfferText,
+  productImageClass,
+  productUnit,
+  savingPercent,
+  unitPriceGbp,
+} from "@/lib/product";
+import { DELIVERY_NOTE, postageLabel, productPostageGbp } from "@/lib/shipping";
 import { useCart } from "@/context/CartContext";
+
+interface ProductPurchaseProps {
+  product: Product;
+}
+
+/** Price, postage, size/bundle picker and add to cart. Postage follows the selected option. */
+export function ProductPurchase({ product }: ProductPurchaseProps) {
+  const options = product.options ?? [];
+  const [optionId, setOptionId] = useState(options[0]?.id ?? product.id);
+  const selected = options.find((o) => o.id === optionId) ?? options[0];
+  const selling = selected ? flattenOption(product, selected) : product;
+  const postage = productPostageGbp(selling);
+
+  return (
+    <div>
+      <div className="flex flex-wrap items-center gap-3 mb-3 tabular-nums">
+        <span className="text-2xl font-extrabold text-ink">{formatPrice(selling.price)}</span>
+        {selling.originalPrice ? (
+          <span className="price-was text-lg font-semibold">{formatPrice(selling.originalPrice)}</span>
+        ) : null}
+        <span className="text-sm text-brand-700 font-bold">{productUnit(selling)}</span>
+        {savingPercent(selling) ? <span className="save-tag">Save {savingPercent(selling)}%</span> : null}
+      </div>
+      <p className="mb-2 text-sm font-bold text-brand-800">{postageLabel(postage)}</p>
+      <p className="mb-2 text-xs font-semibold text-surface-800/50">SKU {selling.sku}</p>
+      {packOfferText(selling) ? (
+        <p className="mb-4 text-sm font-bold text-ink">{packOfferText(selling)}</p>
+      ) : null}
+      <p className="mb-6 text-xs font-semibold leading-relaxed text-graphite/70">{DELIVERY_NOTE}</p>
+
+      {options.length > 0 && (
+        <div className="mb-6">
+          <p className="mb-2 text-sm font-semibold text-ink">Choose an option</p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {options.map((option) => {
+              const active = option.id === selling.id;
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  onClick={() => setOptionId(option.id)}
+                  aria-pressed={active}
+                  className={`rounded-xl border px-3 py-3 text-left transition-colors ${
+                    active ? "border-ink bg-brand-50" : "border-surface-200 bg-white hover:border-ink/30"
+                  }`}
+                >
+                  <span className="block text-sm font-bold text-ink">{option.label}</span>
+                  <span className="mt-0.5 block text-sm font-semibold tabular-nums text-ink">
+                    {formatPrice(option.price)}
+                  </span>
+                  <span className="mt-0.5 block text-[11px] font-bold text-brand-800">
+                    {postageLabel(option.postage)}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <AddToCartButton product={selling} />
+    </div>
+  );
+}
 
 interface AddToCartButtonProps {
   product: Product;
@@ -24,9 +98,13 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
     setTimeout(() => setAdded(false), 2000);
   };
 
+  const total = lineTotalGbp(product, quantity);
+  const saving = bulkSavingGbp(product, quantity);
+  const unit = unitPriceGbp(product, quantity);
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-4">
         <div className="flex items-center border border-surface-200 rounded-xl overflow-hidden">
           <button
             onClick={() => setQuantity(Math.max(min, quantity - 1))}
@@ -50,10 +128,11 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
           {min > 1 ? (
             <span className="mr-3 font-bold text-brand-700">Min. {min} pcs</span>
           ) : null}
-          Total:{" "}
-          <span className="font-semibold text-surface-900">
-            {formatPrice(product.price * quantity)}
-          </span>
+          {formatPrice(unit)} each · Total:{" "}
+          <span className="font-semibold text-surface-900">{formatPrice(total)}</span>
+          {saving > 0 ? (
+            <span className="ml-2 font-bold text-brand-700">You save {formatPrice(saving)}</span>
+          ) : null}
         </p>
       </div>
 

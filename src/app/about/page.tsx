@@ -8,9 +8,9 @@ import { SITE_URL, pageUrl } from "@/lib/site";
 
 const highlights = [
   "111 HD Cali Pack designs, each named and photographed",
-  "£0.20 per pack · minimum order 50 pcs",
+  "£0.22 each · minimum 25 pcs · 50+ for £0.20 each",
   "Online cart and WhatsApp ordering",
-  "Dispatched in 2–3 business days · UK delivery from £4.00",
+  "Dispatched in 2–3 business days · postage shown on each product",
 ];
 
 export default function AboutPage() {
@@ -30,7 +30,7 @@ export default function AboutPage() {
         eyebrow="Real Manchester stock"
         title="About"
         accent="Smoke Cali"
-        description="A real Manchester shop supplying 111 HD Cali Packs. £0.20 per pack, minimum 50 pcs — shop online or visit us on Sagar Street."
+        description="A real Manchester shop supplying 111 HD Cali Packs. £0.22 each, minimum 25 pcs, or £0.20 each from 50 — shop online or visit us on Sagar Street."
         images={[
           "/cali-shop-hero.webp",
           "/products/pack-030.webp",
@@ -46,7 +46,7 @@ export default function AboutPage() {
             <div>
               <p className="font-serif text-2xl leading-snug text-ink sm:text-[1.75rem]">
                 Smoke Cali supplies UK shops and buyers with Cali Packs selected
-                from our real Manchester shelves — £0.20 per pack, 50 pcs minimum.
+                from our real Manchester shelves — £0.22 each, 25 pcs minimum, or £0.20 each from 50.
               </p>
               <p className="mt-4 font-medium leading-relaxed text-graphite/65">
                 Browse online, add products to your cart, or contact us through
@@ -89,7 +89,7 @@ export default function AboutPage() {
               <div><dt className="font-semibold text-ink">Opening hours</dt><dd className="text-graphite/70">Monday–Sunday, 9:30am–7:30pm</dd></div>
               <div><dt className="font-semibold text-ink">Phone &amp; WhatsApp</dt><dd className="text-graphite/70"><a href={contactInfo.phoneHref} className="hover:underline">{contactInfo.phone}</a></dd></div>
               <div><dt className="font-semibold text-ink">Email</dt><dd className="text-graphite/70"><a href={`mailto:${contactInfo.email}`} className="hover:underline">{contactInfo.email}</a></dd></div>
-              <div><dt className="font-semibold text-ink">Online store</dt><dd className="text-graphite/70">UK-wide delivery from £4.00 (Royal Mail Tracked 48), dispatched in 2–3 business days</dd></div>
+              <div><dt className="font-semibold text-ink">Online store</dt><dd className="text-graphite/70">UK postage is shown on each product (Royal Mail Tracked 48). Ordering several items, you pay the highest postage once. Dispatched in 2–3 business days</dd></div>
               <div><dt className="font-semibold text-ink">Age policy</dt><dd className="text-graphite/70">Customers must be 18 or over</dd></div>
             </dl>
             <p className="mt-6 text-sm text-graphite/60">

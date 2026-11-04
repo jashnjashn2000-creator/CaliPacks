@@ -15,12 +15,12 @@ export const faqs: Faq[] = [
   {
     group: "Ordering",
     q: "How much are Cali Packs at Smoke Cali?",
-    a: "Every Cali Pack design is £0.20 per pack with a minimum order of 50 pcs. Choose from 111 HD designs, add them to the online cart and pay securely by card through Viva.com, or order on WhatsApp.",
+    a: "Every Cali Pack design is £0.22 each, with a minimum order of 25 pcs. Buy 50 or more of the same design and the price drops to £0.20 each. Choose from 111 HD designs and pay by card through Viva.com, or order on WhatsApp.",
   },
   {
     group: "Ordering",
     q: "What is the minimum order quantity?",
-    a: "Every Cali Pack is £0.20 per pack with a minimum order of 50 pcs. Add 50 or more of any design to your cart to check out.",
+    a: "The minimum order is 25 pcs of a Cali Pack design, at £0.22 each. When that line reaches 50 or more, the unit price drops to £0.20 each. Different designs are counted separately.",
   },
   {
     group: "Ordering",
@@ -35,7 +35,7 @@ export const faqs: Faq[] = [
   {
     group: "Delivery & returns",
     q: "How much is UK delivery?",
-    a: "UK delivery is by Royal Mail Tracked 48 and is charged once per order, based on the total weight of your basket: Small parcel (up to 2kg) £4.00, Medium parcel (2–10kg) £8.99, Heavy parcel (over 10kg) £14.99. Most Cali Pack orders fall in the £4.00 band. Orders are dispatched within 2–3 business days, then usually arrive in 2–3 working days.",
+    a: "Each product shows its own UK postage, or free UK delivery. We send by Royal Mail Tracked 48. If you order several items you pay the highest postage once — postage is not added together. If every item includes free delivery, postage is £0. Orders are dispatched within 2–3 business days and usually arrive in 2–3 working days.",
   },
   {
     group: "Delivery & returns",

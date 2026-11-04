@@ -58,7 +58,7 @@ export function VivaPayOverlay({ open, status, message, onClose }: VivaPayOverla
           <h2 className="mt-2 font-display text-2xl font-black text-surface-950">{title}</h2>
           <p className="mt-3 text-sm font-semibold leading-relaxed text-surface-800/70">{body}</p>
           <p className="mt-3 rounded-xl border border-brand-200 bg-white px-3 py-2 text-xs font-bold text-brand-800">
-            UK delivery is calculated by order weight and included in the total on the payment page.
+            UK postage is the highest item postage, charged once, and is included in the total on the payment page.
           </p>
           {status !== "error" && (
             <div className="mt-6 h-1.5 overflow-hidden rounded-full bg-brand-200">

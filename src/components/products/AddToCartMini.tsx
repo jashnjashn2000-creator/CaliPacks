@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { ShoppingBag, Check } from "lucide-react";
 import { Product } from "@/types";
 import { useCart } from "@/context/CartContext";
@@ -9,6 +10,17 @@ export function AddToCartMini({ product }: { product: Product }) {
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
   const qty = product.minOrder || 1;
+
+  if (product.options?.length) {
+    return (
+      <Link
+        href={`/product/${product.slug}`}
+        className="mt-3 w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-semibold text-sm text-white bg-ink hover:bg-gold hover:text-ink transition-colors"
+      >
+        Choose size
+      </Link>
+    );
+  }
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();

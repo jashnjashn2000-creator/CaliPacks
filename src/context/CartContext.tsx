@@ -8,6 +8,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { lineTotalGbp } from "@/lib/product";
+import { resolveSellable } from "@/lib/sellable";
 import { CartItem, Product } from "@/types";
 
 interface CartState {
@@ -37,7 +39,8 @@ const CartContext = createContext<CartContextValue | null>(null);
 const STORAGE_KEY = "calipacks-cart-v2";
 
 function minQty(product: Product, quantity: number) {
-  return Math.max(product.minOrder || 1, quantity);
+  const live = resolveSellable(product.id) ?? product;
+  return Math.max(live.minOrder || 1, quantity);
 }
 
 function cartReducer(state: CartState, action: CartAction): CartState {
@@ -119,14 +122,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items));
   }, [state.items, hydrated]);
 
-  const itemCount = state.items.reduce((sum, i) => sum + i.quantity, 0);
-  const subtotal = state.items.reduce(
-    (sum, i) => sum + i.product.price * i.quantity,
-    0
-  );
+  // Overlay live catalogue prices and postage so the basket matches the worker.
+  const items = state.items.map((item) => {
+    const product = resolveSellable(item.product.id);
+    return product ? { ...item, product } : item;
+  });
+  const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
+  const subtotal = items.reduce((sum, i) => sum + lineTotalGbp(i.product, i.quantity), 0);
 
   const value: CartContextValue = {
-    items: state.items,
+    items,
     itemCount,
     subtotal,
     ready: hydrated,

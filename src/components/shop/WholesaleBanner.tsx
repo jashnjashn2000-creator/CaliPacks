@@ -10,7 +10,8 @@ export function WholesaleBanner() {
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/55">
               Wholesale price
             </p>
-            <p className="text-lg font-black leading-tight">£0.20 per pack</p>
+            <p className="text-lg font-black leading-tight">£0.22 each</p>
+            <p className="text-xs font-semibold text-white/70">50+ for £0.20</p>
           </div>
         </div>
         <div className="flex items-center gap-3 text-white">
@@ -19,7 +20,7 @@ export function WholesaleBanner() {
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/55">
               Minimum order
             </p>
-            <p className="text-lg font-black leading-tight">50 pcs</p>
+            <p className="text-lg font-black leading-tight">25 pcs</p>
           </div>
         </div>
         <div className="flex items-center gap-3 text-white">

@@ -5,9 +5,9 @@ import Link from "next/link";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/lib/utils";
-import { productImageClass, productUnit } from "@/lib/product";
+import { bulkSavingGbp, lineTotalGbp, packOfferText, productImageClass, productUnit, unitPriceGbp } from "@/lib/product";
 import { PayNowButton } from "@/components/payments/PayNowButton";
-import { DELIVERY_LABEL, DELIVERY_NOTE, formatWeight, quoteForCart } from "@/lib/shipping";
+import { DELIVERY_LABEL, DELIVERY_NOTE, quoteForCart } from "@/lib/shipping";
 
 export default function CartPage() {
   const { items, subtotal, updateQuantity, removeItem, clearCart, ready } = useCart();
@@ -91,11 +91,19 @@ export default function CartPage() {
                     {item.product.name}
                   </Link>
                   <p className="text-sm text-surface-800/60 mt-1">
-                    {formatPrice(item.product.price)} {productUnit(item.product)}
+                    {formatPrice(unitPriceGbp(item.product, item.quantity))} {productUnit(item.product)}
                     {item.product.minOrder && item.product.minOrder > 1
                       ? ` · min ${item.product.minOrder} pcs`
                       : ""}
                   </p>
+                  {packOfferText(item.product) ? (
+                    <p className="text-xs font-bold text-ink mt-1">{packOfferText(item.product)}</p>
+                  ) : null}
+                  {bulkSavingGbp(item.product, item.quantity) > 0 ? (
+                    <p className="text-xs font-bold text-brand-700 mt-0.5">
+                      You save {formatPrice(bulkSavingGbp(item.product, item.quantity))}
+                    </p>
+                  ) : null}
                   <div className="flex items-center justify-between mt-3">
                     <div className="flex items-center border border-surface-200 rounded-lg overflow-hidden">
                       <button
@@ -127,7 +135,7 @@ export default function CartPage() {
                     </div>
                     <div className="flex items-center gap-4">
                       <span className="font-semibold text-sm">
-                        {formatPrice(item.product.price * item.quantity)}
+                        {formatPrice(lineTotalGbp(item.product, item.quantity))}
                       </span>
                       <button
                         type="button"
@@ -153,14 +161,7 @@ export default function CartPage() {
                   <dd className="font-medium">{formatPrice(subtotal)}</dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt className="text-surface-800/60">
-                    {DELIVERY_LABEL}
-                    {delivery.band && (
-                      <span className="block text-xs text-surface-800/45">
-                        {delivery.band.name} · approx. {formatWeight(delivery.grams)}
-                      </span>
-                    )}
-                  </dt>
+                  <dt className="text-surface-800/60">{DELIVERY_LABEL}</dt>
                   <dd className="font-medium">{formatPrice(shipping)}</dd>
                 </div>
               </dl>

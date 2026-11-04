@@ -3,13 +3,14 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getProductBySlug, products } from "@/data/products";
 import { getCategoryBySlug } from "@/data/categories";
-import { ProductGallery, AddToCartButton } from "@/components/products/ProductDetail";
+import { ProductGallery, ProductPurchase } from "@/components/products/ProductDetail";
 import { ProductCard } from "@/components/products/ProductCard";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { formatPrice } from "@/lib/utils";
 import { SITE_NAME, SITE_URL, pageUrl } from "@/lib/site";
 import { offerShippingAndReturns } from "@/lib/local-business";
-import { isCaliPack, productUnit, savingPercent } from "@/lib/product";
+import { displayPrice, isCaliPack, productUnit } from "@/lib/product";
+import { postageLabel, productPostageGbp } from "@/lib/shipping";
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
@@ -26,17 +27,23 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
   const pack = isCaliPack(product);
   const titleName = pack ? `${product.name} Cali Pack` : product.name;
+  const shown = displayPrice(product);
   const priceLabel = pack
-    ? "£0.20 per pack, minimum 50 pcs"
-    : `${formatPrice(product.price)} each`;
+    ? "£0.22 each, minimum 25 pcs. Buy 50 or more for £0.20 each"
+    : shown.from
+      ? `from ${formatPrice(shown.amount)}`
+      : `${formatPrice(product.price)} each`;
+  const postageBit = product.options?.length
+    ? "Each size shows its postage. The all-3-sizes bundle includes free UK delivery. Ordering several items, you pay the highest postage once."
+    : `${postageLabel(productPostageGbp(product))}. Ordering several items, you pay the highest postage once.`;
 
   return {
     title: titleName,
-    description: `Buy ${product.name} from Smoke Cali, Manchester. ${priceLabel}. UK delivery from £4.00, dispatched in 2–3 business days.`,
+    description: `Buy ${product.name} from Smoke Cali, Manchester. ${priceLabel}. ${postageBit} Dispatched in 2–3 business days.`,
     openGraph: {
       type: "website",
       url: pageUrl(`/product/${product.slug}`),
-      title: `${product.name} — ${formatPrice(product.price)} ${productUnit(product)} | Smoke Cali`,
+      title: `${product.name} — ${shown.from ? "from " : ""}${formatPrice(shown.amount)} ${productUnit(product)} | Smoke Cali`,
       description: product.shortDescription,
       images: [{ url: product.image, alt: `${titleName} — Smoke Cali` }],
     },
@@ -77,28 +84,79 @@ export default async function ProductPage({ params }: ProductPageProps) {
             description: product.description,
             sku: product.sku,
             brand: { "@type": "Brand", name: SITE_NAME },
-            offers: {
-              "@type": "Offer",
-              url: pageUrl(`/product/${product.slug}`),
-              priceCurrency: "GBP",
-              price: product.price.toFixed(2),
-              availability: product.inStock
-                ? "https://schema.org/InStock"
-                : "https://schema.org/OutOfStock",
-              priceValidUntil: "2027-12-31",
-              itemCondition: "https://schema.org/NewCondition",
-              ...(product.minOrder && product.minOrder > 1
-                ? {
-                    eligibleQuantity: {
-                      "@type": "QuantitativeValue",
-                      minValue: product.minOrder,
-                      unitCode: "C62",
-                    },
-                  }
-                : {}),
-              seller: { "@id": `${SITE_URL}/#organization` },
-              ...offerShippingAndReturns(product),
-            },
+            offers: product.options?.length
+              ? {
+                  "@type": "AggregateOffer",
+                  url: pageUrl(`/product/${product.slug}`),
+                  priceCurrency: "GBP",
+                  lowPrice: Math.min(...product.options.map((o) => o.price)).toFixed(2),
+                  highPrice: Math.max(...product.options.map((o) => o.price)).toFixed(2),
+                  offerCount: product.options.length,
+                  offers: product.options.map((option) => ({
+                    "@type": "Offer",
+                    name: option.name,
+                    sku: option.sku,
+                    url: pageUrl(`/product/${product.slug}`),
+                    priceCurrency: "GBP",
+                    price: option.price.toFixed(2),
+                    availability: product.inStock
+                      ? "https://schema.org/InStock"
+                      : "https://schema.org/OutOfStock",
+                    priceValidUntil: "2027-12-31",
+                    itemCondition: "https://schema.org/NewCondition",
+                    seller: { "@id": `${SITE_URL}/#organization` },
+                    ...offerShippingAndReturns(option.postage),
+                  })),
+                }
+              : {
+                  "@type": "Offer",
+                  url: pageUrl(`/product/${product.slug}`),
+                  priceCurrency: "GBP",
+                  price: product.price.toFixed(2),
+                  availability: product.inStock
+                    ? "https://schema.org/InStock"
+                    : "https://schema.org/OutOfStock",
+                  priceValidUntil: "2027-12-31",
+                  itemCondition: "https://schema.org/NewCondition",
+                  ...(product.minOrder && product.minOrder > 1
+                    ? {
+                        eligibleQuantity: {
+                          "@type": "QuantitativeValue",
+                          minValue: product.minOrder,
+                          unitCode: "C62",
+                        },
+                      }
+                    : {}),
+                  ...(product.bulkPrice != null && product.bulkMinQty
+                    ? {
+                        priceSpecification: [
+                          {
+                            "@type": "UnitPriceSpecification",
+                            price: product.price.toFixed(2),
+                            priceCurrency: "GBP",
+                            eligibleQuantity: {
+                              "@type": "QuantitativeValue",
+                              minValue: product.minOrder || 1,
+                              maxValue: product.bulkMinQty - 1,
+                              unitCode: "C62",
+                            },
+                          },
+                          {
+                            "@type": "UnitPriceSpecification",
+                            price: product.bulkPrice.toFixed(2),
+                            priceCurrency: "GBP",
+                            eligibleQuantity: {
+                              "@type": "QuantitativeValue",
+                              minValue: product.bulkMinQty,
+                              unitCode: "C62",
+                            },
+                          },
+                        ],
+                      }
+                    : {}),
+                  seller: { "@id": `${SITE_URL}/#organization` },
+                  ...offerShippingAndReturns(productPostageGbp(product)),
+                },
           },
           {
             "@context": "https://schema.org",
@@ -156,34 +214,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 New Arrival
               </span>
             )}
-            <h1 className="font-serif text-3xl md:text-[2.6rem] font-normal leading-tight tracking-tight mb-3 text-ink">
+            <h1 className="font-serif text-3xl md:text-[2.6rem] font-normal leading-tight tracking-tight mb-4 text-ink">
               {product.name}
             </h1>
-            <div className="flex flex-wrap items-center gap-3 mb-6 tabular-nums">
-              <span className="text-2xl font-extrabold text-ink">
-                {formatPrice(product.price)}
-              </span>
-              {product.originalPrice && (
-                <span className="price-was text-lg font-semibold">
-                  {formatPrice(product.originalPrice)}
-                </span>
-              )}
-              <span className="text-sm text-brand-700 font-bold">{productUnit(product)}</span>
-              {savingPercent(product) ? (
-                <span className="save-tag">Save {savingPercent(product)}%</span>
-              ) : null}
-            </div>
-
-            <p className="text-graphite/75 leading-relaxed mb-8 font-medium">
+            <ProductPurchase product={product} />
+            <p className="text-graphite/75 leading-relaxed mb-8 mt-8 font-medium">
               {product.description}
             </p>
 
             <div className="border-t border-surface-200 pt-6 mb-6">
               <dl className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <dt className="text-surface-800/40">SKU</dt>
-                  <dd className="font-medium">{product.sku}</dd>
-                </div>
                 <div>
                   <dt className="text-surface-800/40">Availability</dt>
                   <dd className="font-medium text-brand-700">
@@ -208,8 +248,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 )}
               </dl>
             </div>
-
-            <AddToCartButton product={product} />
           </div>
         </div>
 

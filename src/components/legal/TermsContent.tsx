@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { LOCAL_BUSINESS } from "@/lib/local-business";
 import { contactInfo } from "@/data/social";
-import { deliveryBands, deliveryService } from "@/lib/shipping";
-import { formatPrice } from "@/lib/utils";
+import { deliveryService } from "@/lib/shipping";
 import { Contents, H2, LEGAL_EFFECTIVE_DATE, LegalBody } from "@/components/legal/LegalBits";
 
 const sections = [
@@ -84,16 +83,11 @@ export function TermsContent() {
 
       <H2 id="delivery">6. Delivery</H2>
       <p>
-        We deliver to UK addresses only, by <strong>{deliveryService}</strong>. Delivery is charged once
-        per order and depends on the total weight of your basket:
+        We deliver to UK addresses only, by <strong>{deliveryService}</strong>. Each product shows its own
+        UK postage, or free UK delivery. When you order several items you pay the <strong>highest postage once</strong>.
+        Postage is not added together, and ordering more than one of the same item does not increase it.
+        If every item in the basket includes free delivery, postage is £0.
       </p>
-      <ul>
-        {deliveryBands.map((b) => (
-          <li key={b.id}>
-            {b.name} ({b.weightLabel}): <strong>{formatPrice(b.price)}</strong>
-          </li>
-        ))}
-      </ul>
       <p>
         In-stock orders are normally dispatched within 2–3 business days and usually arrive 2–3 working
         days after dispatch. These are estimates, not guaranteed delivery dates. Custom orders take 5–7

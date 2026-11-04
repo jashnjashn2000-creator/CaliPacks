@@ -1,7 +1,6 @@
 import { contactInfo, socialLinks } from "@/data/social";
 import { SITE_LOGO, SITE_NAME, SITE_URL } from "@/lib/site";
-import { DELIVERY_FROM_GBP } from "@/lib/shipping";
-import { quoteDelivery } from "../../cloudflare/checkout-worker/src/shipping-rates.js";
+import { DEFAULT_POSTAGE_GBP } from "@/lib/shipping";
 
 /** NAP + hours aligned with the Google Maps listing for SMOKE CALI LTD. */
 export const LOCAL_BUSINESS = {
@@ -42,8 +41,8 @@ export const LOCAL_BUSINESS = {
 
 /** Shipping/returns facts used in Offer structured data — mirror /shipping and /returns. */
 export const SHIPPING = {
-  /** Lowest (Small parcel) delivery rate; per-product rate is computed from weight. */
-  rate: DELIVERY_FROM_GBP,
+  /** Default postage when a product does not set its own. Per-product postage overrides this. */
+  rate: DEFAULT_POSTAGE_GBP,
   currency: "GBP",
   country: "GB",
   handlingMinDays: 2,
@@ -58,16 +57,11 @@ export const RETURNS = {
 } as const;
 
 /**
- * Offer shipping/returns JSON-LD. Pass the product (and its minimum order) to
- * publish the real delivery charge for that quantity from the weight bands;
- * without it, the "from" (Small parcel) rate is used.
+ * Offer shipping/returns JSON-LD. Pass the postage in GBP for this product
+ * (0 = free UK delivery). Without it, the default £3.99 postage is used.
  */
-export function offerShippingAndReturns(product?: { id: string; categorySlug?: string; minOrder?: number }) {
-  const rate = product
-    ? quoteDelivery([
-        { productId: product.id, categorySlug: product.categorySlug, quantity: Math.max(1, product.minOrder || 1) },
-      ]).price
-    : SHIPPING.rate;
+export function offerShippingAndReturns(postageGbp: number = SHIPPING.rate) {
+  const rate = postageGbp;
   return {
     shippingDetails: {
       "@type": "OfferShippingDetails",
@@ -183,7 +177,7 @@ export function localBusinessJsonLd() {
         image: [LOCAL_BUSINESS.image, `${SITE_URL}/brand-showcase.webp`],
         logo: LOCAL_BUSINESS.logo,
         description:
-          "Manchester smoke shop supplying wholesale Cali Packs at £0.20 per pack, minimum 50 pcs, plus grinders, glass, hookahs and accessories.",
+          "Manchester smoke shop supplying wholesale Cali Packs at £0.22 each, minimum 25 pcs, or £0.20 each from 50, plus grinders, glass, hookahs and accessories.",
         priceRange: LOCAL_BUSINESS.priceRange,
         telephone: LOCAL_BUSINESS.telephone,
         email: LOCAL_BUSINESS.email,

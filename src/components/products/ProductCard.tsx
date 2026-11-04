@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
-import { productImageClass, productUnit, savingPercent, thumbSrc } from "@/lib/product";
+import { displayPostageLabel, displayPrice, packOfferText, productImageClass, productUnit, savingPercent, thumbSrc } from "@/lib/product";
 import { AddToCartMini } from "./AddToCartMini";
 
 interface ProductCardProps {
@@ -42,18 +42,23 @@ export function ProductCard({
         </h3>
         <div className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-1 tabular-nums">
           <span className="font-extrabold text-base sm:text-[17px] text-ink">
-            {formatPrice(product.price)}
+            {displayPrice(product).from ? "From " : ""}
+            {formatPrice(displayPrice(product).amount)}
           </span>
-          {product.originalPrice ? (
+          {product.originalPrice && !product.options?.length ? (
             <span className="price-was text-[13px] font-semibold">
               {formatPrice(product.originalPrice)}
             </span>
           ) : null}
           <span className="text-[11px] font-bold text-black/45">{productUnit(product)}</span>
-          {savingPercent(product) ? (
+          {savingPercent(product) && !product.options?.length ? (
             <span className="save-tag ml-auto self-center">Save {savingPercent(product)}%</span>
           ) : null}
         </div>
+        <p className="mt-1 text-[11px] font-bold text-brand-800">{displayPostageLabel(product)}</p>
+        {packOfferText(product) ? (
+          <p className="mt-1 text-[11px] font-bold leading-snug text-ink">{packOfferText(product)}</p>
+        ) : null}
         {product.minOrder && product.minOrder > 1 ? (
           <p className="mt-1 text-[11px] font-extrabold uppercase tracking-wide text-brand-700">
             Min. {product.minOrder} pcs

@@ -8,12 +8,12 @@ export function AnnouncementBar() {
       <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 font-semibold">
         <Sparkles className="w-3.5 h-3.5 text-gold inline shrink-0" />
         <span>
-          Cali Packs <span className="text-gold font-bold">£0.20</span> per pack
-          · min 50 pcs
+          Cali Packs <span className="text-gold font-bold">£0.22</span> each
+          · min 25 · 50+ for £0.20
         </span>
         <span className="hidden sm:inline text-white/25">·</span>
         <span>
-          UK delivery from <span className="text-gold font-bold">£4.00</span>
+          Postage shown on each product
         </span>
         <span className="hidden sm:inline text-white/25">·</span>
         <a
@@ -35,8 +35,8 @@ export function TrustBadges() {
   const badges = [
     {
       icon: Truck,
-      title: "Delivery from £4.00",
-      desc: "Royal Mail Tracked 48",
+      title: "Postage per product",
+      desc: "Pay the highest once",
     },
     {
       icon: Shield,
@@ -45,8 +45,8 @@ export function TrustBadges() {
     },
     {
       icon: Package,
-      title: "£0.20 Per Pack",
-      desc: "Minimum 50 pcs",
+      title: "£0.22 each",
+      desc: "50+ for £0.20 · min 25",
     },
     {
       icon: Headphones,

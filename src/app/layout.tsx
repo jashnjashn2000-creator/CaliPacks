@@ -61,11 +61,11 @@ export const metadata: Metadata = {
     apple: [{ url: "/apple-touch-icon.png?v=2", sizes: "180x180", type: "image/png" }],
   },
   title: {
-    default: `Smoke Cali | Cali Packs £0.20 · Manchester`,
+    default: `Smoke Cali | Cali Packs £0.22 · Manchester`,
     template: `%s | ${SITE_NAME}`,
   },
   description:
-    "Smoke Cali is a Manchester smoke shop for wholesale Cali Packs. 111 HD designs, £0.20 per pack, minimum 50 pcs, UK delivery from £4.00. Visit us at 5 Sagar Street, Manchester, open daily 9:30–19:30.",
+    "Smoke Cali is a Manchester smoke shop for wholesale Cali Packs. 111 HD designs, £0.22 each, minimum 25 pcs, or £0.20 each from 50. UK postage is shown on each product. Visit us at 5 Sagar Street, Manchester, open daily 9:30–19:30.",
   keywords: [
     "Smoke Cali",
     "Cali Packs UK",
@@ -82,9 +82,9 @@ export const metadata: Metadata = {
     locale: "en_GB",
     url: pageUrl("/"),
     siteName: SITE_NAME,
-    title: "Smoke Cali | Cali Packs £0.20 · Manchester",
+    title: "Smoke Cali | Cali Packs £0.22 · Manchester",
     description:
-      "111 HD Cali Packs from Smoke Cali Manchester. £0.20 per pack, minimum 50 pcs. Shop online or visit Sagar Street.",
+      "111 HD Cali Packs from Smoke Cali Manchester. £0.22 each, minimum 25 pcs, or £0.20 each from 50. Shop online or visit Sagar Street.",
     images: [
       {
         url: "/hero-cali-packs.webp",
@@ -96,8 +96,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Smoke Cali | Cali Packs £0.20",
-    description: "111 HD Cali Packs. £0.20 per pack, min 50 pcs. Manchester smoke shop.",
+    title: "Smoke Cali | Cali Packs £0.22",
+    description: "111 HD Cali Packs. £0.22 each, min 25 pcs, 50+ for £0.20. Manchester smoke shop.",
     images: ["/hero-cali-packs.webp"],
   },
   robots: {

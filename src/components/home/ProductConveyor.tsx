@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
-import { productImageClass, savingPercent, thumbSrc } from "@/lib/product";
+import { displayPostageLabel, displayPrice, productImageClass, savingPercent, thumbSrc } from "@/lib/product";
 
 /** Roughly 55px a second, whatever the number of products. */
 const SECONDS_PER_ITEM = 3.2;
@@ -37,13 +37,17 @@ function BeltItem({ product, hidden }: { product: Product; hidden?: boolean }) {
           {product.name}
         </p>
         <p className="flex items-baseline gap-1.5 px-0.5 tabular-nums">
-          <span className="text-[14px] font-extrabold text-ink">{formatPrice(product.price)}</span>
-          {product.originalPrice ? (
+          <span className="text-[14px] font-extrabold text-ink">
+            {displayPrice(product).from ? "From " : ""}
+            {formatPrice(displayPrice(product).amount)}
+          </span>
+          {product.originalPrice && !product.options?.length ? (
             <span className="price-was text-[11.5px] font-semibold">
               {formatPrice(product.originalPrice)}
             </span>
           ) : null}
         </p>
+        <p className="truncate px-0.5 text-[10px] font-bold text-brand-800">{displayPostageLabel(product)}</p>
       </Link>
     </li>
   );

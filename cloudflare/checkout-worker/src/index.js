@@ -5,7 +5,7 @@
  *
  * Flow (Viva "Smart Checkout"):
  *   1. Browser POSTs the basket (product IDs + quantities + delivery details) to /api/checkout/create.
- *   2. Worker prices everything ITSELF from product-catalog.js + shipping-rates.js (never trusts browser prices),
+ *   2. Worker prices everything ITSELF from product-catalog.js + shipping-rates.js (never trusts browser prices or postage),
  *      gets an OAuth2 token from Viva, creates a payment order, and returns the Viva checkout URL.
  *   3. Browser is redirected to Viva to pay, then Viva sends the customer to the success / failure URL
  *      set on the Viva payment source.
@@ -27,7 +27,12 @@
  *   ZAPIER_WEBHOOK_URL, RESEND_API_KEY, OWNER_NOTIFY_EMAIL, RESEND_FROM_EMAIL
  */
 
-import { quoteDelivery, DELIVERY_BANDS, DELIVERY_SERVICE } from "./shipping-rates.js";
+import {
+  quotePostagePence,
+  DEFAULT_POSTAGE_PENCE,
+  DELIVERY_SERVICE,
+  POSTAGE_RULE,
+} from "./shipping-rates.js";
 import { PRODUCT_CATALOG } from "./product-catalog.js";
 
 const DEFAULT_OWNER_EMAIL = "hello@calipacks.co.uk";
@@ -269,7 +274,8 @@ function validateAddress(addr) {
 
 /**
  * Builds the order total. Only `productId` and `quantity` are taken from the browser.
- * Names and prices come from PRODUCT_CATALOG; delivery from shipping-rates.js.
+ * Names, prices and postage come from PRODUCT_CATALOG.
+ * Basket postage is the highest single item postage, charged once (not summed, not × quantity).
  * All maths is in whole pence to avoid rounding errors.
  */
 function buildTotals(items) {
@@ -297,13 +303,27 @@ function buildTotals(items) {
     if (quantity < product.minOrder) {
       throw new Error(`${product.name}: the minimum order is ${product.minOrder}.`);
     }
-    const linePence = quantity * product.pricePence;
+    const postagePence =
+      product.postagePence == null ? DEFAULT_POSTAGE_PENCE : product.postagePence;
+    const unitPence =
+      product.bulkPricePence != null && product.bulkMinQty != null && quantity >= product.bulkMinQty
+        ? product.bulkPricePence
+        : product.pricePence;
+    const linePence = quantity * unitPence;
     subtotalPence += linePence;
-    lines.push({ productId, title: product.name, quantity, unitPence: product.pricePence, linePence });
+    lines.push({
+      productId,
+      title: product.name,
+      quantity,
+      unitPence,
+      linePence,
+      postagePence,
+    });
   }
 
-  const quote = quoteDelivery(lines.map((l) => ({ productId: l.productId, quantity: l.quantity })));
-  const shippingPence = Math.round(quote.price * 100);
+  const shippingPence = quotePostagePence(
+    lines.map((l) => ({ quantity: l.quantity, postagePence: l.postagePence }))
+  );
   const totalPence = subtotalPence + shippingPence;
   if (totalPence > MAX_ORDER_PENCE) {
     throw new Error("This order is too large for online checkout. Please contact us on WhatsApp.");
@@ -312,8 +332,7 @@ function buildTotals(items) {
     lines,
     subtotalPence,
     shippingPence,
-    shippingBand: quote.band ? quote.band.name : "",
-    shippingWeightGrams: quote.grams,
+    shippingBand: shippingPence > 0 ? "Highest item postage" : "Free UK delivery",
     totalPence,
   };
 }
@@ -417,7 +436,7 @@ function buildOrderAlert({ order, orderCode, transactionId, paidPence, mismatch 
     .join(", ");
   const linesText = o.items.length
     ? o.items.map((li) => `• ${li.quantity}× ${li.name}`).join("\n") +
-      (o.shippingPence ? `\n• UK delivery (${o.shippingBand}) — ${money(o.shippingPence)}` : "")
+      (o.shippingPence ? `\n• UK postage (${o.shippingBand}) — ${money(o.shippingPence)}` : "\n• UK postage — free")
     : "(Order details not available — see the Viva dashboard)";
   const warning = mismatch
     ? "⚠ CHECK THIS ORDER: the amount paid does not match the basket total recorded. Check the Viva dashboard before dispatching."
@@ -770,16 +789,12 @@ export default {
           mode: vivaMode(env),
           currency: "GBP",
           deliveryService: DELIVERY_SERVICE,
-          deliveryBands: DELIVERY_BANDS.map((b) => ({
-            id: b.id,
-            name: b.name,
-            weight: b.weightLabel,
-            price: b.price,
-          })),
-          deliveryNote: "Delivery is charged once per order, based on total basket weight.",
+          defaultPostage: DEFAULT_POSTAGE_PENCE / 100,
+          postageRule: POSTAGE_RULE,
+          deliveryNote: POSTAGE_RULE,
           freeShippingOver: null,
           message: configured
-            ? `Viva checkout ready (${vivaMode(env)}). Delivery from £4.00, calculated by order weight.`
+            ? `Viva checkout ready (${vivaMode(env)}). Postage is the highest item postage, charged once.`
             : "Set the VIVA_* secrets on the checkout worker.",
         },
         200,
