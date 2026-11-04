@@ -1,4 +1,6 @@
-import { Product } from "@/types";
+import { Product, ProductOption } from "@/types";
+import { postageLabel, productPostageGbp } from "@/lib/shipping";
+import { formatPrice } from "@/lib/utils";
 
 export function isCaliPack(product: Product) {
   return product.categorySlug === "cali-packs";
@@ -13,6 +15,45 @@ const framedPackIds = new Set(["pack-001", "pack-080", "pack-109", "pack-110", "
 export function productImageClass(product: Product) {
   if (isCaliPack(product) && !framedPackIds.has(product.id)) return "pack-fill";
   return "product-fit";
+}
+
+/** Lowest price, and whether the card should say "From". */
+export function displayPrice(product: Product): { amount: number; from: boolean } {
+  if (!product.options?.length) return { amount: product.price, from: false };
+  return { amount: Math.min(...product.options.map((o) => o.price)), from: true };
+}
+
+/**
+ * Postage line for a product card. Mixed options (some free) name the free choice
+ * so the card does not hide free delivery behind a single paid rate.
+ */
+export function displayPostageLabel(product: Product): string {
+  const options = product.options;
+  if (!options?.length) return postageLabel(productPostageGbp(product));
+  const paid = [...new Set(options.filter((o) => o.postage > 0).map((o) => o.postage))];
+  const free = options.filter((o) => o.postage <= 0);
+  if (free.length && paid.length === 1) {
+    const freeLabels = free.map((o) => o.label).join(", ");
+    return `${postageLabel(paid[0])} · ${freeLabels}: Free UK delivery`;
+  }
+  if (free.length && paid.length === 0) return "Free UK delivery";
+  if (!free.length && paid.length === 1) return postageLabel(paid[0]);
+  const lowest = Math.min(...options.map((o) => o.postage));
+  return lowest <= 0 ? "Free UK delivery on some options" : `Postage from ${formatPrice(lowest)}`;
+}
+
+/** Cart line for one size/bundle. Drops the options list so the line is a single SKU. */
+export function flattenOption(product: Product, option: ProductOption): Product {
+  return {
+    ...product,
+    id: option.id,
+    name: option.name,
+    price: option.price,
+    postage: option.postage,
+    sku: option.sku,
+    originalPrice: undefined,
+    options: undefined,
+  };
 }
 
 /** Whole-number % saved against the crossed-out price, or 0 when there is no saving. */

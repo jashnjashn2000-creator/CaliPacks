@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description:
-    "Smoke Cali is a Manchester smoke shop for wholesale Cali Packs. 111 HD designs, £0.20 per pack, minimum 50 pcs, UK delivery from £4.00. Visit us at 5 Sagar Street, Manchester, open daily 9:30–19:30.",
+    "Smoke Cali is a Manchester smoke shop for wholesale Cali Packs. 111 HD designs, £0.20 per pack, minimum 50 pcs. UK postage is shown on each product. Visit us at 5 Sagar Street, Manchester, open daily 9:30–19:30.",
   keywords: [
     "Smoke Cali",
     "Cali Packs UK",

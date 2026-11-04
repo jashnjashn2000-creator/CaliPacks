@@ -22,7 +22,7 @@ export function GET() {
     `- Phone / WhatsApp: ${contactInfo.phone}`,
     `- Email: ${contactInfo.email}`,
     `- Website: ${pageUrl("/")}`,
-    "- Delivery: UK only, Royal Mail Tracked 48, charged once per order by total basket weight: up to 2kg £4.00, 2–10kg £8.99, over 10kg £14.99. Dispatched in 2–3 business days, then 2–3 working days in transit",
+    "- Delivery: UK only, Royal Mail Tracked 48. Each product shows its own postage or free UK delivery. Ordering several items, you pay the highest postage once (not added together). If every item is free delivery, postage is £0. Dispatched in 2–3 business days, then 2–3 working days in transit",
     "- Returns: 14-day right to cancel for unopened, unused goods (Consumer Contracts Regulations 2013; excludes opened sealed hygiene items and personalised goods); faulty or damaged goods handled under the Consumer Rights Act 2015",
     "- Payment: card payments are processed securely by Viva.com (Visa, Mastercard, Apple Pay, Google Pay)",
     "- Order: online card checkout via Viva.com, or order on WhatsApp",

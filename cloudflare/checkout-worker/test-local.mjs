@@ -4,6 +4,8 @@
  */
 import assert from "node:assert/strict";
 import worker, { buildTotals } from "./src/index.js";
+import { quotePostagePence } from "./src/shipping-rates.js";
+import { PRODUCT_CATALOG } from "./src/product-catalog.js";
 
 const env = {
   VIVA_ENV: "demo",
@@ -54,8 +56,8 @@ const address = { name: "Test Buyer", phone: "07123456789", line1: "1 Test St", 
 // 1. price tampering: the browser's prices are ignored
 let totals = buildTotals([{ productId: "pack-001", quantity: 50, unitPrice: 0.0001, title: "hacked" }]);
 assert.equal(totals.subtotalPence, 1000); // 50 x 20p
-assert.equal(totals.shippingPence, 400);
-assert.equal(totals.totalPence, 1400);
+assert.equal(totals.shippingPence, 399); // default postage, not the tampered browser price
+assert.equal(totals.totalPence, 1399);
 assert.throws(() => buildTotals([{ productId: "pack-001", quantity: 10 }]), /minimum order/);
 assert.throws(() => buildTotals([{ productId: "nope", quantity: 1 }]), /no longer available/);
 assert.throws(() => buildTotals([]), /empty/);
@@ -72,7 +74,7 @@ assert.equal(r.status, 200, JSON.stringify(data));
 assert.equal(data.orderCode, "9071992547409931");
 assert.equal(data.url, "https://demo.vivapayments.com/web/checkout?ref=9071992547409931");
 const sent = txStore.get("order");
-assert.equal(sent.amount, 1400);
+assert.equal(sent.amount, 1399);
 assert.equal(sent.sourceCode, "1234");
 assert.ok(sent.merchantTrns.startsWith("SCV1:"));
 
@@ -92,11 +94,11 @@ assert.deepEqual(await r.json(), { Key: "ABC123KEY" });
 
 // 6. verify + webhook for a paid transaction
 const TX = "11111111-2222-3333-4444-555555555555";
-txStore.set(TX, { amount: 14.0, orderCode: "9071992547409931", statusId: "F", merchantTrns: sent.merchantTrns });
+txStore.set(TX, { amount: 13.99, orderCode: "9071992547409931", statusId: "F", merchantTrns: sent.merchantTrns });
 r = await call(`/api/checkout/verify?t=${TX}&s=9071992547409931`);
 data = await r.json();
 assert.equal(data.paymentStatus, "paid");
-assert.equal(data.total, 14);
+assert.equal(data.total, 13.99);
 r = await call(`/api/checkout/verify?t=${TX}&s=1111`);
 assert.equal(r.status, 400);
 
@@ -117,7 +119,7 @@ assert.equal((await r.json()).duplicate, true);
 r = await call("/api/viva/webhook", { method: "POST", body: rawHook(hook({ SourceCode: "9999" })) });
 assert.equal((await r.json()).reason, "other_source");
 const TX2 = "aaaaaaaa-2222-3333-4444-555555555555";
-txStore.set(TX2, { amount: 14.0, orderCode: "9071992547409931", statusId: "E", merchantTrns: sent.merchantTrns });
+txStore.set(TX2, { amount: 13.99, orderCode: "9071992547409931", statusId: "E", merchantTrns: sent.merchantTrns });
 r = await call("/api/viva/webhook", { method: "POST", body: rawHook(hook({ TransactionId: TX2 })) });
 assert.equal((await r.json()).reason, "not_paid");
 const TX3 = "bbbbbbbb-2222-3333-4444-555555555555";
@@ -127,5 +129,74 @@ assert.equal((await r.json()).paymentStatus, "check");
 
 // 8. nothing sensitive in responses
 for (const c of calls) assert.ok(!String(c.url).includes("test-secret"));
+
+// 9. Postage: highest single item, charged once. Quantity does not multiply it.
+assert.equal(quotePostagePence([]), 0);
+assert.equal(quotePostagePence([{ postagePence: 0, quantity: 3 }]), 0);
+assert.equal(quotePostagePence([{ postagePence: 299, quantity: 4 }, { postagePence: 399, quantity: 2 }]), 399);
+assert.equal(quotePostagePence([{ postagePence: 299, quantity: 1 }, { postagePence: 299, quantity: 1 }]), 299);
+assert.equal(quotePostagePence([{ postagePence: undefined, quantity: 1 }]), 399);
+
+const expectSku = (id, pricePence, postagePence, nameIncludes) => {
+  const row = PRODUCT_CATALOG[id];
+  assert.ok(row, id);
+  assert.equal(row.pricePence, pricePence, id);
+  assert.equal(row.postagePence, postagePence, id);
+  if (nameIncludes) assert.match(row.name, nameIncludes);
+};
+
+expectSku("shop-vacuum-sealer", 1999, 399, /Vacuum Sealer Machine/);
+expectSku("shop-vacuum-rolls", 599, 399, /Small/);
+expectSku("shop-vacuum-rolls-m", 699, 399, /Medium/);
+expectSku("shop-vacuum-rolls-l", 799, 399, /Large/);
+expectSku("shop-vacuum-rolls-all", 2199, 0, /All 3 sizes/);
+expectSku("shop-travel-kit", 1599, 399, /Cartoon Smoking Travel Kit/);
+expectSku("shop-mz100", 899, 0, /On Balance MZ-100/);
+expectSku("shop-triton-t3", 1699, 0, /My Weigh Triton T3/);
+expectSku("shop-colour-hookah", 5499, 399, /Pink AK-47 Hookah/);
+expectSku("shop-mini-bubblers", 1699, 399, /^Mini Glass Bubblers$/);
+expectSku("shop-spiral-bubblers", 799, 299, /Spiral Perc Glass Bubbler/);
+expectSku("shop-swan-pipe", 999, 299, /Swan Shape Glass Pipe/);
+expectSku("pack-001", 20, 399);
+expectSku("shop-gold-grinder", 799, 399);
+
+// Browser postage is ignored. Bundle alone is free. Highest postage wins across lines.
+const bundleOnly = buildTotals([{ productId: "shop-vacuum-rolls-all", quantity: 2, postagePence: 9999 }]);
+assert.equal(bundleOnly.subtotalPence, 4398);
+assert.equal(bundleOnly.shippingPence, 0);
+assert.equal(bundleOnly.totalPence, 4398);
+
+const mixed = buildTotals([
+  { productId: "shop-vacuum-rolls-all", quantity: 1 },
+  { productId: "shop-spiral-bubblers", quantity: 3 },
+  { productId: "shop-mz100", quantity: 1 },
+]);
+assert.equal(mixed.subtotalPence, 2199 + 799 * 3 + 899);
+assert.equal(mixed.shippingPence, 299); // spiral £2.99 beats free bundle and free scale
+assert.equal(mixed.totalPence, mixed.subtotalPence + 299);
+
+const scales = buildTotals([
+  { productId: "shop-mz100", quantity: 1 },
+  { productId: "shop-triton-t3", quantity: 2 },
+]);
+assert.equal(scales.shippingPence, 0);
+assert.equal(scales.totalPence, 899 + 1699 * 2);
+
+const glass = buildTotals([
+  { productId: "shop-swan-pipe", quantity: 1 },
+  { productId: "shop-spiral-bubblers", quantity: 1 },
+  { productId: "shop-vacuum-sealer", quantity: 1 },
+]);
+assert.equal(glass.subtotalPence, 999 + 799 + 1999);
+assert.equal(glass.shippingPence, 399); // highest, not 2.99+2.99+3.99
+assert.equal(glass.totalPence, glass.subtotalPence + 399);
+
+const rolls = buildTotals([
+  { productId: "shop-vacuum-rolls", quantity: 1 },
+  { productId: "shop-vacuum-rolls-m", quantity: 1 },
+  { productId: "shop-vacuum-rolls-l", quantity: 1 },
+]);
+assert.equal(rolls.subtotalPence, 599 + 699 + 799);
+assert.equal(rolls.shippingPence, 399);
 
 console.log("All worker checks passed.");

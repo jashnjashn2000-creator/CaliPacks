@@ -7,7 +7,7 @@ import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/lib/utils";
 import { productImageClass, productUnit } from "@/lib/product";
 import { PayNowButton } from "@/components/payments/PayNowButton";
-import { DELIVERY_LABEL, DELIVERY_NOTE, formatWeight, quoteForCart } from "@/lib/shipping";
+import { DELIVERY_LABEL, DELIVERY_NOTE, quoteForCart } from "@/lib/shipping";
 
 export default function CartPage() {
   const { items, subtotal, updateQuantity, removeItem, clearCart, ready } = useCart();
@@ -153,14 +153,7 @@ export default function CartPage() {
                   <dd className="font-medium">{formatPrice(subtotal)}</dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt className="text-surface-800/60">
-                    {DELIVERY_LABEL}
-                    {delivery.band && (
-                      <span className="block text-xs text-surface-800/45">
-                        {delivery.band.name} · approx. {formatWeight(delivery.grams)}
-                      </span>
-                    )}
-                  </dt>
+                  <dt className="text-surface-800/60">{DELIVERY_LABEL}</dt>
                   <dd className="font-medium">{formatPrice(shipping)}</dd>
                 </div>
               </dl>

@@ -1,41 +1,51 @@
-import { deliveryBands, deliveryService } from "@/lib/shipping";
-import { formatPrice } from "@/lib/utils";
+import { deliveryService, DELIVERY_NOTE } from "@/lib/shipping";
 
-/** Delivery rates table for the Shipping Policy page (rates from the shared config). */
+/** How UK postage is worked out. Amounts are shown on each product, not by weight. */
 export function DeliveryTable() {
   return (
     <section aria-labelledby="delivery-rates" className="mt-8 space-y-6 text-surface-800/80">
       <div>
         <h2 id="delivery-rates" className="text-xl font-semibold text-surface-900 mb-3">
-          UK delivery rates
+          UK postage
         </h2>
+        <p className="text-sm mb-4">
+          {DELIVERY_NOTE}
+        </p>
         <div className="overflow-x-auto rounded-xl border border-surface-200">
           <table className="w-full text-sm text-left">
             <thead className="bg-surface-50 text-surface-900">
               <tr>
-                <th scope="col" className="px-4 py-3 font-semibold">Parcel</th>
-                <th scope="col" className="px-4 py-3 font-semibold">Total order weight</th>
+                <th scope="col" className="px-4 py-3 font-semibold">Your basket</th>
                 <th scope="col" className="px-4 py-3 font-semibold">Service</th>
                 <th scope="col" className="px-4 py-3 font-semibold">Estimated delivery</th>
-                <th scope="col" className="px-4 py-3 font-semibold text-right">Price</th>
+                <th scope="col" className="px-4 py-3 font-semibold text-right">Postage you pay</th>
               </tr>
             </thead>
             <tbody>
-              {deliveryBands.map((b) => (
-                <tr key={b.id} className="border-t border-surface-200">
-                  <td className="px-4 py-3 font-medium text-surface-900">{b.name}</td>
-                  <td className="px-4 py-3">{b.weightLabel}</td>
-                  <td className="px-4 py-3">{deliveryService}</td>
-                  <td className="px-4 py-3">2–3 working days after dispatch</td>
-                  <td className="px-4 py-3 text-right font-semibold text-surface-900">{formatPrice(b.price)}</td>
-                </tr>
-              ))}
+              <tr className="border-t border-surface-200">
+                <td className="px-4 py-3 font-medium text-surface-900">One product</td>
+                <td className="px-4 py-3">{deliveryService}</td>
+                <td className="px-4 py-3">2–3 working days after dispatch</td>
+                <td className="px-4 py-3 text-right font-semibold text-surface-900">The postage shown on that product</td>
+              </tr>
+              <tr className="border-t border-surface-200">
+                <td className="px-4 py-3 font-medium text-surface-900">Several products</td>
+                <td className="px-4 py-3">{deliveryService}</td>
+                <td className="px-4 py-3">2–3 working days after dispatch</td>
+                <td className="px-4 py-3 text-right font-semibold text-surface-900">The highest postage, charged once</td>
+              </tr>
+              <tr className="border-t border-surface-200">
+                <td className="px-4 py-3 font-medium text-surface-900">Every item includes free delivery</td>
+                <td className="px-4 py-3">{deliveryService}</td>
+                <td className="px-4 py-3">2–3 working days after dispatch</td>
+                <td className="px-4 py-3 text-right font-semibold text-surface-900">£0.00</td>
+              </tr>
             </tbody>
           </table>
         </div>
         <p className="mt-3 text-sm">
-          Delivery is charged <strong>once per order</strong>, not per item, and is calculated automatically
-          at checkout from the total weight of your basket. Most Cali Pack orders fall in the Small parcel band.
+          Postage is <strong>not</strong> added up across items, and buying more than one of the same item does not
+          increase it. Each product page shows either a postage price or &ldquo;Free UK delivery&rdquo;.
         </p>
       </div>
 

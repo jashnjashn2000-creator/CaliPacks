@@ -9,11 +9,11 @@ import { ReturnsContent } from "@/components/legal/ReturnsContent";
 const pages: Record<string, { title: string; content: string }> = {
   terms: {
     title: "Terms & Conditions",
-    content: "Terms and conditions for orders from SMOKE CALI LTD: 18+ only, ordering and contract formation, pricing, card payments processed securely by Viva.com, UK delivery by weight, your 14-day right to cancel, faulty goods and governing law.",
+    content: "Terms and conditions for orders from SMOKE CALI LTD: 18+ only, ordering and contract formation, pricing, card payments processed securely by Viva.com, UK postage shown on each product (highest postage charged once), your 14-day right to cancel, faulty goods and governing law.",
   },
   shipping: {
     title: "Shipping Policy",
-    content: "UK delivery by Royal Mail Tracked 48 from £4.00. Delivery is charged once per order and calculated at checkout by the total weight of your basket. In-stock orders are dispatched within 2–3 business days and tracking is emailed when your order ships.",
+    content: "UK delivery by Royal Mail Tracked 48. Each product shows its postage or free UK delivery. When you order several items you pay the highest postage once. In-stock orders are dispatched within 2–3 business days and tracking is emailed when your order ships.",
   },
   returns: {
     title: "Returns & Refunds",

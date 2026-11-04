@@ -13,7 +13,7 @@ export function AnnouncementBar() {
         </span>
         <span className="hidden sm:inline text-white/25">·</span>
         <span>
-          UK delivery from <span className="text-gold font-bold">£4.00</span>
+          Postage shown on each product
         </span>
         <span className="hidden sm:inline text-white/25">·</span>
         <a
@@ -35,8 +35,8 @@ export function TrustBadges() {
   const badges = [
     {
       icon: Truck,
-      title: "Delivery from £4.00",
-      desc: "Royal Mail Tracked 48",
+      title: "Postage per product",
+      desc: "Pay the highest once",
     },
     {
       icon: Shield,

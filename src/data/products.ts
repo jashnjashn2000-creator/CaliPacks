@@ -1882,6 +1882,9 @@ export function searchProducts(query: string): Product[] {
     (p) =>
       p.name.toLowerCase().includes(q) ||
       p.description.toLowerCase().includes(q) ||
-      p.tags.some((t) => t.includes(q))
+      p.tags.some((t) => t.includes(q)) ||
+      p.options?.some(
+        (o) => o.name.toLowerCase().includes(q) || o.label.toLowerCase().includes(q)
+      )
   );
 }

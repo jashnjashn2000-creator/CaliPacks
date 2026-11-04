@@ -11,7 +11,7 @@ interface HeroBannerSliderProps {
 const HIGHLIGHTS = [
   { icon: Tag, label: "£0.20 per pack" },
   { icon: Layers, label: "Min 50 pcs" },
-  { icon: Truck, label: "UK delivery from £4.00" },
+  { icon: Truck, label: "Postage shown per product" },
   { icon: Clock, label: "2–3 day delivery" },
 ];
 

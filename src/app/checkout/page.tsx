@@ -12,7 +12,7 @@ import { checkoutCreateUrl, LAST_ORDER_KEY } from "@/lib/payments";
 import { VivaPayOverlay } from "@/components/payments/VivaPayOverlay";
 import { SecuredByViva } from "@/components/payments/VivaBadge";
 import { CheckoutLegalLinks } from "@/components/legal/LegalLinks";
-import { DELIVERY_LABEL, DELIVERY_NOTE, formatWeight, quoteForCart } from "@/lib/shipping";
+import { DELIVERY_LABEL, DELIVERY_NOTE, quoteForCart } from "@/lib/shipping";
 
 type OverlayStatus = "preparing" | "redirecting" | "error";
 
@@ -38,11 +38,11 @@ export default function CheckoutPage() {
       ...lines,
       "",
       `Subtotal: ${formatPrice(subtotal)}`,
-      `${DELIVERY_LABEL}${delivery.band ? ` (${delivery.band.name})` : ""}: ${formatPrice(shipping)}`,
+      `${DELIVERY_LABEL}: ${formatPrice(shipping)}`,
       `Total: ${formatPrice(total)}`,
     ].join("\n");
     return `https://wa.me/${whatsappOrderNumber}?text=${encodeURIComponent(text)}`;
-  }, [items, subtotal, shipping, total, delivery.band]);
+  }, [items, subtotal, shipping, total]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -313,7 +313,7 @@ export default function CheckoutPage() {
             </button>
             <p className="text-center text-xs font-semibold text-surface-800/45">
               For customers aged 18 and over. Card details are entered only on the payment page —
-              never on this website. Delivery is calculated by order weight and shown above.
+              never on this website. Postage is the highest item postage, charged once, and is shown above.
             </p>
             <CheckoutLegalLinks />
             <SecuredByViva tone="light" className="justify-center" />
@@ -360,14 +360,7 @@ export default function CheckoutPage() {
                   <dd>{formatPrice(subtotal)}</dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt className="text-surface-800/60">
-                    {DELIVERY_LABEL}
-                    {delivery.band && (
-                      <span className="block text-xs text-surface-800/45">
-                        {delivery.band.name} · approx. {formatWeight(delivery.grams)}
-                      </span>
-                    )}
-                  </dt>
+                  <dt className="text-surface-800/60">{DELIVERY_LABEL}</dt>
                   <dd>{formatPrice(shipping)}</dd>
                 </div>
                 <div className="flex justify-between font-bold text-base pt-2">

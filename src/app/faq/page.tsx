@@ -7,7 +7,7 @@ import { faqs } from "@/data/faqs";
 export const metadata: Metadata = {
   title: "FAQ",
   description:
-    "Smoke Cali FAQ: Cali Packs £0.20 per pack (min 50 pcs), UK delivery from £4.00, 2–3 day dispatch, returns, custom orders, and Manchester shop address and opening hours.",
+    "Smoke Cali FAQ: Cali Packs £0.20 per pack (min 50 pcs), UK postage shown on each product, 2–3 day dispatch, returns, custom orders, and Manchester shop address and opening hours.",
   alternates: { canonical: pageUrl("/faq") },
   openGraph: {
     url: pageUrl("/faq"),

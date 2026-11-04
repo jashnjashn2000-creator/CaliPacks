@@ -35,7 +35,7 @@ export const faqs: Faq[] = [
   {
     group: "Delivery & returns",
     q: "How much is UK delivery?",
-    a: "UK delivery is by Royal Mail Tracked 48 and is charged once per order, based on the total weight of your basket: Small parcel (up to 2kg) £4.00, Medium parcel (2–10kg) £8.99, Heavy parcel (over 10kg) £14.99. Most Cali Pack orders fall in the £4.00 band. Orders are dispatched within 2–3 business days, then usually arrive in 2–3 working days.",
+    a: "Each product shows its own UK postage, or free UK delivery. We send by Royal Mail Tracked 48. If you order several items you pay the highest postage once — postage is not added together. If every item includes free delivery, postage is £0. Orders are dispatched within 2–3 business days and usually arrive in 2–3 working days.",
   },
   {
     group: "Delivery & returns",

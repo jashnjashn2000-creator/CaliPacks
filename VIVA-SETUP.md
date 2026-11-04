@@ -144,7 +144,7 @@ If Verify fails, the Merchant ID / API Key on the worker are wrong or missing, o
 
 ## Things worth knowing
 - **Prices can't be changed by customers.** The worker has its own price list (`cloudflare/checkout-worker/src/product-catalog.js`), created automatically from the website's product data every time you run `npm run build`. **If you change a price, rebuild the site AND redeploy the worker**, otherwise the website and the worker will disagree and checkout will charge the worker's price.
-- **Delivery** is still worked out from basket weight: £4.00 up to 2kg, £8.99 for 2–10kg, £14.99 over 10kg (in `src/shipping-rates.js` inside the worker folder).
+- **Postage** is a fixed amount on each product (in the worker catalog as `postagePence`). The basket is charged the highest item postage once, not a sum and not by weight. Products with no postage set use £3.99. Postage of 0 is free UK delivery. The rule is in `cloudflare/checkout-worker/src/shipping-rates.js`.
 - **Plan / fees:** your Viva plan page showed "In-person Zero". Website payments are normally under the Omnichannel plans, which add a small monthly charge per website, so check with Viva support that your plan allows website payments.
 - **Very large baskets:** if an order has so many different products that it no longer fits in the order note stored with Viva, checkout will ask the customer to split it or order on WhatsApp.
 - **Customer receipts:** the old Stripe flow emailed customers a receipt. This worker only notifies *you*. Check in your Viva dashboard (Settings / email notifications) whether Viva sends a customer receipt, or ask Viva support.
