@@ -13,29 +13,56 @@ function shopItem(
 }
 
 function bong(
-  size: "medium" | "large",
+  size: "medium" | "large" | "small",
   code: string,
   name: string,
   slug: string,
   file: string,
   description: string,
-  shortDescription: string
+  shortDescription: string,
+  extras?: { price?: number; heightCm?: number }
 ): Product {
-  const medium = size === "medium";
+  const sizeCode = size === "medium" ? "m" : size === "large" ? "l" : "s";
+  const skuSize = size === "medium" ? "M" : size === "large" ? "L" : "S";
+  const category = size === "medium" ? "medium-bongs" : size === "large" ? "large-bongs" : "small-bongs";
+  const price = extras?.price ?? (size === "medium" ? 14.99 : size === "large" ? 24.99 : 8.99);
+  const heightCm = size === "large" ? 35 : extras?.heightCm;
+  const heightLine = heightCm == null ? "" : ` Height ${heightCm} cm.`;
   return shopItem({
-    id: `shop-bong-${medium ? "m" : "l"}-${code}`,
+    id: `shop-bong-${sizeCode}-${code}`,
     name,
     slug,
-    description,
+    description: `${description}${heightLine}`,
     shortDescription,
-    price: medium ? 14.99 : 24.99,
-    postage: medium ? 3.5 : 3.99,
-    categoryId: medium ? "medium-bongs" : "large-bongs",
-    categorySlug: medium ? "medium-bongs" : "large-bongs",
+    price,
+    postage: size === "medium" ? 3.5 : 3.99,
+    categoryId: category,
+    categorySlug: category,
     image: `/shop/${file}`,
-    tags: ["bongs", medium ? "medium-bongs" : "large-bongs", "shop-stock"],
+    tags: ["bongs", category, "shop-stock"],
     minOrder: 1,
-    sku: `SC-BNG-${medium ? "M" : "L"}-${code}`,
+    sku: `SC-BNG-${skuSize}-${code}`,
+  });
+}
+
+const BLU_FLAME_BOX =
+  "Blu Flame click lighters in a counter display box of 50: five designs, ten of each. Sold as a full box, with free UK delivery.";
+
+function bluFlame(key: string, title: string, detail: string): Product {
+  return shopItem({
+    id: `shop-lgt-${key}`,
+    name: `Blu Flame Click Lighters – ${title} (Box of 50)`,
+    slug: `blu-flame-click-lighters-${key}`,
+    description: `${detail} ${BLU_FLAME_BOX}`,
+    shortDescription: `Blu Flame click lighters, ${title.toLowerCase()} — full box of 50, free UK delivery.`,
+    price: 15.99,
+    postage: 0,
+    categoryId: "lighters",
+    categorySlug: "lighters",
+    image: `/shop/lighter-${key}.webp`,
+    tags: ["lighters", "blu-flame", "box", "shop-stock"],
+    minOrder: 1,
+    sku: `SC-LGT-${key.toUpperCase()}`,
   });
 }
 
@@ -45,8 +72,13 @@ function money(amount: number) {
 }
 
 /**
- * Grinders omit postage, so the checkout charges the £3.99 default.
+ * The Gold Honeycomb grinder is £7.99 with free delivery on its own listing.
+ * The other grinders omit postage, so checkout charges the £3.99 default.
  * Scales are free delivery. Bought together, the basket pays the highest once.
+ *
+ * The Grinder + Digital Scale bundle listing is left as published. Its
+ * "bought separately" figures still use £3.99 postage for every grinder,
+ * including the Gold Honeycomb.
  */
 const GRINDER_CHOICES = [
   { key: "gold", label: "Gold Honeycomb", piece: "Gold Honeycomb Grinder", price: 7.99, postage: 3.99 },
@@ -99,8 +131,8 @@ export const shopStockProducts: Product[] = [
     name: "Black Vacuum Sealer Rolls",
     slug: "vacuum-sealer-rolls",
     description:
-      "Black food-grade vacuum sealer rolls for airtight packing. Fits standard domestic sealers. Choose small, medium or large, or the all-3-sizes bundle, which includes free UK delivery. Lengths for each size will be added here once they are confirmed. Black rolls only.",
-    shortDescription: "Black vacuum sealer rolls — small, medium, large, or all 3 sizes.",
+      "Black food-grade vacuum sealer rolls for airtight packing. Fits standard domestic sealers. Widths are 15 cm, 20 cm and 28 cm. Choose one width, or all three widths, which includes free UK delivery. Roll length is not listed. Black rolls only.",
+    shortDescription: "Black vacuum sealer rolls — 15 cm, 20 cm or 28 cm wide, or all three.",
     price: 5.99,
     postage: 3.99,
     categoryId: "accessories",
@@ -112,32 +144,32 @@ export const shopStockProducts: Product[] = [
     options: [
       {
         id: "shop-vacuum-rolls",
-        label: "Small",
-        name: "Black Vacuum Sealer Rolls — Small",
+        label: "15 cm wide",
+        name: "Black Vacuum Sealer Rolls — 15 cm wide",
         price: 5.99,
         postage: 3.99,
         sku: "SC-VAC-ROLL-S",
       },
       {
         id: "shop-vacuum-rolls-m",
-        label: "Medium",
-        name: "Black Vacuum Sealer Rolls — Medium",
+        label: "20 cm wide",
+        name: "Black Vacuum Sealer Rolls — 20 cm wide",
         price: 6.99,
         postage: 3.99,
         sku: "SC-VAC-ROLL-M",
       },
       {
         id: "shop-vacuum-rolls-l",
-        label: "Large",
-        name: "Black Vacuum Sealer Rolls — Large",
+        label: "28 cm wide",
+        name: "Black Vacuum Sealer Rolls — 28 cm wide",
         price: 7.99,
         postage: 3.99,
         sku: "SC-VAC-ROLL-L",
       },
       {
         id: "shop-vacuum-rolls-all",
-        label: "All 3 sizes",
-        name: "Black Vacuum Sealer Rolls — All 3 sizes",
+        label: "All 3 widths",
+        name: "Black Vacuum Sealer Rolls — 15 cm, 20 cm and 28 cm wide",
         price: 21.99,
         postage: 0,
         sku: "SC-VAC-ROLL-ALL",
@@ -156,6 +188,7 @@ export const shopStockProducts: Product[] = [
     categoryId: "accessories",
     categorySlug: "accessories",
     image: "/shop/vacuum-sealer.webp",
+    images: ["/shop/vacuum-sealer.webp", "/shop/sealer-machine.webp"],
     tags: ["accessories", "vacuum", "shop-stock"],
     isFeatured: true,
     minOrder: 1,
@@ -174,12 +207,8 @@ export const shopStockProducts: Product[] = [
     saveAsAmount: true,
     categoryId: "accessories",
     categorySlug: "accessories",
-    image: "/shop/bundle-vacuum-sealer-rolls.webp",
-    images: [
-      "/shop/bundle-vacuum-sealer-rolls.webp",
-      "/shop/vacuum-sealer.webp",
-      "/shop/vacuum-sealer-rolls.webp",
-    ],
+    image: "/shop/sealer-machine.webp",
+    images: ["/shop/sealer-machine.webp", "/shop/vacuum-sealer-rolls.webp"],
     tags: ["accessories", "vacuum", "bundle", "shop-stock"],
     isFeatured: true,
     minOrder: 1,
@@ -235,9 +264,10 @@ export const shopStockProducts: Product[] = [
     name: "Gold Honeycomb Grinder",
     slug: "gold-honeycomb-grinder",
     description:
-      "Gold honeycomb herb grinder with matching leaf-style grinders from the shop display. Sharp teeth, metal build, tobacco/herb use.",
-    shortDescription: "Gold honeycomb metal herb grinder from shop stock.",
+      "Gold honeycomb herb grinder from the Smoke Cali counter. Sharp teeth, metal build, for tobacco and herb. £7.99 with free UK delivery.",
+    shortDescription: "Gold honeycomb metal herb grinder. £7.99, free UK delivery.",
     price: 7.99,
+    postage: 0,
     originalPrice: 9.99,
     categoryId: "grinders",
     categorySlug: "grinders",
@@ -246,22 +276,6 @@ export const shopStockProducts: Product[] = [
     isFeatured: true,
     minOrder: 1,
     sku: "SC-GR-GOLD",
-  }),
-  shopItem({
-    id: "shop-graphic-lighters",
-    name: "Graphic Flame Lighters",
-    slug: "graphic-flame-lighters",
-    description:
-      "Refillable graphic-print lighters from the Blu Flame style display. Sold each at a high-street smoke-shop price.",
-    shortDescription: "Refillable graphic-print lighters — sold each.",
-    price: 1.99,
-    originalPrice: 2.49,
-    categoryId: "lighters",
-    categorySlug: "lighters",
-    image: "/shop/graphic-lighters.webp",
-    tags: ["lighters", "shop-stock"],
-    minOrder: 1,
-    sku: "SC-LGT-GFX",
   }),
   shopItem({
     id: "shop-mz100",
@@ -291,7 +305,8 @@ export const shopStockProducts: Product[] = [
     postage: 0,
     categoryId: "scales",
     categorySlug: "scales",
-    image: "/shop/triton-t3-scale.webp",
+    image: "/shop/triton-front.webp",
+    images: ["/shop/triton-front.webp", "/shop/triton-back.webp"],
     tags: ["scales", "shop-stock"],
     isFeatured: true,
     minOrder: 1,
@@ -353,8 +368,8 @@ export const shopStockProducts: Product[] = [
     description:
       "Mini glass bubblers with zip carry cases. Compact percolator pieces photographed from the shop glass wall.",
     shortDescription: "Mini glass bubblers with zip cases — sold each.",
-    price: 16.99,
-    originalPrice: 22.99,
+    price: 8.99,
+    postage: 3.99,
     categoryId: "small-bongs",
     categorySlug: "small-bongs",
     image: "/shop/mini-glass-bubblers.webp",
@@ -370,8 +385,8 @@ export const shopStockProducts: Product[] = [
     description:
       "Spiral percolator glass bubbler. Clear borosilicate with a coloured spiral perc, compact rig-in-one style, sold individually.",
     shortDescription: "Spiral perc glass bubbler — clear borosilicate, sold each.",
-    price: 7.99,
-    postage: 2.99,
+    price: 8.99,
+    postage: 3.99,
     categoryId: "small-bongs",
     categorySlug: "small-bongs",
     image: "/shop/spiral-glass-bubblers.webp",
@@ -386,8 +401,8 @@ export const shopStockProducts: Product[] = [
     description:
       "Hand-blown swan shape glass pipe from shop stock. Sculptural borosilicate piece with an amber head and coloured wing, sold individually.",
     shortDescription: "Hand-blown swan shape glass pipe — sold each.",
-    price: 9.99,
-    postage: 2.99,
+    price: 8.99,
+    postage: 3.99,
     categoryId: "small-bongs",
     categorySlug: "small-bongs",
     image: "/shop/swan-glass-pipe.webp",
@@ -691,5 +706,348 @@ export const shopStockProducts: Product[] = [
     "bong-l-7502-blue-octopus.webp",
     "Large sculpted bong with a blue octopus, purple and yellow eyes and yellow suckers. The tentacles wrap a clear straight tube and round base, and one holds the glass bowl. Sold each.",
     "Large blue octopus bong with purple eyes and tentacles around a clear tube."
+  ),
+  shopItem({
+    id: "shop-lgt-4smoke",
+    name: "4smoke Disposable Lighters – Clear, 5 Colours (Box of 50)",
+    slug: "4smoke-disposable-lighters-clear-5-colours",
+    description:
+      "Plain 4smoke disposable lighters in five translucent colours: green, clear, red, blue and amber. Full counter display box of 50. Free UK delivery.",
+    shortDescription: "4smoke plain disposable lighters in five colours — full box of 50, free UK delivery.",
+    price: 12.99,
+    postage: 0,
+    categoryId: "lighters",
+    categorySlug: "lighters",
+    image: "/shop/lighter-4smoke.webp",
+    tags: ["lighters", "disposable", "box", "shop-stock"],
+    minOrder: 1,
+    sku: "SC-LGT-4SMOKE",
+  }),
+  bluFlame(
+    "skulls",
+    "Skull Designs",
+    "Skull artwork across the box, including a yellow skull, a crowned skull, a red mask, a snake and a green skull."
+  ),
+  bluFlame(
+    "portraits",
+    "Portrait Designs",
+    "Illustrated portrait designs in bold colour, five prints to the box."
+  ),
+  bluFlame(
+    "aces",
+    "Ace Designs",
+    "Playing-card aces in hearts, clubs, diamonds and spades, printed over flame and colour backgrounds."
+  ),
+  bluFlame(
+    "rasta",
+    "Rasta Designs",
+    "Red, gold and green skull designs with striped hats and dreadlocks."
+  ),
+  bluFlame(
+    "cardsuits",
+    "Card Suit Designs",
+    "Hearts, diamonds, clubs and spades in repeating black, white and red patterns."
+  ),
+  bluFlame(
+    "unionjack",
+    "Union Jack Designs",
+    "Union Jack flag prints across the box."
+  ),
+  bluFlame(
+    "glamour",
+    "Glamour Designs",
+    "Glamour portrait prints, five designs to the box."
+  ),
+  bluFlame(
+    "leaf",
+    "Leaf Designs",
+    "Leaf artwork in green, yellow, pink and red, with pop-art lettering."
+  ),
+  bluFlame(
+    "bigben",
+    "Big Ben Designs",
+    "Elizabeth Tower and Palace of Westminster prints, five London designs to the box."
+  ),
+  bluFlame(
+    "casino",
+    "Casino Designs",
+    "Casino prints with sevens, cards, chips and a roulette wheel."
+  ),
+  bluFlame(
+    "london",
+    "London Designs",
+    "London scene prints, including the clock tower, a red telephone box, a red bridge, a red umbrella and a flower."
+  ),
+  bluFlame(
+    "love",
+    "Love Designs",
+    "Heart and love prints, including gem hearts, a kiss, and a heart of stones."
+  ),
+  bong(
+    "medium",
+    "01",
+    "Medium Green Frog Glass Bong",
+    "medium-green-frog-glass-bong",
+    "bong-m-01-frog-green-sculpted.webp",
+    "Medium sculpted glass bong shaped as a seated green frog on a black scrolled base. Curved green neck, black bowl arm and a clear glass bowl. Sold each.",
+    "Medium green frog bong with a curved neck and black base."
+  ),
+  bong(
+    "medium",
+    "02",
+    "Medium Teal and Lime Recycler Glass Bong",
+    "medium-teal-lime-recycler-glass-bong",
+    "bong-m-02-recycler-teal-lime.webp",
+    "Medium teal recycler with a lime bent neck, a side chamber and a clear glass bowl. Round foot and a fixed handle. Sold each.",
+    "Medium teal and lime recycler with a side chamber."
+  ),
+  bong(
+    "medium",
+    "03",
+    "Medium Amber and Purple Recycler Glass Bong",
+    "medium-amber-purple-recycler-glass-bong",
+    "bong-m-03-recycler-yellow-purple.webp",
+    "Medium amber recycler with a purple bent neck, a side chamber and a clear glass bowl. Round foot and a fixed handle. Sold each.",
+    "Medium amber and purple recycler with a side chamber."
+  ),
+  bong(
+    "medium",
+    "04",
+    "Medium Pink and Teal Recycler Glass Bong",
+    "medium-pink-teal-recycler-glass-bong",
+    "bong-m-04-recycler-pink-teal.webp",
+    "Medium pink recycler with a teal bent neck, a side chamber and a clear glass bowl. Round foot and a fixed handle. Sold each.",
+    "Medium pink and teal recycler with a side chamber."
+  ),
+  bong(
+    "medium",
+    "05",
+    "Medium Green and Lime Recycler Glass Bong",
+    "medium-green-lime-recycler-glass-bong",
+    "bong-m-05-recycler-green-lime.webp",
+    "Medium green recycler with a lime bent neck, a side chamber and a clear glass bowl. Round foot and a fixed handle. Sold each.",
+    "Medium green and lime recycler with a side chamber."
+  ),
+  bong(
+    "medium",
+    "06",
+    "Medium Yellow Coca-Cola Can Glass Bong",
+    "medium-yellow-coca-cola-can-glass-bong",
+    "bong-m-06-can-coca-cola-yellow.webp",
+    "Medium soda-can glass bong with a yellow Coca-Cola orange-soda label, a bent clear mouthpiece and a glass bowl on the lid. Sold each.",
+    "Medium yellow Coca-Cola can bong with a bent mouthpiece."
+  ),
+  bong(
+    "medium",
+    "07",
+    "Medium Orange Fanta Can Glass Bong",
+    "medium-orange-fanta-can-glass-bong",
+    "bong-m-07-can-fanta-orange.webp",
+    "Medium soda-can glass bong with an orange Fanta label, a bent clear mouthpiece and a glass bowl on the lid. Sold each.",
+    "Medium orange Fanta can bong with a bent mouthpiece."
+  ),
+  bong(
+    "medium",
+    "08",
+    "Medium Purple Fanta Cherry Can Glass Bong",
+    "medium-purple-fanta-cherry-can-glass-bong",
+    "bong-m-08-can-fanta-cherry.webp",
+    "Medium soda-can glass bong with a purple Fanta Cherry label, a bent clear mouthpiece and a glass bowl on the lid. Sold each.",
+    "Medium purple Fanta Cherry can bong with a bent mouthpiece."
+  ),
+  bong(
+    "medium",
+    "09",
+    "Medium Green Sprite Can Glass Bong",
+    "medium-green-sprite-can-glass-bong",
+    "bong-m-09-can-sprite.webp",
+    "Medium soda-can glass bong with a green Sprite lemon-lime label, a bent clear mouthpiece and a glass bowl on the lid. Sold each.",
+    "Medium green Sprite can bong with a bent mouthpiece."
+  ),
+  bong(
+    "medium",
+    "10",
+    "Medium Blue Pepsi Can Glass Bong",
+    "medium-blue-pepsi-can-glass-bong",
+    "bong-m-10-can-pepsi.webp",
+    "Medium soda-can glass bong with a blue Pepsi label, a bent clear mouthpiece and a glass bowl on the lid. Sold each.",
+    "Medium blue Pepsi can bong with a bent mouthpiece."
+  ),
+  bong(
+    "medium",
+    "11",
+    "Medium Red Coca-Cola Can Glass Bong",
+    "medium-red-coca-cola-can-glass-bong",
+    "bong-m-11-can-coca-cola-red.webp",
+    "Medium soda-can glass bong with a red Coca-Cola label, a bent clear mouthpiece and a glass bowl on the lid. Sold each.",
+    "Medium red Coca-Cola can bong with a bent mouthpiece."
+  ),
+  bong(
+    "medium",
+    "12",
+    "Medium Pink One-Eye Monster Glass Bong",
+    "medium-pink-one-eye-monster-glass-bong",
+    "bong-m-12-monster-pink-one-eye.webp",
+    "Medium sculpted pink monster bong with one blue eye, white spots, an open red mouth with teeth, and a clear chamber in the mouth. Glass bowl on the side. Sold each.",
+    "Medium pink one-eye monster bong with an open mouth.",
+    { price: 16.99 }
+  ),
+  bong(
+    "medium",
+    "13",
+    "Medium Yellow Teeth Monster Glass Bong",
+    "medium-yellow-teeth-monster-glass-bong",
+    "bong-m-13-monster-yellow-teeth.webp",
+    "Medium sculpted yellow monster bong with tentacles, pink-rimmed eyes, and a wide pink mouth of white teeth around a clear chamber. Glass bowl included. Sold each.",
+    "Medium yellow monster bong with tentacles and a toothy mouth.",
+    { price: 16.99 }
+  ),
+  bong(
+    "medium",
+    "14",
+    "Medium Peach Grin Face Glass Bong",
+    "medium-peach-grin-face-glass-bong",
+    "bong-m-14-face-peach-grin.webp",
+    "Medium peach sculpted face bong with one eye, a small ear and a wide grin of white teeth. The bowl sits through the cheek. Sold each.",
+    "Medium peach face bong with one eye and a wide grin.",
+    { price: 16.99 }
+  ),
+  bong(
+    "medium",
+    "15",
+    "Medium Blue Octopus Beaker Glass Bong",
+    "medium-blue-octopus-beaker-glass-bong",
+    "bong-m-15-octopus-blue-clear-tube.webp",
+    "Medium clear beaker with a blue octopus wrapped around the tube. Yellow suckers, green eyes, a blue lip and a glass bowl. Sold each.",
+    "Medium blue octopus beaker with yellow suckers."
+  ),
+  bong(
+    "medium",
+    "16",
+    "Medium Rasta Skull Glass Bong",
+    "medium-rasta-skull-glass-bong",
+    "bong-m-16-skull-rasta-green.webp",
+    "Medium skull bong in green, yellow and red glass, with painted leaves on the neck and a black metal bowl. Sold each.",
+    "Medium green, yellow and red skull bong. Height 24 cm.",
+    { heightCm: 24 }
+  ),
+  bong(
+    "medium",
+    "17",
+    "Medium Purple and Blue Skull Glass Bong",
+    "medium-purple-blue-skull-glass-bong",
+    "bong-m-17-skull-purple-blue.webp",
+    "Medium skull bong in purple and blue glass, with green leaves on the neck and a black metal bowl. Sold each.",
+    "Medium purple and blue skull bong. Height 24 cm.",
+    { heightCm: 24 }
+  ),
+  bong(
+    "medium",
+    "18",
+    "Medium Yellow Gold-Ring Beaker Bong",
+    "medium-yellow-gold-ring-beaker-bong",
+    "bong-m-18-beaker-yellow-gold.webp",
+    "Medium beaker with a yellow neck, gold rings and textured silver bands on the neck and base. Clear downstem and glass bowl. Sold each.",
+    "Medium yellow beaker with gold rings. Height 20.5 cm.",
+    { heightCm: 20.5 }
+  ),
+  bong(
+    "medium",
+    "19",
+    "Medium Green Gold-Ring Beaker Bong",
+    "medium-green-gold-ring-beaker-bong",
+    "bong-m-19-beaker-green-gold.webp",
+    "Medium beaker with a green neck and downstem, gold rings and textured silver bands on the neck and base. Clear glass bowl. Sold each.",
+    "Medium green beaker with gold rings and a green downstem."
+  ),
+  bong(
+    "medium",
+    "20",
+    "Medium Blue Gold-Ring Beaker Bong",
+    "medium-blue-gold-ring-beaker-bong",
+    "bong-m-20-beaker-blue-gold.webp",
+    "Medium beaker with a blue neck, gold rings and textured silver bands on the neck and base. Clear downstem and glass bowl. Sold each.",
+    "Medium blue beaker with gold rings."
+  ),
+  bong(
+    "medium",
+    "21",
+    "Medium Navy Gold-Ring Beaker Bong",
+    "medium-navy-gold-ring-beaker-bong",
+    "bong-m-21-beaker-navy-gold.webp",
+    "Medium beaker with a navy neck and downstem, gold rings and textured silver bands on the neck and base. Clear glass bowl. Sold each.",
+    "Medium navy beaker with gold rings and a navy downstem."
+  ),
+  bong(
+    "small",
+    "22",
+    "Small Swan Rig with Pipe",
+    "small-swan-rig-with-pipe",
+    "bong-s-22-swan-rig-with-pipe.webp",
+    "Small clear swan rig with an amber head, a green and amber wing, and a separate clear mouthpiece pipe with a green tip. Sold each.",
+    "Small swan rig with a green-tip mouthpiece pipe."
+  ),
+  bong(
+    "small",
+    "23",
+    "Small Blue Coil Rig with Pipe",
+    "small-blue-coil-rig-with-pipe",
+    "bong-s-23-rig-blue-coil-with-pipe.webp",
+    "Small clear rig with a blue glass coil and a green tree perc, a bent neck and a separate mouthpiece pipe with a blue tip. Sold each.",
+    "Small blue coil rig with a blue-tip mouthpiece pipe."
+  ),
+  bong(
+    "small",
+    "24",
+    "Small Pink Flower Rig with Pipe",
+    "small-pink-flower-rig-with-pipe",
+    "bong-s-24-rig-pink-flower-with-pipe.webp",
+    "Small clear rig with a pink flower and a green leaf inside the chamber, a bent neck and a separate mouthpiece pipe with a pink tip. Sold each.",
+    "Small pink flower rig with a pink-tip mouthpiece pipe."
+  ),
+  bong(
+    "small",
+    "25",
+    "Small Green Spiral Rig with Pipe",
+    "small-green-spiral-rig-with-pipe",
+    "bong-s-25-rig-green-spiral-with-pipe.webp",
+    "Small clear rig with a dark green spiral inside the chamber, a bent neck and a separate mouthpiece pipe with a green tip. Sold each.",
+    "Small green spiral rig with a green-tip mouthpiece pipe."
+  ),
+  bong(
+    "small",
+    "26",
+    "Small Orange and Yellow Rig with Pipe",
+    "small-orange-yellow-rig-with-pipe",
+    "bong-s-26-rig-orange-yellow-with-pipe.webp",
+    "Small rig with a yellow-to-orange chamber, a horned figure inside, a bent neck and a separate mouthpiece pipe with an orange tip. Sold each.",
+    "Small orange and yellow rig with an orange-tip mouthpiece pipe."
+  ),
+  bong(
+    "small",
+    "27",
+    "Small Amber Coil Rig with Pipe",
+    "small-amber-coil-rig-with-pipe",
+    "bong-s-27-rig-amber-coil-with-pipe.webp",
+    "Small clear rig with an amber glass coil and a green tree perc, a bent neck and a separate mouthpiece pipe with an amber tip. Sold each.",
+    "Small amber coil rig with an amber-tip mouthpiece pipe."
+  ),
+  bong(
+    "small",
+    "28",
+    "Small Drops and Moon Rig with Pipe",
+    "small-drops-moon-rig-with-pipe",
+    "bong-s-28-rig-drops-moon-with-pipe.webp",
+    "Small clear rig with a green drop, an amber moon and a blue swirl inside the chamber, a bent neck and a separate mouthpiece pipe with a pink tip. Sold each.",
+    "Small drops and moon rig with a pink-tip mouthpiece pipe."
+  ),
+  bong(
+    "small",
+    "29",
+    "Small Blue Crescent Rig with Pipe",
+    "small-blue-crescent-rig-with-pipe",
+    "bong-s-29-rig-blue-crescent-with-pipe.webp",
+    "Small clear rig with blue and white crescents inside the chamber, a bent neck and a separate mouthpiece pipe with a blue tip. Sold each.",
+    "Small blue crescent rig with a blue-tip mouthpiece pipe."
   ),
 ];

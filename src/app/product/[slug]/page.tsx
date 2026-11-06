@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getProductBySlug, products } from "@/data/products";
 import { getCategoryBySlug } from "@/data/categories";
 import { ProductGallery, ProductPurchase } from "@/components/products/ProductDetail";
+import { MatchingOffer } from "@/components/products/MatchingOffer";
 import { ShopLegacyRedirect } from "@/components/shop/ShopLegacyRedirect";
 import { ProductCard } from "@/components/products/ProductCard";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -22,6 +23,10 @@ const RETIRED_PRODUCTS: Record<string, { href: string; message: string }> = {
   "gummy-cluster-beaker": {
     href: "/shop/medium-bongs/",
     message: "This Nerds beaker has been replaced by the Medium Nerds bongs. Taking you there…",
+  },
+  "graphic-flame-lighters": {
+    href: "/shop/lighters/",
+    message: "Those single graphic lighters have been replaced by Blu Flame and 4smoke boxes. Taking you there…",
   },
 };
 
@@ -55,7 +60,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       : `${formatPrice(product.price)} each`;
   const postageBit =
     product.slug === "vacuum-sealer-rolls"
-      ? "Each size shows its postage. The all-3-sizes bundle includes free UK delivery. Ordering several items, you pay the highest postage once."
+      ? "Widths are 15 cm, 20 cm and 28 cm. Each width shows its postage. All three widths include free UK delivery. Ordering several items, you pay the highest postage once."
       : product.options?.length
         ? `${postageLabel(productPostageGbp({ postage: product.options[0].postage }))}. Ordering several items, you pay the highest postage once.`
         : `${postageLabel(productPostageGbp(product))}. Ordering several items, you pay the highest postage once.`;
@@ -263,6 +268,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               {product.name}
             </h1>
             <ProductPurchase product={product} />
+            <MatchingOffer productId={product.id} />
             <p className="text-graphite/75 leading-relaxed mb-8 mt-8 font-medium">
               {product.description}
             </p>

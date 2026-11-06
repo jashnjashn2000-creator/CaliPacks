@@ -1013,28 +1013,28 @@ export const PRODUCT_CATALOG = {
   "inStock": true
  },
  "shop-vacuum-rolls": {
-  "name": "Black Vacuum Sealer Rolls — Small",
+  "name": "Black Vacuum Sealer Rolls — 15 cm wide",
   "pricePence": 599,
   "postagePence": 399,
   "minOrder": 1,
   "inStock": true
  },
  "shop-vacuum-rolls-m": {
-  "name": "Black Vacuum Sealer Rolls — Medium",
+  "name": "Black Vacuum Sealer Rolls — 20 cm wide",
   "pricePence": 699,
   "postagePence": 399,
   "minOrder": 1,
   "inStock": true
  },
  "shop-vacuum-rolls-l": {
-  "name": "Black Vacuum Sealer Rolls — Large",
+  "name": "Black Vacuum Sealer Rolls — 28 cm wide",
   "pricePence": 799,
   "postagePence": 399,
   "minOrder": 1,
   "inStock": true
  },
  "shop-vacuum-rolls-all": {
-  "name": "Black Vacuum Sealer Rolls — All 3 sizes",
+  "name": "Black Vacuum Sealer Rolls — 15 cm, 20 cm and 28 cm wide",
   "pricePence": 2199,
   "postagePence": 0,
   "minOrder": 1,
@@ -1120,14 +1120,7 @@ export const PRODUCT_CATALOG = {
  "shop-gold-grinder": {
   "name": "Gold Honeycomb Grinder",
   "pricePence": 799,
-  "postagePence": 399,
-  "minOrder": 1,
-  "inStock": true
- },
- "shop-graphic-lighters": {
-  "name": "Graphic Flame Lighters",
-  "pricePence": 199,
-  "postagePence": 399,
+  "postagePence": 0,
   "minOrder": 1,
   "inStock": true
  },
@@ -1168,22 +1161,22 @@ export const PRODUCT_CATALOG = {
  },
  "shop-mini-bubblers": {
   "name": "Mini Glass Bubblers",
-  "pricePence": 1699,
+  "pricePence": 899,
   "postagePence": 399,
   "minOrder": 1,
   "inStock": true
  },
  "shop-spiral-bubblers": {
   "name": "Spiral Perc Glass Bubbler",
-  "pricePence": 799,
-  "postagePence": 299,
+  "pricePence": 899,
+  "postagePence": 399,
   "minOrder": 1,
   "inStock": true
  },
  "shop-swan-pipe": {
   "name": "Swan Shape Glass Pipe",
-  "pricePence": 999,
-  "postagePence": 299,
+  "pricePence": 899,
+  "postagePence": 399,
   "minOrder": 1,
   "inStock": true
  },
@@ -1386,6 +1379,300 @@ export const PRODUCT_CATALOG = {
  "shop-bong-l-7502": {
   "name": "Large Blue Octopus Glass Bong",
   "pricePence": 2499,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-lgt-4smoke": {
+  "name": "4smoke Disposable Lighters – Clear, 5 Colours (Box of 50)",
+  "pricePence": 1299,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-lgt-skulls": {
+  "name": "Blu Flame Click Lighters – Skull Designs (Box of 50)",
+  "pricePence": 1599,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-lgt-portraits": {
+  "name": "Blu Flame Click Lighters – Portrait Designs (Box of 50)",
+  "pricePence": 1599,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-lgt-aces": {
+  "name": "Blu Flame Click Lighters – Ace Designs (Box of 50)",
+  "pricePence": 1599,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-lgt-rasta": {
+  "name": "Blu Flame Click Lighters – Rasta Designs (Box of 50)",
+  "pricePence": 1599,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-lgt-cardsuits": {
+  "name": "Blu Flame Click Lighters – Card Suit Designs (Box of 50)",
+  "pricePence": 1599,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-lgt-unionjack": {
+  "name": "Blu Flame Click Lighters – Union Jack Designs (Box of 50)",
+  "pricePence": 1599,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-lgt-glamour": {
+  "name": "Blu Flame Click Lighters – Glamour Designs (Box of 50)",
+  "pricePence": 1599,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-lgt-leaf": {
+  "name": "Blu Flame Click Lighters – Leaf Designs (Box of 50)",
+  "pricePence": 1599,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-lgt-bigben": {
+  "name": "Blu Flame Click Lighters – Big Ben Designs (Box of 50)",
+  "pricePence": 1599,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-lgt-casino": {
+  "name": "Blu Flame Click Lighters – Casino Designs (Box of 50)",
+  "pricePence": 1599,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-lgt-london": {
+  "name": "Blu Flame Click Lighters – London Designs (Box of 50)",
+  "pricePence": 1599,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-lgt-love": {
+  "name": "Blu Flame Click Lighters – Love Designs (Box of 50)",
+  "pricePence": 1599,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-01": {
+  "name": "Medium Green Frog Glass Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-02": {
+  "name": "Medium Teal and Lime Recycler Glass Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-03": {
+  "name": "Medium Amber and Purple Recycler Glass Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-04": {
+  "name": "Medium Pink and Teal Recycler Glass Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-05": {
+  "name": "Medium Green and Lime Recycler Glass Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-06": {
+  "name": "Medium Yellow Coca-Cola Can Glass Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-07": {
+  "name": "Medium Orange Fanta Can Glass Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-08": {
+  "name": "Medium Purple Fanta Cherry Can Glass Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-09": {
+  "name": "Medium Green Sprite Can Glass Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-10": {
+  "name": "Medium Blue Pepsi Can Glass Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-11": {
+  "name": "Medium Red Coca-Cola Can Glass Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-12": {
+  "name": "Medium Pink One-Eye Monster Glass Bong",
+  "pricePence": 1699,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-13": {
+  "name": "Medium Yellow Teeth Monster Glass Bong",
+  "pricePence": 1699,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-14": {
+  "name": "Medium Peach Grin Face Glass Bong",
+  "pricePence": 1699,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-15": {
+  "name": "Medium Blue Octopus Beaker Glass Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-16": {
+  "name": "Medium Rasta Skull Glass Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-17": {
+  "name": "Medium Purple and Blue Skull Glass Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-18": {
+  "name": "Medium Yellow Gold-Ring Beaker Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-19": {
+  "name": "Medium Green Gold-Ring Beaker Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-20": {
+  "name": "Medium Blue Gold-Ring Beaker Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-m-21": {
+  "name": "Medium Navy Gold-Ring Beaker Bong",
+  "pricePence": 1499,
+  "postagePence": 350,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-s-22": {
+  "name": "Small Swan Rig with Pipe",
+  "pricePence": 899,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-s-23": {
+  "name": "Small Blue Coil Rig with Pipe",
+  "pricePence": 899,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-s-24": {
+  "name": "Small Pink Flower Rig with Pipe",
+  "pricePence": 899,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-s-25": {
+  "name": "Small Green Spiral Rig with Pipe",
+  "pricePence": 899,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-s-26": {
+  "name": "Small Orange and Yellow Rig with Pipe",
+  "pricePence": 899,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-s-27": {
+  "name": "Small Amber Coil Rig with Pipe",
+  "pricePence": 899,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-s-28": {
+  "name": "Small Drops and Moon Rig with Pipe",
+  "pricePence": 899,
+  "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-bong-s-29": {
+  "name": "Small Blue Crescent Rig with Pipe",
+  "pricePence": 899,
   "postagePence": 399,
   "minOrder": 1,
   "inStock": true

@@ -146,24 +146,33 @@ const expectSku = (id, pricePence, postagePence, nameIncludes) => {
 };
 
 expectSku("shop-vacuum-sealer", 1999, 399, /Vacuum Sealer Machine/);
-expectSku("shop-vacuum-rolls", 599, 399, /Small/);
-expectSku("shop-vacuum-rolls-m", 699, 399, /Medium/);
-expectSku("shop-vacuum-rolls-l", 799, 399, /Large/);
-expectSku("shop-vacuum-rolls-all", 2199, 0, /All 3 sizes/);
+expectSku("shop-vacuum-rolls", 599, 399, /15 cm wide/);
+expectSku("shop-vacuum-rolls-m", 699, 399, /20 cm wide/);
+expectSku("shop-vacuum-rolls-l", 799, 399, /28 cm wide/);
+expectSku("shop-vacuum-rolls-all", 2199, 0, /15 cm, 20 cm and 28 cm/);
 expectSku("shop-travel-kit", 1599, 399, /Cartoon Smoking Travel Kit/);
 expectSku("shop-mz100", 899, 0, /On Balance MZ-100/);
 expectSku("shop-triton-t3", 1699, 0, /My Weigh Triton T3/);
 expectSku("shop-colour-hookah", 5499, 399, /Pink AK-47 Hookah/);
-expectSku("shop-mini-bubblers", 1699, 399, /^Mini Glass Bubblers$/);
-expectSku("shop-spiral-bubblers", 799, 299, /Spiral Perc Glass Bubbler/);
-expectSku("shop-swan-pipe", 999, 299, /Swan Shape Glass Pipe/);
+expectSku("shop-mini-bubblers", 899, 399, /^Mini Glass Bubblers$/);
+expectSku("shop-spiral-bubblers", 899, 399, /Spiral Perc Glass Bubbler/);
+expectSku("shop-swan-pipe", 899, 399, /Swan Shape Glass Pipe/);
 expectSku("pack-001", 22, 399);
 assert.equal(PRODUCT_CATALOG["pack-001"].bulkPricePence, 20);
 assert.equal(PRODUCT_CATALOG["pack-001"].bulkMinQty, 50);
 assert.equal(PRODUCT_CATALOG["pack-001"].minOrder, 25);
 assert.equal(PRODUCT_CATALOG["pack-111"].pricePence, 22);
 assert.equal(PRODUCT_CATALOG["pack-111"].minOrder, 25);
-expectSku("shop-gold-grinder", 799, 399);
+expectSku("shop-gold-grinder", 799, 0);
+assert.equal(PRODUCT_CATALOG["shop-graphic-lighters"], undefined);
+expectSku("shop-lgt-4smoke", 1299, 0, /Disposable Lighters/);
+expectSku("shop-lgt-skulls", 1599, 0, /Skull Designs/);
+expectSku("shop-bong-m-01", 1499, 350, /Frog/);
+expectSku("shop-bong-m-12", 1699, 350, /One-Eye/);
+expectSku("shop-bong-m-13", 1699, 350, /Yellow Teeth/);
+expectSku("shop-bong-m-14", 1699, 350, /Peach/);
+expectSku("shop-bong-m-18", 1499, 350, /Yellow Gold-Ring/);
+expectSku("shop-bong-s-22", 899, 399, /Swan Rig/);
 assert.equal(PRODUCT_CATALOG["shop-gummy-beaker"], undefined);
 expectSku("shop-bong-m-7461", 1499, 350, /Runtz Green Apple/);
 expectSku("shop-bong-m-7462", 1499, 350, /Nerds Big Chewy/);
@@ -188,9 +197,9 @@ const mixed = buildTotals([
   { productId: "shop-spiral-bubblers", quantity: 3 },
   { productId: "shop-mz100", quantity: 1 },
 ]);
-assert.equal(mixed.subtotalPence, 2199 + 799 * 3 + 899);
-assert.equal(mixed.shippingPence, 299); // spiral £2.99 beats free bundle and free scale
-assert.equal(mixed.totalPence, mixed.subtotalPence + 299);
+assert.equal(mixed.subtotalPence, 2199 + 899 * 3 + 899);
+assert.equal(mixed.shippingPence, 399); // small bongs are £3.99 postage
+assert.equal(mixed.totalPence, mixed.subtotalPence + 399);
 
 const scales = buildTotals([
   { productId: "shop-mz100", quantity: 1 },
@@ -204,8 +213,8 @@ const glass = buildTotals([
   { productId: "shop-spiral-bubblers", quantity: 1 },
   { productId: "shop-vacuum-sealer", quantity: 1 },
 ]);
-assert.equal(glass.subtotalPence, 999 + 799 + 1999);
-assert.equal(glass.shippingPence, 399); // highest, not 2.99+2.99+3.99
+assert.equal(glass.subtotalPence, 899 + 899 + 1999);
+assert.equal(glass.shippingPence, 399); // highest, not added together
 assert.equal(glass.totalPence, glass.subtotalPence + 399);
 
 const rolls = buildTotals([
