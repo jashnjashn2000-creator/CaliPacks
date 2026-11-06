@@ -35,7 +35,7 @@ import {
 } from "./shipping-rates.js";
 import { PRODUCT_CATALOG } from "./product-catalog.js";
 
-const DEFAULT_OWNER_EMAIL = "hello@calipacks.co.uk";
+const DEFAULT_OWNER_EMAIL = "smokecaliltd@gmail.com";
 const ORDER_TAG = "SCV1:"; // prefix on merchantTrns so we only act on orders this worker created
 const MERCHANT_TRNS_MAX = 1800; // Viva allows long merchantTrns; stay well inside it
 const MAX_ORDER_PENCE = 1_000_000; // £10,000 safety cap per online order
