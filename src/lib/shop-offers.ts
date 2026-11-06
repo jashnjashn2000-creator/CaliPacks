@@ -5,10 +5,17 @@ import { formatPrice } from "@/lib/utils";
  * Existing bundle listings to surface on the matching single-item page.
  * Prices are read from those listings. Nothing here is a new offer.
  */
+export interface ShopOfferImage {
+  src: string;
+  alt: string;
+}
+
 export interface ShopOfferCallout {
   href: string;
   heading: string;
   detail: string;
+  /** Photos from the bundle listing. The sealer offer shows the machine and the black rolls. */
+  images?: ShopOfferImage[];
 }
 
 const GRINDER_IDS = new Set([
@@ -26,6 +33,10 @@ export function shopOfferCallout(productId: string): ShopOfferCallout | null {
       href: `/product/${bundle.slug}`,
       heading: `Add all 3 roll sizes for ${formatPrice(bundle.price)}`,
       detail: `${bundle.name}, free UK delivery. ${formatPrice(bundle.price)} is the price for this machine together with the 15 cm, 20 cm and 28 cm black rolls.`,
+      images: (bundle.images?.length ? bundle.images : [bundle.image]).map((src) => ({
+        src,
+        alt: src.includes("rolls") ? "Black vacuum sealer rolls" : "Compact vacuum sealer machine",
+      })),
     };
   }
 
