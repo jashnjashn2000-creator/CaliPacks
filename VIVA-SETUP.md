@@ -95,6 +95,8 @@ Each command asks you to paste the value.
 
 **Order emails (same as before, keep what you already had):** `ZAPIER_WEBHOOK_URL`, `RESEND_API_KEY`, `OWNER_NOTIFY_EMAIL`, `RESEND_FROM_EMAIL`. The old `STRIPE_*` secrets are no longer used and can be deleted.
 
+**Customer confirmation:** `CUSTOMER_EMAIL_FROM`, a verified sender such as `Smoke Cali <orders@smokecali.co.uk>`. Leave it unset while the sender is still `onboarding@resend.dev`. That address can only deliver to the Resend account owner, so the worker skips the customer email, writes a log line, and still marks the order paid. The shop alert email is unchanged.
+
 **Then deploy the worker yourself** (I have not deployed anything): `npx wrangler deploy` from `cloudflare/checkout-worker`. Also publish the updated website as you normally do. The website's `NEXT_PUBLIC_CHECKOUT_API_URL` setting stays the same as before (your worker's address).
 
 ### Demo vs live switch

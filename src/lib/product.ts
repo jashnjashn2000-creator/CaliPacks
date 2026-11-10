@@ -1,5 +1,5 @@
 import { Product, ProductOption } from "@/types";
-import { postageLabel, productPostageGbp } from "@/lib/shipping";
+import { caliPackPostageLabel, postageLabel, productPostageGbp } from "@/lib/shipping";
 import { formatPrice } from "@/lib/utils";
 
 export function isCaliPack(product: Product) {
@@ -111,6 +111,7 @@ export function bundleSavingLabel(product: Product): string | null {
  * so the card does not hide free delivery behind a single paid rate.
  */
 export function displayPostageLabel(product: Product): string {
+  if (isCaliPack(product)) return caliPackPostageLabel;
   const options = product.options;
   if (!options?.length) return postageLabel(productPostageGbp(product));
   const paid = [...new Set(options.filter((o) => o.postage > 0).map((o) => o.postage))];

@@ -52,7 +52,7 @@ export const SHIPPING = {
 } as const;
 
 export const RETURNS = {
-  /** 14-day change-of-mind cancellation right (Consumer Contracts Regulations 2013) for unopened/unused goods. */
+  /** 14-day change-of-mind cancellation right (Consumer Contracts Regulations 2013) for distance orders. */
   days: 14,
 } as const;
 

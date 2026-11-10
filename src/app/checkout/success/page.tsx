@@ -7,6 +7,7 @@ import { formatPrice } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
 import { checkoutVerifyUrl, LAST_ORDER_KEY } from "@/lib/payments";
 import { contactInfo } from "@/data/social";
+import { TrustpilotLink } from "@/components/layout/TrustpilotLink";
 
 interface LastOrder {
   name?: string;
@@ -165,13 +166,16 @@ export default function CheckoutSuccessPage() {
         )}
 
         {result.kind !== "checking" && (
-          <Link
-            href={result.kind === "paid" ? "/shop/" : "/checkout/"}
-            className="inline-flex items-center gap-2 px-6 py-3.5 bg-ink text-white font-semibold rounded-xl hover:bg-graphite transition-colors"
-          >
-            {result.kind === "paid" ? "Continue shopping" : "Return to checkout"}
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+          <div className="flex flex-col items-center gap-6">
+            <Link
+              href={result.kind === "paid" ? "/shop/" : "/checkout/"}
+              className="inline-flex items-center gap-2 px-6 py-3.5 bg-ink text-white font-semibold rounded-xl hover:bg-graphite transition-colors"
+            >
+              {result.kind === "paid" ? "Continue shopping" : "Return to checkout"}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            {result.kind === "paid" && <TrustpilotLink tone="light" />}
+          </div>
         )}
       </div>
     </div>

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { thumbSrc } from "@/lib/product";
 
 interface PageHeroProps {
   eyebrow: string;
@@ -78,6 +79,7 @@ export function PageHero({
           >
             {showcase.map((src, index) => {
               const product = isProductShot(src);
+              const shot = product ? thumbSrc(src) : src;
               const isMain = index === 0;
               return (
                 <div
@@ -87,10 +89,12 @@ export function PageHero({
                   }`}
                 >
                   <Image
-                    src={src}
+                    src={shot}
                     alt=""
                     fill
                     priority={isMain}
+                    fetchPriority={isMain ? "high" : "auto"}
+                    loading={isMain ? "eager" : "lazy"}
                     sizes={
                       isMain
                         ? large

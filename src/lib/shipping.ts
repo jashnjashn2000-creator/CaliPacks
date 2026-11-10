@@ -1,13 +1,16 @@
 /**
- * Per-product UK postage, charged once per order.
+ * UK postage, charged once per order.
  * The rule lives in ONE place, shared with the checkout worker:
  *   cloudflare/checkout-worker/src/shipping-rates.js
  * The worker recalculates postage server-side before charging through Viva.com.
  * Amounts live on each product (`postage` in GBP). Omit it to use £3.99. 0 = free.
+ * Cali Packs use a quantity band instead (£2.99 up to 200 packs, £3.50 over 200).
  */
 import type { CartItem } from "@/types";
 import { formatPrice } from "@/lib/utils";
 import {
+  CALI_PACK_POSTAGE_LABEL,
+  CALI_PACK_POSTAGE_UP_TO_PENCE,
   DEFAULT_POSTAGE_PENCE,
   DELIVERY_SERVICE,
   POSTAGE_RULE,
@@ -15,6 +18,11 @@ import {
 } from "../../cloudflare/checkout-worker/src/shipping-rates.js";
 
 export const deliveryService: string = DELIVERY_SERVICE;
+
+export const caliPackPostageLabel: string = CALI_PACK_POSTAGE_LABEL;
+
+/** Postage shown for a Cali Pack order of 200 packs or fewer. */
+export const CALI_PACK_POSTAGE_UP_TO_GBP = CALI_PACK_POSTAGE_UP_TO_PENCE / 100;
 
 /** Default postage when a product does not set its own. */
 export const DEFAULT_POSTAGE_GBP = DEFAULT_POSTAGE_PENCE / 100;
@@ -40,10 +48,15 @@ export function postageLabel(postageGbp: number): string {
   return `Postage ${formatPrice(postageGbp)}`;
 }
 
+function isCaliPackLine(product: { id?: string; categorySlug?: string }) {
+  return product.categorySlug === "cali-packs" || String(product.id || "").startsWith("pack-");
+}
+
 export function quoteForCart(items: CartItem[]): DeliveryQuote {
   const pricePence = quotePostagePence(
     items.map((i) => ({
       quantity: i.quantity,
+      caliPack: isCaliPackLine(i.product),
       postagePence: i.product.postage == null ? undefined : Math.round(i.product.postage * 100),
     }))
   );

@@ -11,8 +11,8 @@ interface HeroBannerSliderProps {
 const HIGHLIGHTS = [
   { icon: Tag, label: "£0.22 each" },
   { icon: Layers, label: "Min 25 pcs" },
-  { icon: Truck, label: "Postage shown per product" },
-  { icon: Clock, label: "2–3 day delivery" },
+  { icon: Truck, label: "Evri tracked delivery" },
+  { icon: Clock, label: "2–3 days after dispatch" },
 ];
 
 export function HeroBannerSlider({ products }: HeroBannerSliderProps) {
@@ -21,16 +21,22 @@ export function HeroBannerSlider({ products }: HeroBannerSliderProps) {
       <div className="container-site">
         <div className="grid gap-3 sm:gap-4 lg:grid-cols-[1.65fr_1fr]">
           <div className="relative isolate flex min-h-[520px] overflow-hidden rounded-[1.75rem] bg-ink text-white shadow-[0_30px_70px_rgba(5,31,32,0.28)] lg:min-h-[580px]">
-            <Image
-              src="/brand-showcase.webp"
-              alt="Smoke Cali studio product photography"
-              fill
-              priority
-              fetchPriority="high"
-              sizes="(max-width: 1023px) 100vw, 760px"
-              quality={72}
-              className="-z-20 object-cover object-[70%_center] saturate-[.78] brightness-[0.92] contrast-[1.05]"
-            />
+            <picture className="absolute inset-0 -z-20">
+              <source
+                media="(max-width: 1023px)"
+                srcSet="/brand-showcase-mobile.webp"
+                type="image/webp"
+              />
+              {/* Static export has no image optimizer, so the mobile source is a real 800px file. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/brand-showcase.webp"
+                alt="Smoke Cali studio product photography"
+                fetchPriority="high"
+                decoding="async"
+                className="h-full w-full object-cover object-[70%_center] saturate-[.78] brightness-[0.92] contrast-[1.05]"
+              />
+            </picture>
             <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/80 to-ink/25 lg:bg-gradient-to-r lg:from-ink lg:via-ink/85 lg:to-ink/20" />
             <div className="absolute -left-20 -top-20 -z-10 h-72 w-72 rounded-full bg-gold/20 blur-3xl" />
 

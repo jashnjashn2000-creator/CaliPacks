@@ -12,7 +12,7 @@ import { formatPrice } from "@/lib/utils";
 import { SITE_NAME, SITE_URL, pageUrl } from "@/lib/site";
 import { offerShippingAndReturns } from "@/lib/local-business";
 import { displayPrice, isCaliPack, productUnit } from "@/lib/product";
-import { postageLabel, productPostageGbp } from "@/lib/shipping";
+import { CALI_PACK_POSTAGE_UP_TO_GBP, caliPackPostageLabel, postageLabel, productPostageGbp } from "@/lib/shipping";
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
@@ -58,8 +58,9 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     : shown.from
       ? `from ${formatPrice(shown.amount)}`
       : `${formatPrice(product.price)} each`;
-  const postageBit =
-    product.slug === "vacuum-sealer-rolls"
+  const postageBit = pack
+    ? `${caliPackPostageLabel}. Ordering several items, you pay the highest postage once.`
+    : product.slug === "vacuum-sealer-rolls"
       ? "Widths are 15 cm, 20 cm and 28 cm. Each width shows its postage. All three widths include free UK delivery. Ordering several items, you pay the highest postage once."
       : product.options?.length
         ? `${postageLabel(productPostageGbp({ postage: product.options[0].postage }))}. Ordering several items, you pay the highest postage once.`
@@ -187,7 +188,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       }
                     : {}),
                   seller: { "@id": `${SITE_URL}/#organization` },
-                  ...offerShippingAndReturns(productPostageGbp(product)),
+                  ...offerShippingAndReturns(
+                    isCaliPack(product) ? CALI_PACK_POSTAGE_UP_TO_GBP : productPostageGbp(product)
+                  ),
                 },
           },
           {

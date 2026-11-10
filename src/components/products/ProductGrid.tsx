@@ -45,6 +45,7 @@ interface CategorySectionProps {
   eagerCount?: number;
   showCart?: boolean;
   tone?: "light" | "dark";
+  viewAllLabel?: string;
 }
 
 export function CategorySection({
@@ -56,6 +57,7 @@ export function CategorySection({
   eagerCount = 0,
   showCart = true,
   tone = "light",
+  viewAllLabel = "View All",
 }: CategorySectionProps) {
   const dark = tone === "dark";
   return (
@@ -81,7 +83,7 @@ export function CategorySection({
             href={viewAllHref}
             className={`flex-shrink-0 flex items-center gap-1.5 text-sm font-semibold uppercase tracking-[0.14em] transition-colors group ${dark ? "text-gold hover:text-white" : "text-brand-700 hover:text-ink"}`}
           >
-            View All
+            {viewAllLabel}
             <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>

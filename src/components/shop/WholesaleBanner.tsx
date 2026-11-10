@@ -26,10 +26,11 @@ export function WholesaleBanner() {
         <div className="flex items-center gap-3 text-white">
           <Truck className="h-5 w-5 shrink-0 text-gold" />
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/55">
-              UK dispatch
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/70">
+              UK postage
             </p>
-            <p className="text-lg font-black leading-tight">2–3 days</p>
+            <p className="text-lg font-black leading-tight">£2.99 up to 200</p>
+            <p className="text-xs font-semibold text-white/70">£3.50 over 200 packs</p>
           </div>
         </div>
       </div>

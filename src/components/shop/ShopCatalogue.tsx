@@ -14,6 +14,7 @@ import { productsForCategory } from "@/lib/catalogue";
 import { getCategoryBySlug, listingSlugs } from "@/data/categories";
 import { SITE_URL } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import { thumbSrc } from "@/lib/product";
 
 interface ShopCatalogueProps {
   categorySlug?: string;
@@ -72,11 +73,12 @@ function ShopView({ categorySlug, query, isNew }: ShopViewProps) {
           ? "Latest drops from the Manchester shop — Cali Packs at £0.22 (min 25, 50+ for £0.20) plus new shop-floor stock."
           : "Cali Packs at £0.22 each (min 25 pcs, 50+ for £0.20) plus grinders, bongs, hookahs, scales, and accessories from the shop floor.");
 
-  const heroImages = category
+  const heroImages = (category
     ? [category.image, ...displayProducts.slice(0, 2).map((p) => p.image)]
     : isNew
       ? ["/shop/cartoon-travel-kit.webp", "/shop/gold-honeycomb-grinder.webp", "/shop/candy-stash-cans.webp"]
-      : ["/products/pack-040.webp", "/shop/colour-novelty-hookah.webp", "/shop/gold-honeycomb-grinder.webp"];
+      : ["/products/pack-040.webp", "/shop/colour-novelty-hookah.webp", "/shop/gold-honeycomb-grinder.webp"]
+  ).map((src) => thumbSrc(src));
 
   return (
     <div>
@@ -126,9 +128,11 @@ function ShopView({ categorySlug, query, isNew }: ShopViewProps) {
                       ? category.name
                       : "The full collection"}
               </h2>
-              <p className="mt-1 text-sm font-semibold text-black/50">
+              <p className="mt-1 text-sm font-semibold text-black/60">
                 {displayProducts.length} item{displayProducts.length !== 1 ? "s" : ""}
-                {categorySlug === "cali-packs" ? " · £0.22 each · min 25 · 50+ for £0.20" : ""}
+                {categorySlug === "cali-packs"
+                  ? " · £0.22 each · min 25 · 50+ for £0.20 · Postage £2.99 up to 200 packs, £3.50 over 200 packs"
+                  : ""}
                 {category?.tagline && categorySlug !== "cali-packs" ? ` · ${category.tagline}` : ""}
               </p>
             </div>

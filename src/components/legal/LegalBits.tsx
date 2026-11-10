@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export const LEGAL_EFFECTIVE_DATE = "2 November 2026";
+export const LEGAL_EFFECTIVE_DATE = "10 November 2026";
 
 export function H2({ id, children }: { id: string; children: ReactNode }) {
   return (

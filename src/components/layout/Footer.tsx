@@ -3,6 +3,7 @@ import { footerLinks, footerNav } from "@/data/navigation";
 import { Logo } from "@/components/layout/Logo";
 import { contactInfo, socialLinks } from "@/data/social";
 import { SecuredByViva } from "@/components/payments/VivaBadge";
+import { TrustpilotLink } from "@/components/layout/TrustpilotLink";
 
 function FacebookIcon({ className }: { className?: string }) {
   return (
@@ -178,13 +179,16 @@ export function Footer() {
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gold/90">
               18+ only
             </p>
-            <p className="mt-1.5 max-w-md text-xs font-medium leading-relaxed text-white/45">
+            <p className="mt-1.5 max-w-md text-xs font-medium leading-relaxed text-white/55">
               &copy; {new Date().getFullYear()} SMOKE CALI LTD (company no. 16543027). All rights reserved.
               Smoking accessories and related products are for adults aged 18 and over.
               By using this site you confirm you are of legal age.
             </p>
           </div>
-          <SecuredByViva tone="dark" className="justify-center sm:justify-end" />
+          <div className="flex flex-col items-center gap-3 sm:items-end">
+            <TrustpilotLink tone="dark" />
+            <SecuredByViva tone="dark" className="justify-center sm:justify-end" />
+          </div>
         </div>
       </div>
     </footer>
