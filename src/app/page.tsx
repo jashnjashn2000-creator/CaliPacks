@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { preload } from "react-dom";
 import { HeroBannerSlider } from "@/components/home/HeroBannerSlider";
 import { CategoryHub } from "@/components/home/CategoryHub";
 import { CategoryShowcase } from "@/components/home/CategoryShowcase";
@@ -19,6 +20,18 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
+  preload("/brand-showcase-mobile.webp", {
+    as: "image",
+    type: "image/webp",
+    fetchPriority: "high",
+    media: "(max-width: 1023px)",
+  });
+  preload("/brand-showcase.webp", {
+    as: "image",
+    type: "image/webp",
+    fetchPriority: "high",
+    media: "(min-width: 1024px)",
+  });
   const { latest, more, heroTiles, featured, shopStock, conveyor } = getHomepageSections();
 
   return (

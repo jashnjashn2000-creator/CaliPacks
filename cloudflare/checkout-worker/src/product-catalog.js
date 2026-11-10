@@ -4,6 +4,8 @@
  * postagePence 0 means free UK delivery. Omitted product postage becomes 399 (£3.99).
  * caliPack products ignore that stored postage: the basket rate is £2.99 up to 200
  * packs in the order and £3.50 over 200 (see shipping-rates.js).
+ * stashCan products (packs of 10) ignore stored postage: £2.99 for 1 to 4 packs,
+ * £3.99 for 5 or more packs. The Candy Stash Cans sold each are not stashCan.
  * bulkPricePence replaces pricePence when the line quantity is at least bulkMinQty.
  * Generated from src/data/products.ts + src/data/shop-stock.ts.
  */
@@ -1117,6 +1119,86 @@ export const PRODUCT_CATALOG = {
   "caliPack": true,
   "bulkPricePence": 20,
   "bulkMinQty": 50
+ },
+ "shop-can-cherry-pie-gelato": {
+  "name": "Cherry Pie Gelato Stash Can – Pack of 10",
+  "pricePence": 750,
+  "postagePence": 299,
+  "minOrder": 1,
+  "inStock": true,
+  "stashCan": true
+ },
+ "shop-can-alien-space": {
+  "name": "Alien Space Stash Can – Pack of 10",
+  "pricePence": 750,
+  "postagePence": 299,
+  "minOrder": 1,
+  "inStock": true,
+  "stashCan": true
+ },
+ "shop-can-gorilla-glue": {
+  "name": "Gorilla Glue Stash Can – Pack of 10",
+  "pricePence": 750,
+  "postagePence": 299,
+  "minOrder": 1,
+  "inStock": true,
+  "stashCan": true
+ },
+ "shop-can-zkittles": {
+  "name": "Zkittles Stash Can – Pack of 10",
+  "pricePence": 750,
+  "postagePence": 299,
+  "minOrder": 1,
+  "inStock": true,
+  "stashCan": true
+ },
+ "shop-can-blue-cheese": {
+  "name": "Blue Cheese Stash Can – Pack of 10",
+  "pricePence": 750,
+  "postagePence": 299,
+  "minOrder": 1,
+  "inStock": true,
+  "stashCan": true
+ },
+ "shop-can-gush": {
+  "name": "Gush Stash Can – Pack of 10",
+  "pricePence": 750,
+  "postagePence": 299,
+  "minOrder": 1,
+  "inStock": true,
+  "stashCan": true
+ },
+ "shop-can-skittlez": {
+  "name": "Skittlez Stash Can – Pack of 10",
+  "pricePence": 750,
+  "postagePence": 299,
+  "minOrder": 1,
+  "inStock": true,
+  "stashCan": true
+ },
+ "shop-can-rainbow-belts": {
+  "name": "Rainbow Belts Stash Can – Pack of 10",
+  "pricePence": 750,
+  "postagePence": 299,
+  "minOrder": 1,
+  "inStock": true,
+  "stashCan": true
+ },
+ "shop-can-gelato-45": {
+  "name": "Gelato 45 Stash Can – Pack of 10",
+  "pricePence": 750,
+  "postagePence": 299,
+  "minOrder": 1,
+  "inStock": true,
+  "stashCan": true
+ },
+ "shop-can-lemonhead": {
+  "name": "Lemonhead Stash Can – Pack of 10",
+  "pricePence": 750,
+  "postagePence": 299,
+  "minOrder": 1,
+  "inStock": true,
+  "stashCan": true
  },
  "shop-stash-cans": {
   "name": "Candy Stash Cans",

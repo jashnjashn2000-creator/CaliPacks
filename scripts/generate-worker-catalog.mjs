@@ -48,7 +48,7 @@ function postagePence(value) {
 }
 
 const catalog = {};
-function addEntry(id, name, price, minOrder, inStock, postage, bulk, caliPack) {
+function addEntry(id, name, price, minOrder, inStock, postage, bulk, caliPack, stashCan) {
   if (!id || typeof price !== "number" || price <= 0) return;
   if (catalog[id]) throw new Error(`Duplicate product id in worker catalog: ${id}`);
   const row = {
@@ -59,6 +59,7 @@ function addEntry(id, name, price, minOrder, inStock, postage, bulk, caliPack) {
     inStock: inStock !== false,
   };
   if (caliPack) row.caliPack = true;
+  if (stashCan) row.stashCan = true;
   if (bulk && bulk.price != null && bulk.minQty) {
     row.bulkPricePence = Math.round(Number(bulk.price) * 100);
     row.bulkMinQty = Math.floor(Number(bulk.minQty));
@@ -69,15 +70,17 @@ function addEntry(id, name, price, minOrder, inStock, postage, bulk, caliPack) {
 for (const p of all) {
   const bulk = { price: p.bulkPrice, minQty: p.bulkMinQty };
   const caliPack = p.categorySlug === "cali-packs";
+  const stashCan =
+    String(p.id || "").startsWith("shop-can-") || (p.tags || []).includes("stash-can-pack");
   if (p.options?.length) {
     for (const opt of p.options) {
-      addEntry(opt.id, opt.name, opt.price, p.minOrder, p.inStock, opt.postage, null, false);
+      addEntry(opt.id, opt.name, opt.price, p.minOrder, p.inStock, opt.postage, null, false, false);
     }
     if (!p.options.some((opt) => opt.id === p.id)) {
-      addEntry(p.id, p.name, p.price, p.minOrder, p.inStock, p.postage, bulk, caliPack);
+      addEntry(p.id, p.name, p.price, p.minOrder, p.inStock, p.postage, bulk, caliPack, stashCan);
     }
   } else {
-    addEntry(p.id, p.name, p.price, p.minOrder, p.inStock, p.postage, bulk, caliPack);
+    addEntry(p.id, p.name, p.price, p.minOrder, p.inStock, p.postage, bulk, caliPack, stashCan);
   }
 }
 
@@ -87,6 +90,8 @@ const header = `/**
  * postagePence 0 means free UK delivery. Omitted product postage becomes 399 (£3.99).
  * caliPack products ignore that stored postage: the basket rate is £2.99 up to 200
  * packs in the order and £3.50 over 200 (see shipping-rates.js).
+ * stashCan products (packs of 10) ignore stored postage: £2.99 for 1 to 4 packs,
+ * £3.99 for 5 or more packs. The Candy Stash Cans sold each are not stashCan.
  * bulkPricePence replaces pricePence when the line quantity is at least bulkMinQty.
  * Generated from src/data/products.ts + src/data/shop-stock.ts.
  */

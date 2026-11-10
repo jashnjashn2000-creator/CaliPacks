@@ -15,11 +15,11 @@ export const categories: Category[] = [
     id: "stash-cans",
     name: "Stash Cans",
     slug: "stash-cans",
-    tagline: "From £5.99",
+    tagline: "Packs of 10 £7.50 · Tins from £5.99",
     description:
-      "Novelty candy-tin diversion cans from the Manchester shop. Hidden stash, supermarket-style labels, sold each.",
-    image: "/shop/candy-stash-cans.webp",
-    productCount: 1,
+      "Plastic stash cans in ten designs, sold as packs of 10. Each can holds 3.5 g, 75p per can (£7.50 a pack), minimum 10 cans. Postage £2.99, or £3.99 for 5 or more packs. Also candy-tin stash cans from the Manchester shop, sold each from £5.99.",
+    image: "/shop/can-cherry-pie-gelato.webp",
+    productCount: 11,
   },
   {
     id: "grinders",

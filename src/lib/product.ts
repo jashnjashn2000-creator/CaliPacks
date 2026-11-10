@@ -1,9 +1,14 @@
 import { Product, ProductOption } from "@/types";
-import { caliPackPostageLabel, postageLabel, productPostageGbp } from "@/lib/shipping";
+import { caliPackPostageLabel, postageLabel, productPostageGbp, stashCanPostageLabel } from "@/lib/shipping";
 import { formatPrice } from "@/lib/utils";
 
 export function isCaliPack(product: Product) {
   return product.categorySlug === "cali-packs";
+}
+
+/** Pack-of-10 flavour stash cans, not the existing Candy Stash Cans sold each. */
+export function isStashCanPack(product: { id?: string; tags?: string[] }) {
+  return String(product.id || "").startsWith("shop-can-") || (product.tags || []).includes("stash-can-pack");
 }
 
 function toPence(gbp: number) {
@@ -61,7 +66,8 @@ export function packOfferText(product: { price: number; bulkPrice?: number; bulk
 }
 
 export function productUnit(product: Product) {
-  return isCaliPack(product) ? "per pack" : "each";
+  if (isCaliPack(product) || isStashCanPack(product)) return "per pack";
+  return "each";
 }
 
 const framedPackIds = new Set(["pack-001", "pack-080", "pack-109", "pack-110", "pack-111"]);
@@ -112,6 +118,7 @@ export function bundleSavingLabel(product: Product): string | null {
  */
 export function displayPostageLabel(product: Product): string {
   if (isCaliPack(product)) return caliPackPostageLabel;
+  if (isStashCanPack(product)) return stashCanPostageLabel;
   const options = product.options;
   if (!options?.length) return postageLabel(productPostageGbp(product));
   const paid = [...new Set(options.filter((o) => o.postage > 0).map((o) => o.postage))];

@@ -35,7 +35,7 @@ export const faqs: Faq[] = [
   {
     group: "Delivery & returns",
     q: "How much is UK delivery?",
-    a: "Postage is £2.99 up to 200 packs, and £3.50 over 200 packs, counted across every Cali Pack in the order. Other products show their own UK postage, or free UK delivery. We send by Evri tracked delivery. If you order several items you pay the highest postage once — postage is not added together. If every item includes free delivery, postage is £0. Orders are dispatched within 2–3 business days and usually arrive in 2–3 working days.",
+    a: "Cali Packs are postage £2.99 up to 200 packs, and £3.50 over 200 packs, counted across every Cali Pack in the order. Stash can packs of 10 are postage £2.99, or £3.99 if you order 5 or more packs. Other products show their own UK postage, or free UK delivery. We send by Evri tracked delivery. If you order several items you pay the highest postage once — postage is not added together. If every item includes free delivery, postage is £0. Orders are dispatched within 2–3 business days and usually arrive in 2–3 working days.",
   },
   {
     group: "Delivery & returns",

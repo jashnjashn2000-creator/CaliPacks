@@ -5,8 +5,8 @@
   "workers_dev": true,
   "vars": {
     "SITE_URL": "https://smokecali.co.uk",
-    // "demo" = fake test payments. Change to "live" ONLY after Viva verification is complete
-    // and you have put the LIVE credentials in as secrets (see VIVA-SETUP.md).
-    "VIVA_ENV": "demo"
+    // Live Viva.com payments. Keep this "live" unless you are deliberately testing.
+    // LIVE credentials must stay set as worker secrets (see VIVA-SETUP.md).
+    "VIVA_ENV": "live"
   }
 }

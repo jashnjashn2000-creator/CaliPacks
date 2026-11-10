@@ -107,8 +107,53 @@ const grinderScaleOptions = GRINDER_CHOICES.flatMap((grinder) =>
 
 const VACUUM_SEPARATE = money(19.99 + 5.99 + 6.99 + 7.99 + 3.99);
 
+
+const STASH_CAN_PACK_POSTAGE = 2.99;
+const STASH_CAN_PACK_PRICE = 7.5;
+
+function stashCanPack(
+  slug: string,
+  name: string,
+  sku: string
+): Product {
+  const front = `/shop/can-${slug}.webp`;
+  const pack = `/shop/can-${slug}-pack.webp`;
+  return shopItem({
+    id: `shop-can-${slug}`,
+    name: `${name} Stash Can – Pack of 10`,
+    slug: `${slug}-stash-can`,
+    description:
+      `${name} plastic stash can, sold as a pack of 10. Each can holds 3.5 g. 75p per can, so the pack is £7.50. The minimum you can buy is 10 cans (one pack). Opens by twisting the top: the silver lid and the coloured cap attached to it twist open together. A novelty can for hidden storage. UK postage is £2.99, or £3.99 if you order 5 or more packs.`,
+    shortDescription: `${name} stash can — pack of 10, 75p per can (£7.50). Holds 3.5 g. Opens by twisting the top. Minimum 10 cans.`,
+    price: STASH_CAN_PACK_PRICE,
+    postage: STASH_CAN_PACK_POSTAGE,
+    categoryId: "stash-cans",
+    categorySlug: "stash-cans",
+    image: front,
+    images: [front, pack],
+    tags: ["stash-cans", "stash-can-pack", "shop-stock", "accessories", "novelty"],
+    isFeatured: true,
+    minOrder: 1,
+    sku,
+  });
+}
+
+const stashCanPackProducts: Product[] = [
+  stashCanPack("cherry-pie-gelato", "Cherry Pie Gelato", "SC-CAN-CHERRY"),
+  stashCanPack("alien-space", "Alien Space", "SC-CAN-ALIEN"),
+  stashCanPack("gorilla-glue", "Gorilla Glue", "SC-CAN-GORILLA"),
+  stashCanPack("zkittles", "Zkittles", "SC-CAN-ZKITTLES"),
+  stashCanPack("blue-cheese", "Blue Cheese", "SC-CAN-BLUECHEESE"),
+  stashCanPack("gush", "Gush", "SC-CAN-GUSH"),
+  stashCanPack("skittlez", "Skittlez", "SC-CAN-SKITTLEZ"),
+  stashCanPack("rainbow-belts", "Rainbow Belts", "SC-CAN-RAINBOW"),
+  stashCanPack("gelato-45", "Gelato 45", "SC-CAN-GELATO45"),
+  stashCanPack("lemonhead", "Lemonhead", "SC-CAN-LEMONHEAD"),
+];
+
 /** In-store Smoke Cali stock from shop-floor photos. UK-competitive retail. */
 export const shopStockProducts: Product[] = [
+  ...stashCanPackProducts,
   shopItem({
     id: "shop-stash-cans",
     name: "Candy Stash Cans",
