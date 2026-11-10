@@ -24,7 +24,7 @@ export function AnnouncementBar() {
         </a>
         <span className="hidden sm:inline text-white/25">·</span>
         <Link href="/shop" className="text-white underline decoration-gold/60 underline-offset-2 hover:text-gold">
-          Shop now · tracked UK delivery
+          Shop now · Evri tracked delivery
         </Link>
       </p>
     </div>

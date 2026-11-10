@@ -25,6 +25,12 @@
  * Optional:
  *   VIVA_WEBHOOK_KEY      Paste the verification key directly instead of fetching it with MERCHANT_ID + API_KEY
  *   ZAPIER_WEBHOOK_URL, RESEND_API_KEY, OWNER_NOTIFY_EMAIL, RESEND_FROM_EMAIL
+ *   CUSTOMER_EMAIL_FROM   Verified sender for the customer confirmation, e.g.
+ *                         Smoke Cali <orders@smokecali.co.uk>
+ *                         Leave unset (or set to onboarding@resend.dev) to skip that
+ *                         email. onboarding@resend.dev can only deliver to the Resend
+ *                         account owner, so it is never used for the customer copy.
+ *                         A skip is logged and does not fail the paid order.
  */
 
 import {
@@ -275,9 +281,14 @@ function validateAddress(addr) {
 /**
  * Builds the order total. Only `productId` and `quantity` are taken from the browser.
  * Names, prices and postage come from PRODUCT_CATALOG.
- * Basket postage is the highest single item postage, charged once (not summed, not × quantity).
+ * Basket postage is the highest single postage, charged once (not summed, not × quantity).
+ * Cali Pack lines are priced as one band from the total number of packs.
  * All maths is in whole pence to avoid rounding errors.
  */
+
+function isCaliPackProduct(productId, product) {
+  return (product && product.caliPack === true) || String(productId).startsWith("pack-");
+}
 function buildTotals(items) {
   if (!Array.isArray(items) || !items.length) throw new Error("Cart is empty.");
   if (items.length > MAX_LINES) throw new Error("Too many different products in one order.");
@@ -303,8 +314,12 @@ function buildTotals(items) {
     if (quantity < product.minOrder) {
       throw new Error(`${product.name}: the minimum order is ${product.minOrder}.`);
     }
-    const postagePence =
-      product.postagePence == null ? DEFAULT_POSTAGE_PENCE : product.postagePence;
+    const caliPack = isCaliPackProduct(productId, product);
+    const postagePence = caliPack
+      ? 0
+      : product.postagePence == null
+        ? DEFAULT_POSTAGE_PENCE
+        : product.postagePence;
     const unitPence =
       product.bulkPricePence != null && product.bulkMinQty != null && quantity >= product.bulkMinQty
         ? product.bulkPricePence
@@ -318,11 +333,12 @@ function buildTotals(items) {
       unitPence,
       linePence,
       postagePence,
+      caliPack,
     });
   }
 
   const shippingPence = quotePostagePence(
-    lines.map((l) => ({ quantity: l.quantity, postagePence: l.postagePence }))
+    lines.map((l) => ({ quantity: l.quantity, postagePence: l.postagePence, caliPack: l.caliPack }))
   );
   const totalPence = subtotalPence + shippingPence;
   if (totalPence > MAX_ORDER_PENCE) {
@@ -534,6 +550,132 @@ async function notifyOwnerEmail(env, payload) {
   return { ok: true, id: data.id };
 }
 
+const SHOP_EMAIL = "smokecaliltd@gmail.com";
+const SHOP_WHATSAPP = "07473 108067";
+const SHOP_ADDRESS = "5 Sagar Street, M8 8EU, Manchester, United Kingdom";
+
+/** Sender for the customer copy. onboarding@resend.dev cannot deliver to buyers. */
+function customerFromAddress(env) {
+  const from = String(env.CUSTOMER_EMAIL_FROM || "").trim();
+  if (!from || /onboarding@resend\.dev/i.test(from)) return "";
+  return from;
+}
+
+function siteBase(env) {
+  return String(env.SITE_URL || "https://smokecali.co.uk").replace(/\/+$/, "");
+}
+
+/**
+ * Plain-text order confirmation for the customer. The business alert email is separate
+ * and is left unchanged.
+ */
+function buildCustomerConfirmation(env, { order, paidPence }) {
+  const o = order || { reference: "", email: "", items: [], shippingPence: 0 };
+  const reference = o.reference || "your order";
+  const base = siteBase(env);
+  let itemLines = "(We have your payment. We will confirm the items if you reply to this email.)";
+  try {
+    const totals = buildTotals((o.items || []).map((item) => ({
+      productId: item.productId,
+      quantity: item.quantity,
+    })));
+    itemLines = totals.lines
+      .map((line) => `• ${line.quantity}× ${line.title} — ${money(line.linePence)}`)
+      .join("\n");
+  } catch (err) {
+    console.error("customer confirmation could not reprice lines", err);
+    if (o.items && o.items.length) {
+      itemLines = o.items.map((item) => `• ${item.quantity}× ${item.name}`).join("\n");
+    }
+  }
+  const postage = Number(o.shippingPence) > 0 ? money(o.shippingPence) : "£0.00";
+
+  return {
+    subject: `Your Smoke Cali order ${reference}`,
+    text: [
+      "Thank you for your order from Smoke Cali.",
+      "",
+      "Seller",
+      "Smoke Cali Ltd",
+      "Company number 16543027",
+      SHOP_ADDRESS,
+      `Email: ${SHOP_EMAIL}`,
+      `WhatsApp: ${SHOP_WHATSAPP}`,
+      "",
+      `Order reference: ${reference}`,
+      "",
+      "Items",
+      itemLines,
+      `Postage: ${postage}`,
+      `Total: ${money(paidPence)}`,
+      "",
+      "Delivery",
+      "We send in-stock orders by Evri tracked delivery. We dispatch within 2–3 business days, and delivery then usually takes 2–3 working days.",
+      "",
+      "Cancellation and returns",
+      "You can cancel within 14 days of delivery. The 14 days start on the day after the goods are delivered. You then have 14 days to send them back, and we refund you within 14 days of receiving them (or of proof of postage, if earlier).",
+      "If you cancel before we dispatch, we refund the full amount, including postage, and the parcel is not sent. Email or WhatsApp us as soon as you can.",
+      "If you change your mind after delivery, you pay the return postage. If the goods are faulty, damaged or not what you ordered, we pay the return postage.",
+      "A clear written cancellation is enough to cancel. Email or WhatsApp us for the return address.",
+      `Returns: ${base}/returns/`,
+      `Terms: ${base}/terms/`,
+      "",
+      "This does not affect your statutory rights under the Consumer Contracts (Information, Cancellation and Additional Charges) Regulations 2013 or the Consumer Rights Act 2015.",
+    ].join("\n"),
+  };
+}
+
+/**
+ * Customer confirmation. Skipped (and logged) when there is no verified sender.
+ * A failure here must not fail the paid order or the business alert.
+ */
+async function notifyCustomerEmail(env, { order, paidPence }) {
+  const apiKey = String(env.RESEND_API_KEY || "").trim();
+  const to = String((order && order.email) || "").trim();
+  if (!apiKey) {
+    console.log("customer confirmation skipped: RESEND_API_KEY not set");
+    return { skipped: true, reason: "RESEND_API_KEY not set" };
+  }
+  const from = customerFromAddress(env);
+  if (!from) {
+    console.log(
+      "customer confirmation skipped: set CUSTOMER_EMAIL_FROM to a verified sender. onboarding@resend.dev can only deliver to the Resend account owner."
+    );
+    return { skipped: true, reason: "CUSTOMER_EMAIL_FROM not set" };
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) {
+    console.log("customer confirmation skipped: no customer email on the order");
+    return { skipped: true, reason: "no customer email" };
+  }
+
+  const message = buildCustomerConfirmation(env, { order, paidPence });
+  try {
+    const resp = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from,
+        to: [to],
+        reply_to: SHOP_EMAIL,
+        subject: message.subject,
+        text: message.text,
+      }),
+    });
+    const data = await resp.json().catch(() => ({}));
+    if (!resp.ok) {
+      console.error("customer confirmation failed", resp.status, data);
+      return { ok: false, status: resp.status, error: data };
+    }
+    return { ok: true, id: data.id };
+  } catch (err) {
+    console.error("customer confirmation failed", err);
+    return { ok: false, error: String(err && err.message ? err.message : err) };
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Create checkout (browser -> worker -> Viva)
 // ---------------------------------------------------------------------------
@@ -737,11 +879,15 @@ async function handleVivaWebhook(request, env) {
       paidPence,
       mismatch,
     });
-    const [zapier, email] = await Promise.all([
+    const [zapier, email, customer] = await Promise.all([
       notifyZapier(env, payload).catch((e) => ({ ok: false, error: String(e && e.message ? e.message : e) })),
       notifyOwnerEmail(env, payload).catch((e) => ({ ok: false, error: String(e && e.message ? e.message : e) })),
+      notifyCustomerEmail(env, { order, paidPence }).catch((e) => ({
+        ok: false,
+        error: String(e && e.message ? e.message : e),
+      })),
     ]);
-    return json({ status: "ok", notified: { zapier, email }, order_code: payload.order_code }, 200);
+    return json({ status: "ok", notified: { zapier, email, customer }, order_code: payload.order_code }, 200);
   } catch (err) {
     console.error("viva webhook handler error", err);
     // 500 so Viva retries (hourly, up to 24 times) — safe because we de-duplicate.

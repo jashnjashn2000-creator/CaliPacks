@@ -117,7 +117,7 @@ export function AgeGate() {
           </div>
         )}
 
-        <p className="mt-7 text-xs leading-relaxed text-white/45">
+        <p className="mt-7 text-xs leading-relaxed text-white/55">
           By entering you agree to our{" "}
           <Link href="/terms" className="underline underline-offset-2 hover:text-gold">
             Terms &amp; Conditions

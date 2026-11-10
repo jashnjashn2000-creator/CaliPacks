@@ -13,11 +13,11 @@ const pages: Record<string, { title: string; content: string }> = {
   },
   shipping: {
     title: "Shipping Policy",
-    content: "UK delivery by Royal Mail Tracked 48. Each product shows its postage or free UK delivery. When you order several items you pay the highest postage once. In-stock orders are dispatched within 2–3 business days and tracking is emailed when your order ships.",
+    content: "UK delivery by Evri tracked delivery, usually 2–3 working days after dispatch. Cali Packs are postage £2.99 up to 200 packs and £3.50 over 200 packs. Other products show their postage or free UK delivery. When you order several items you pay the highest postage once. In-stock orders are dispatched within 2–3 business days.",
   },
   returns: {
     title: "Returns & Refunds",
-    content: "Cancel within 14 days of receiving your order for a refund on unopened, unused goods (you pay return postage), or report faulty or damaged goods and we will repair, replace or refund under the Consumer Rights Act 2015.",
+    content: "Cancel a distance order within 14 days starting the day after delivery. Cancel before dispatch for a full refund including postage. After delivery you pay return postage if you change your mind. Faulty goods are repaired, replaced or refunded under the Consumer Rights Act 2015.",
   },
 };
 

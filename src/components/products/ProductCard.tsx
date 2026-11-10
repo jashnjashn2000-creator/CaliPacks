@@ -50,7 +50,7 @@ export function ProductCard({
               {formatPrice(product.originalPrice)}
             </span>
           ) : null}
-          <span className="text-[11px] font-bold text-black/45">{productUnit(product)}</span>
+          <span className="text-[11px] font-bold text-black/60">{productUnit(product)}</span>
           {bundleSavingLabel(product) ? (
             <span className="save-tag ml-auto self-center">{bundleSavingLabel(product)}</span>
           ) : savingPercent(product) && !product.options?.length ? (

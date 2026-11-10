@@ -15,7 +15,7 @@ export const faqs: Faq[] = [
   {
     group: "Ordering",
     q: "How much are Cali Packs at Smoke Cali?",
-    a: "Every Cali Pack design is £0.22 each, with a minimum order of 25 pcs. Buy 50 or more of the same design and the price drops to £0.20 each. Choose from 111 HD designs and pay by card through Viva.com, or order on WhatsApp.",
+    a: "Every Cali Pack design is £0.22 each, with a minimum order of 25 pcs. Buy 50 or more of the same design and the price drops to £0.20 each. Postage is £2.99 up to 200 packs, and £3.50 over 200 packs. Choose from 111 HD designs and pay by card through Viva.com, or order on WhatsApp.",
   },
   {
     group: "Ordering",
@@ -30,12 +30,12 @@ export const faqs: Faq[] = [
   {
     group: "Delivery & returns",
     q: "How long does delivery take?",
-    a: "In-stock items are dispatched within 2–3 business days. UK delivery with Royal Mail Tracked 48 then usually takes 2–3 working days. Custom orders take 5–7 business days after design approval.",
+    a: "In-stock items are dispatched within 2–3 business days. Evri tracked delivery then usually takes 2–3 working days. Custom orders take 5–7 business days after design approval.",
   },
   {
     group: "Delivery & returns",
     q: "How much is UK delivery?",
-    a: "Each product shows its own UK postage, or free UK delivery. We send by Royal Mail Tracked 48. If you order several items you pay the highest postage once — postage is not added together. If every item includes free delivery, postage is £0. Orders are dispatched within 2–3 business days and usually arrive in 2–3 working days.",
+    a: "Postage is £2.99 up to 200 packs, and £3.50 over 200 packs, counted across every Cali Pack in the order. Other products show their own UK postage, or free UK delivery. We send by Evri tracked delivery. If you order several items you pay the highest postage once — postage is not added together. If every item includes free delivery, postage is £0. Orders are dispatched within 2–3 business days and usually arrive in 2–3 working days.",
   },
   {
     group: "Delivery & returns",
@@ -45,7 +45,7 @@ export const faqs: Faq[] = [
   {
     group: "Delivery & returns",
     q: "What is your returns policy?",
-    a: "If you change your mind, you can cancel within 14 days of receiving your order and return unopened, unused goods for a refund (you pay return postage). Sealed items opened for health or hygiene reasons and personalised or custom-made items cannot be returned for change of mind. If something is faulty or damaged, email us with photos and we will repair, replace or refund under the Consumer Rights Act 2015. See our Returns & Refunds page for full details.",
+    a: "You can cancel a distance order within 14 days starting the day after delivery. Cancel before we dispatch and we refund you in full, including postage, and the parcel is not sent. After delivery, return unused goods in the original packaging where you can. You may inspect them as you would in a shop. You pay the return postage if you change your mind. We pay it if the item is faulty, damaged or wrong. Sealed hygiene items, once opened (such as used bongs, pipes, mouthpieces or opened papers), and custom orders already in production, cannot be returned for a change of mind. Faulty-goods rights still apply. Shop purchases are not covered by the 14-day online cancellation right. See Returns & Refunds.",
   },
   {
     group: "Visiting the shop",

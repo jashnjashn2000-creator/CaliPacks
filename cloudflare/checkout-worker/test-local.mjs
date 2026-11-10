@@ -18,10 +18,18 @@ const env = {
 
 const calls = [];
 const txStore = new Map();
+let failCustomerEmail = false;
 globalThis.fetch = async (url, init = {}) => {
   url = String(url);
   calls.push({ url, init });
   const reply = (obj, status = 200) => new Response(typeof obj === "string" ? obj : JSON.stringify(obj), { status });
+  if (url === "https://api.resend.com/emails") {
+    const body = JSON.parse(init.body);
+    if (failCustomerEmail && String((body.to || [])[0] || "").includes("buyer@")) {
+      return reply({ message: "domain not verified" }, 403);
+    }
+    return reply({ id: "email_test" });
+  }
   if (url === "https://demo-accounts.vivapayments.com/connect/token") {
     assert.match(init.headers.Authorization, /^Basic /);
     assert.equal(init.body, "grant_type=client_credentials");
@@ -56,8 +64,8 @@ const address = { name: "Test Buyer", phone: "07123456789", line1: "1 Test St", 
 // 1. price tampering: the browser's prices are ignored
 let totals = buildTotals([{ productId: "pack-001", quantity: 50, unitPrice: 0.0001, title: "hacked" }]);
 assert.equal(totals.subtotalPence, 1000); // 50 x 20p
-assert.equal(totals.shippingPence, 399); // default postage, not the tampered browser price
-assert.equal(totals.totalPence, 1399);
+assert.equal(totals.shippingPence, 299); // 50 packs: £2.99, not the tampered browser price
+assert.equal(totals.totalPence, 1299);
 assert.throws(() => buildTotals([{ productId: "pack-001", quantity: 10 }]), /minimum order/);
 assert.throws(() => buildTotals([{ productId: "nope", quantity: 1 }]), /no longer available/);
 assert.throws(() => buildTotals([]), /empty/);
@@ -74,7 +82,7 @@ assert.equal(r.status, 200, JSON.stringify(data));
 assert.equal(data.orderCode, "9071992547409931");
 assert.equal(data.url, "https://demo.vivapayments.com/web/checkout?ref=9071992547409931");
 const sent = txStore.get("order");
-assert.equal(sent.amount, 1399);
+assert.equal(sent.amount, 1299);
 assert.equal(sent.sourceCode, "1234");
 assert.ok(sent.merchantTrns.startsWith("SCV1:"));
 
@@ -94,11 +102,11 @@ assert.deepEqual(await r.json(), { Key: "ABC123KEY" });
 
 // 6. verify + webhook for a paid transaction
 const TX = "11111111-2222-3333-4444-555555555555";
-txStore.set(TX, { amount: 13.99, orderCode: "9071992547409931", statusId: "F", merchantTrns: sent.merchantTrns });
+txStore.set(TX, { amount: 12.99, orderCode: "9071992547409931", statusId: "F", merchantTrns: sent.merchantTrns });
 r = await call(`/api/checkout/verify?t=${TX}&s=9071992547409931`);
 data = await r.json();
 assert.equal(data.paymentStatus, "paid");
-assert.equal(data.total, 13.99);
+assert.equal(data.total, 12.99);
 r = await call(`/api/checkout/verify?t=${TX}&s=1111`);
 assert.equal(r.status, 400);
 
@@ -119,7 +127,7 @@ assert.equal((await r.json()).duplicate, true);
 r = await call("/api/viva/webhook", { method: "POST", body: rawHook(hook({ SourceCode: "9999" })) });
 assert.equal((await r.json()).reason, "other_source");
 const TX2 = "aaaaaaaa-2222-3333-4444-555555555555";
-txStore.set(TX2, { amount: 13.99, orderCode: "9071992547409931", statusId: "E", merchantTrns: sent.merchantTrns });
+txStore.set(TX2, { amount: 12.99, orderCode: "9071992547409931", statusId: "E", merchantTrns: sent.merchantTrns });
 r = await call("/api/viva/webhook", { method: "POST", body: rawHook(hook({ TransactionId: TX2 })) });
 assert.equal((await r.json()).reason, "not_paid");
 const TX3 = "bbbbbbbb-2222-3333-4444-555555555555";
@@ -185,6 +193,8 @@ expectSku("shop-bnd-gr-gold-mz", 1699, 0, /Gold Honeycomb/);
 expectSku("shop-bnd-gr-teal-mz", 1699, 0, /Teal 4-Piece/);
 expectSku("shop-bnd-gr-charm-t3", 1699, 0, /Crystal Charm/);
 assert.equal(PRODUCT_CATALOG["shop-bnd-gr-gold-mz"].name.includes("Grinder + Digital Scale Bundle"), true);
+assert.equal(PRODUCT_CATALOG["pack-001"].caliPack, true);
+assert.equal(PRODUCT_CATALOG["shop-mz100"].caliPack, undefined);
 
 // Browser postage is ignored. Bundle alone is free. Highest postage wins across lines.
 const bundleOnly = buildTotals([{ productId: "shop-vacuum-rolls-all", quantity: 2, postagePence: 9999 }]);
@@ -225,28 +235,54 @@ const rolls = buildTotals([
 assert.equal(rolls.subtotalPence, 599 + 699 + 799);
 assert.equal(rolls.shippingPence, 399);
 
-// 10. Cali Packs: £0.22 from 25, £0.20 once that line is 50+. Postage stays £3.99.
+// 10. Cali Packs: £0.22 from 25, £0.20 once that line is 50+.
+// Postage is £2.99 up to and including 200 packs in the order, £3.50 over 200.
 assert.throws(() => buildTotals([{ productId: "pack-001", quantity: 24 }]), /minimum order/);
 const pack25 = buildTotals([{ productId: "pack-001", quantity: 25, unitPrice: 0.01 }]);
 assert.equal(pack25.lines[0].unitPence, 22);
 assert.equal(pack25.subtotalPence, 550);
-assert.equal(pack25.shippingPence, 399);
-assert.equal(pack25.totalPence, 949);
+assert.equal(pack25.shippingPence, 299);
+assert.equal(pack25.totalPence, 849);
 const pack49 = buildTotals([{ productId: "pack-001", quantity: 49, unitPrice: 0.2 }]);
 assert.equal(pack49.lines[0].unitPence, 22);
 assert.equal(pack49.subtotalPence, 1078);
-assert.equal(pack49.shippingPence, 399);
-assert.equal(pack49.totalPence, 1477);
+assert.equal(pack49.shippingPence, 299);
+assert.equal(pack49.totalPence, 1377);
 const pack50 = buildTotals([{ productId: "pack-002", quantity: 50, unitPrice: 0.22 }]);
 assert.equal(pack50.lines[0].unitPence, 20);
 assert.equal(pack50.subtotalPence, 1000);
-assert.equal(pack50.shippingPence, 399);
-assert.equal(pack50.totalPence, 1399);
+assert.equal(pack50.shippingPence, 299);
+assert.equal(pack50.totalPence, 1299);
 const pack100 = buildTotals([{ productId: "pack-001", quantity: 100 }]);
 assert.equal(pack100.lines[0].unitPence, 20);
 assert.equal(pack100.subtotalPence, 2000);
-assert.equal(pack100.shippingPence, 399);
-assert.equal(pack100.totalPence, 2399);
+assert.equal(pack100.shippingPence, 299);
+assert.equal(pack100.totalPence, 2299);
+const pack200 = buildTotals([{ productId: "pack-001", quantity: 200 }]);
+assert.equal(pack200.shippingPence, 299);
+const pack201 = buildTotals([{ productId: "pack-001", quantity: 201 }]);
+assert.equal(pack201.lines[0].unitPence, 20);
+assert.equal(pack201.shippingPence, 350);
+const packsAcrossDesigns = buildTotals([
+  { productId: "pack-001", quantity: 100 },
+  { productId: "pack-002", quantity: 101 },
+]);
+assert.equal(packsAcrossDesigns.shippingPence, 350);
+const packsWithFree = buildTotals([
+  { productId: "pack-001", quantity: 250 },
+  { productId: "shop-mz100", quantity: 1 },
+]);
+assert.equal(packsWithFree.shippingPence, 350);
+const packsWithMedium = buildTotals([
+  { productId: "pack-001", quantity: 50 },
+  { productId: "shop-bong-m-01", quantity: 1 },
+]);
+assert.equal(packsWithMedium.shippingPence, 350); // £3.50 beats the £2.99 pack band, charged once
+const packsWithSmall = buildTotals([
+  { productId: "pack-001", quantity: 250 },
+  { productId: "shop-swan-pipe", quantity: 1 },
+]);
+assert.equal(packsWithSmall.shippingPence, 399); // £3.99 beats the £3.50 pack band, charged once
 // 25 + 25 of the same design merges to 50 and takes the £0.20 price.
 const merged = buildTotals([
   { productId: "pack-003", quantity: 25 },
@@ -261,7 +297,115 @@ const split = buildTotals([
   { productId: "pack-002", quantity: 25 },
 ]);
 assert.equal(split.subtotalPence, 1100);
-assert.equal(split.shippingPence, 399);
-assert.equal(split.totalPence, 1499);
+assert.equal(split.shippingPence, 299);
+assert.equal(split.totalPence, 1399);
+
+assert.equal(quotePostagePence([{ caliPack: true, quantity: 200, postagePence: 399 }]), 299);
+assert.equal(quotePostagePence([{ caliPack: true, quantity: 201, postagePence: 9999 }]), 350);
+assert.equal(
+  quotePostagePence([
+    { caliPack: true, quantity: 25, postagePence: 399 },
+    { postagePence: 0, quantity: 2 },
+  ]),
+  299
+);
+
+// 11. Customer confirmation email. The business alert still sends. A missing
+// verified sender skips the customer copy and does not fail the paid order.
+const resendCalls = () => calls.filter((c) => c.url === "https://api.resend.com/emails");
+const resendBody = (call) => JSON.parse(call.init.body);
+const paidTx = (id) => {
+  txStore.set(id, {
+    amount: 12.99,
+    orderCode: "9071992547409931",
+    statusId: "F",
+    merchantTrns: sent.merchantTrns,
+  });
+};
+const TXC = "cccccccc-2222-3333-4444-555555555555";
+paidTx(TXC);
+r = await call("/api/viva/webhook", {
+  method: "POST",
+  body: rawHook(hook({ TransactionId: TXC })),
+  env: { RESEND_API_KEY: "re_test" },
+});
+data = await r.json();
+assert.equal(r.status, 200, JSON.stringify(data));
+assert.equal(data.status, "ok");
+assert.equal(data.notified.customer.skipped, true);
+assert.equal(data.notified.email.ok, true);
+const ownerOnly = resendCalls().map(resendBody);
+assert.equal(ownerOnly.length, 1);
+assert.equal(ownerOnly[0].to[0], "hello@calipacks.co.uk");
+assert.doesNotMatch(ownerOnly[0].subject, /Your Smoke Cali order/);
+
+const TXD = "dddddddd-2222-3333-4444-555555555555";
+paidTx(TXD);
+r = await call("/api/viva/webhook", {
+  method: "POST",
+  body: rawHook(hook({ TransactionId: TXD })),
+  env: {
+    RESEND_API_KEY: "re_test",
+    CUSTOMER_EMAIL_FROM: "Smoke Cali <onboarding@resend.dev>",
+  },
+});
+data = await r.json();
+assert.equal(r.status, 200);
+assert.equal(data.notified.customer.skipped, true);
+
+const TXE = "eeeeeeee-2222-3333-4444-555555555555";
+paidTx(TXE);
+const beforeVerified = resendCalls().length;
+r = await call("/api/viva/webhook", {
+  method: "POST",
+  body: rawHook(hook({ TransactionId: TXE })),
+  env: {
+    RESEND_API_KEY: "re_test",
+    CUSTOMER_EMAIL_FROM: "Smoke Cali <orders@smokecali.co.uk>",
+    SITE_URL: "https://smokecali.co.uk",
+  },
+});
+data = await r.json();
+assert.equal(r.status, 200, JSON.stringify(data));
+assert.equal(data.notified.customer.ok, true);
+assert.equal(data.notified.email.ok, true);
+const both = resendCalls().slice(beforeVerified).map(resendBody);
+const customerMail = both.find((body) => body.to[0] === "buyer@example.com");
+const ownerMail = both.find((body) => body.to[0] === "hello@calipacks.co.uk");
+assert.ok(customerMail, JSON.stringify(both.map((b) => b.to)));
+assert.ok(ownerMail);
+assert.equal(customerMail.from, "Smoke Cali <orders@smokecali.co.uk>");
+assert.equal(customerMail.reply_to, "smokecaliltd@gmail.com");
+assert.match(customerMail.subject, /^Your Smoke Cali order SC-/);
+assert.match(customerMail.text, /Smoke Cali Ltd/);
+assert.match(customerMail.text, /16543027/);
+assert.match(customerMail.text, /5 Sagar Street/);
+assert.match(customerMail.text, /smokecaliltd@gmail.com/);
+assert.match(customerMail.text, /07473 108067/);
+assert.match(customerMail.text, /50× Rainbow Candy/);
+assert.match(customerMail.text, /Postage: £2\.99/);
+assert.match(customerMail.text, /Total: £12\.99/);
+assert.match(customerMail.text, /Evri tracked delivery/);
+assert.match(customerMail.text, /https:\/\/smokecali\.co\.uk\/returns\//);
+assert.match(customerMail.text, /https:\/\/smokecali\.co\.uk\/terms\//);
+assert.match(customerMail.text, /you pay the return postage/i);
+assert.equal(ownerMail.subject.startsWith("New Smoke Cali order"), true);
+
+failCustomerEmail = true;
+const TXF = "ffffffff-2222-3333-4444-555555555555";
+paidTx(TXF);
+r = await call("/api/viva/webhook", {
+  method: "POST",
+  body: rawHook(hook({ TransactionId: TXF })),
+  env: {
+    RESEND_API_KEY: "re_test",
+    CUSTOMER_EMAIL_FROM: "Smoke Cali <orders@smokecali.co.uk>",
+  },
+});
+data = await r.json();
+assert.equal(r.status, 200, JSON.stringify(data));
+assert.equal(data.status, "ok");
+assert.equal(data.notified.customer.ok, false);
+assert.equal(data.notified.email.ok, true);
 
 console.log("All worker checks passed.");

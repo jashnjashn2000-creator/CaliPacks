@@ -84,14 +84,17 @@ export function TermsContent() {
       <H2 id="delivery">6. Delivery</H2>
       <p>
         We deliver to UK addresses only, by <strong>{deliveryService}</strong>. Each product shows its own
-        UK postage, or free UK delivery. When you order several items you pay the <strong>highest postage once</strong>.
-        Postage is not added together, and ordering more than one of the same item does not increase it.
-        If every item in the basket includes free delivery, postage is £0.
+        UK postage, or free UK delivery. Cali Packs are postage £2.99 when the order contains up to and
+        including 200 packs, and £3.50 when it contains more than 200 packs. That rate uses the total
+        number of Cali Packs in the order. When you order several items you pay the{" "}
+        <strong>highest postage once</strong>. Postage is not added together. Ordering more of the same
+        item does not increase its postage, except where the Cali Pack total moves the order over 200
+        packs. If every item in the basket includes free delivery, postage is £0.
       </p>
       <p>
-        In-stock orders are normally dispatched within 2–3 business days and usually arrive 2–3 working
-        days after dispatch. These are estimates, not guaranteed delivery dates. Custom orders take 5–7
-        business days after design approval. Full details, including cut-off times, are on our{" "}
+        In-stock orders are normally dispatched within 2–3 business days. Evri tracked delivery then
+        usually takes 2–3 working days. These are estimates, not guaranteed delivery dates. Custom orders
+        take 5–7 business days after design approval. Full details, including cut-off times, are on our{" "}
         <Link href="/shipping" className={link}>Delivery page</Link>. Risk in the goods passes to you when
         they are delivered to your address; ownership passes when we have received full payment.
       </p>
@@ -107,24 +110,37 @@ export function TermsContent() {
         14 days start on the day after you (or someone you nominate) receive the goods. If your order is
         delivered in several parts, the period starts the day after the last part arrives.
       </p>
+      <p>
+        This 14-day right applies to distance orders (this website, email or WhatsApp). It does not apply
+        to goods you buy in person in the shop. Faulty goods bought in the shop are still covered by
+        section 8.
+      </p>
+      <p><strong>Cancel before we dispatch</strong></p>
+      <p>
+        If you cancel before we dispatch, we refund the full amount you paid, including postage, and we
+        do not send the parcel. Email {mail} or WhatsApp us on{" "}
+        <a href={contactInfo.phoneHref} className={link}>{contactInfo.phone}</a> as soon as you can.
+      </p>
       <p><strong>How to cancel</strong></p>
       <ul>
-        <li>Email {mail} (or write to us at {contactInfo.address}) with a clear statement that you wish to cancel, your name, your order number and the goods concerned. You may use the model cancellation form below if you wish, but you do not have to.</li>
-        <li>Please send the goods back to us <strong>without undue delay and within 14 days</strong> of telling us you want to cancel. Email us first so we can give you the return address and a reference.</li>
-        <li>The goods must be unopened, unused and in the condition you received them. You are responsible for taking reasonable care of them until we receive them, so we recommend a tracked service and keeping proof of postage.</li>
+        <li>Email {mail}, WhatsApp us, or write to us at {contactInfo.address}, with a clear statement that you wish to cancel, your name, your order number and the goods concerned. You may use the model cancellation form below if you wish, but you do not have to. A clear written cancellation is enough. You do not have to wait for our reply for the cancellation to count.</li>
+        <li>Email or WhatsApp us for the return address. Please send the goods back <strong>without undue delay and within 14 days</strong> of telling us you want to cancel.</li>
+        <li>Return the goods unused, in the original packaging where you can. You may inspect them as you would in a shop. You are responsible for them until we receive them, so we recommend tracked post and keeping proof of postage.</li>
       </ul>
       <p><strong>Refunds</strong></p>
       <ul>
         <li>We will refund the price you paid for the goods and the standard delivery charge <strong>within 14 days</strong> of receiving the goods back (or of you providing proof that you have sent them back, if earlier).</li>
+        <li>If you cancel before dispatch, the refund includes postage and the parcel is not sent.</li>
         <li>Refunds are made to the original payment method.</li>
-        <li><strong>You pay the cost of returning the goods</strong> unless they are faulty or not as described (see section 8).</li>
-        <li>We may reduce the refund if the goods have lost value because you handled them more than was needed to check what they are and how they work.</li>
+        <li>If you change your mind after delivery, <strong>you pay the cost of returning the goods</strong>. We pay the return postage if the goods are faulty, damaged or not as described (see section 8).</li>
+        <li>We may reduce the refund if the goods have lost value because you handled them more than was needed to inspect them, as you would in a shop.</li>
       </ul>
-      <p><strong>Goods that cannot be cancelled</strong></p>
+      <p><strong>Goods that cannot be cancelled for a change of mind</strong></p>
       <ul>
-        <li>Sealed goods which are not suitable for return for health-protection or hygiene reasons, if you have unsealed them after delivery (for example opened mouthpieces, pipes, vaporiser parts or similar items).</li>
-        <li>Goods made to your specification or clearly personalised (see section 9).</li>
+        <li>Sealed hygiene or personal items, once you have unsealed them after delivery. That includes used bongs, pipes, mouthpieces, opened papers or filters, and similar goods.</li>
+        <li>Goods made to your specification or clearly personalised, including custom orders once production has started (see section 9).</li>
       </ul>
+      <p>These limits do not affect your rights where goods are faulty, damaged or not as described.</p>
       <p>
         Our <Link href="/returns" className={link}>Returns &amp; Refunds</Link> page sets out the process in
         more detail.
@@ -141,13 +157,15 @@ export function TermsContent() {
       <p>
         We are legally required to supply goods that are of satisfactory quality, fit for purpose and as
         described. Under the Consumer Rights Act 2015, if goods are faulty, damaged on arrival or not as
-        described you are entitled to a remedy: a refund if you reject them within 30 days of delivery, or
-        a repair or replacement (and in some cases a price reduction or refund) afterwards.
+        described you are entitled to a remedy. For the first 30 days after delivery you can reject
+        faulty goods for a full refund. After 30 days you can ask for a repair or a replacement. If a
+        repair or replacement is not possible, is not done within a reasonable time, or does not put the
+        problem right, you can ask for a refund or a price reduction.
       </p>
       <ul>
         <li>Please email {mail} as soon as you can, with your order number and photographs of the problem.</li>
-        <li>If goods are faulty or not as described, <strong>we will pay the reasonable cost of returning them</strong> (or collect them) and will refund, repair or replace as the law requires.</li>
-        <li>Please check your parcel on delivery and tell us promptly about any damage in transit.</li>
+        <li>If goods are faulty, damaged or not as described, <strong>we will pay the reasonable cost of returning them</strong> (or collect them) and will refund, repair or replace as the law requires.</li>
+        <li>Please tell us about damage in transit, or about the wrong item, within 48 hours of delivery and include photographs, so we can claim from the courier. This request does not affect your statutory rights.</li>
       </ul>
       <p>
         See <Link href="/returns" className={link}>Returns &amp; Refunds</Link> for how to report a fault.

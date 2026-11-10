@@ -7,12 +7,12 @@ import { MessageCircle, CreditCard, ArrowLeft, Loader2 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/lib/utils";
 import { lineTotalGbp, productImageClass } from "@/lib/product";
-import { whatsappOrderNumber } from "@/data/social";
+import { contactInfo, whatsappOrderNumber } from "@/data/social";
 import { checkoutCreateUrl, LAST_ORDER_KEY } from "@/lib/payments";
 import { VivaPayOverlay } from "@/components/payments/VivaPayOverlay";
 import { SecuredByViva } from "@/components/payments/VivaBadge";
 import { CheckoutLegalLinks } from "@/components/legal/LegalLinks";
-import { DELIVERY_LABEL, DELIVERY_NOTE, quoteForCart } from "@/lib/shipping";
+import { DELIVERY_LABEL, DELIVERY_NOTE, deliveryService, quoteForCart } from "@/lib/shipping";
 
 type OverlayStatus = "preparing" | "redirecting" | "error";
 
@@ -299,6 +299,30 @@ export default function CheckoutPage() {
               </div>
             </div>
 
+            <div className="rounded-2xl border border-[#25D366]/35 bg-[#f3faf5] p-4">
+              <p className="mb-3 text-sm font-medium leading-relaxed text-ink">
+                We also take custom and wholesale orders. Got a bigger order or a question? Message us on WhatsApp.
+              </p>
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-6 py-4 font-semibold text-white transition-colors hover:bg-[#1ebe57]"
+              >
+                <MessageCircle className="h-5 w-5" />
+                Order on WhatsApp
+              </a>
+              <p className="mt-2 text-center text-xs font-semibold text-ink/80">{contactInfo.phone}</p>
+            </div>
+
+            <p className="text-center text-sm font-medium leading-relaxed text-ink">
+              You can cancel within 14 days of delivery. If you change your mind you pay the return postage.{" "}
+              <Link href="/returns" className="font-semibold text-brand-700 underline underline-offset-2">
+                See Returns
+              </Link>
+              .
+            </p>
+
             <button
               type="submit"
               disabled={submitting}
@@ -311,22 +335,12 @@ export default function CheckoutPage() {
               )}
               {submitting ? "Opening checkout…" : "Pay Now · 18+"}
             </button>
-            <p className="text-center text-xs font-semibold text-surface-800/45">
+            <p className="text-center text-xs font-semibold text-surface-800/70">
               For customers aged 18 and over. Card details are entered only on the payment page —
               never on this website. Postage is the highest item postage, charged once, and is shown above.
             </p>
             <CheckoutLegalLinks />
             <SecuredByViva tone="light" className="justify-center" />
-
-            <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[#25D366] text-white font-semibold rounded-xl hover:bg-[#1ebe57] transition-colors"
-            >
-              <MessageCircle className="w-5 h-5" />
-              Order via WhatsApp
-            </a>
           </form>
 
           <aside className="lg:col-span-2">
@@ -371,8 +385,8 @@ export default function CheckoutPage() {
               <p className="text-xs font-bold text-brand-700 mt-3 rounded-lg bg-brand-50 px-3 py-2">
                 {DELIVERY_NOTE}
               </p>
-              <p className="text-xs text-surface-800/45 mt-4">
-                Dispatched within 2–3 business days, then 2–3 working days with Royal Mail Tracked 48.
+              <p className="mt-4 text-xs font-medium text-ink/75">
+                Dispatched within 2–3 business days, then usually 2–3 working days with {deliveryService}.
               </p>
             </div>
           </aside>

@@ -157,7 +157,7 @@ export function Logo({
             className={cn(
               "logo-tagline mt-1.5 font-semibold uppercase tracking-[0.28em]",
               s.tagline,
-              isLight ? "text-white/55" : "text-graphite/60"
+              isLight ? "text-white/75" : "text-graphite/60"
             )}
           >
             {SITE_TAGLINE}

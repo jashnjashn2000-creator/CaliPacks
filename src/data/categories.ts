@@ -5,9 +5,9 @@ export const categories: Category[] = [
     id: "cali-packs",
     name: "Cali Packs",
     slug: "cali-packs",
-    tagline: "£0.22 each · Min 25 · 50+ for £0.20",
+    tagline: "£0.22 each · Min 25 · Postage from £2.99",
     description:
-      "111 HD-photographed Cali Packs. £0.22 each, minimum order 25 pcs. Buy 50 or more of the same design for £0.20 each. Smell-proof 3.5g designs ready for UK shops.",
+      "111 HD-photographed Cali Packs. £0.22 each, minimum order 25 pcs. Buy 50 or more of the same design for £0.20 each. Postage £2.99 up to 200 packs, £3.50 over 200 packs. Smell-proof 3.5g designs, dispatched within 2–3 business days by Evri tracked delivery.",
     image: "/products/pack-001.webp",
     productCount: 111,
   },

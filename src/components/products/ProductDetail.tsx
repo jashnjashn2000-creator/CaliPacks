@@ -9,6 +9,7 @@ import {
   bulkSavingGbp,
   bundleSavingLabel,
   flattenOption,
+  isCaliPack,
   lineTotalGbp,
   packOfferText,
   productImageClass,
@@ -17,7 +18,7 @@ import {
   savingPercent,
   unitPriceGbp,
 } from "@/lib/product";
-import { DELIVERY_NOTE, postageLabel, productPostageGbp } from "@/lib/shipping";
+import { DELIVERY_NOTE, caliPackPostageLabel, postageLabel, productPostageGbp } from "@/lib/shipping";
 import { useCart } from "@/context/CartContext";
 
 interface ProductPurchaseProps {
@@ -46,7 +47,9 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
           <span className="save-tag">Save {savingPercent(selling)}%</span>
         ) : null}
       </div>
-      <p className="mb-2 text-sm font-bold text-brand-800">{postageLabel(postage)}</p>
+      <p className="mb-2 text-sm font-bold text-brand-800">
+        {isCaliPack(product) ? caliPackPostageLabel : postageLabel(postage)}
+      </p>
       <p className="mb-2 text-xs font-semibold text-surface-800/50">SKU {selling.sku}</p>
       {packOfferText(selling) ? (
         <p className="mb-4 text-sm font-bold text-ink">{packOfferText(selling)}</p>

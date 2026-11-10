@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { topLevelCategories } from "@/data/categories";
+import { thumbSrc } from "@/lib/product";
 
 export function CategoryHub() {
   return (
@@ -38,7 +39,7 @@ export function CategoryHub() {
             >
               <div className="relative aspect-[4/3] bg-white">
                 <Image
-                  src={category.image}
+                  src={thumbSrc(category.image)}
                   alt={category.name}
                   fill
                   loading="lazy"
@@ -56,7 +57,7 @@ export function CategoryHub() {
                     {category.tagline}
                   </p>
                 </div>
-                <p className="shrink-0 text-[11px] font-semibold tabular-nums text-graphite/55">
+                <p className="shrink-0 text-[11px] font-semibold tabular-nums text-graphite/70">
                   {category.productCount} item{category.productCount === 1 ? "" : "s"}
                 </p>
               </div>

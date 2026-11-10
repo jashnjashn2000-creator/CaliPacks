@@ -44,15 +44,16 @@ export default function HomePage() {
       <CategorySection
         title="Shop-floor stock"
         subtitle="Named HD photos from the Manchester shop — grinders, bongs, hookahs, scales, and accessories at UK-competitive prices."
-        products={shopStock}
+        products={shopStock.slice(0, 8)}
         viewAllHref="/shop"
+        viewAllLabel="See all"
         eagerCount={0}
         showCart={false}
         className="py-14 md:py-20"
       />
       <CategorySection
         title="Latest Cali Packs"
-        subtitle="HD studio photography. £0.22 each · minimum 25 pcs · 50+ for £0.20 each."
+        subtitle="HD studio photography. £0.22 each · minimum 25 pcs · 50+ for £0.20 each. Postage £2.99 up to 200 packs, £3.50 over 200 packs."
         products={latest}
         viewAllHref="/shop/cali-packs"
         eagerCount={0}

@@ -12,4 +12,9 @@ ZAPIER_WEBHOOK_URL=
 RESEND_API_KEY=
 OWNER_NOTIFY_EMAIL=hello@calipacks.co.uk
 RESEND_FROM_EMAIL=Smoke Cali <orders@smokecali.co.uk>
+# Customer confirmation. Leave blank until the domain is verified at Resend.
+# onboarding@resend.dev can only deliver to the Resend account owner, so it is
+# not used for this email. When the domain is verified, set for example:
+# CUSTOMER_EMAIL_FROM=Smoke Cali <orders@smokecali.co.uk>
+CUSTOMER_EMAIL_FROM=
 SITE_URL=https://smokecali.co.uk
