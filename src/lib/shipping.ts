@@ -5,6 +5,7 @@
  * The worker recalculates postage server-side before charging through Viva.com.
  * Amounts live on each product (`postage` in GBP). Omit it to use £3.99. 0 = free.
  * Cali Packs use a quantity band instead (£2.99 up to 200 packs, £3.50 over 200).
+ * Stash can packs of 10 use a quantity band (£2.99, or £3.99 for 5 or more packs).
  */
 import type { CartItem } from "@/types";
 import { formatPrice } from "@/lib/utils";
@@ -14,12 +15,15 @@ import {
   DEFAULT_POSTAGE_PENCE,
   DELIVERY_SERVICE,
   POSTAGE_RULE,
+  STASH_CAN_POSTAGE_LABEL,
   quotePostagePence,
 } from "../../cloudflare/checkout-worker/src/shipping-rates.js";
 
 export const deliveryService: string = DELIVERY_SERVICE;
 
 export const caliPackPostageLabel: string = CALI_PACK_POSTAGE_LABEL;
+
+export const stashCanPostageLabel: string = STASH_CAN_POSTAGE_LABEL;
 
 /** Postage shown for a Cali Pack order of 200 packs or fewer. */
 export const CALI_PACK_POSTAGE_UP_TO_GBP = CALI_PACK_POSTAGE_UP_TO_PENCE / 100;
@@ -52,11 +56,16 @@ function isCaliPackLine(product: { id?: string; categorySlug?: string }) {
   return product.categorySlug === "cali-packs" || String(product.id || "").startsWith("pack-");
 }
 
+function isStashCanPackLine(product: { id?: string; tags?: string[] }) {
+  return String(product.id || "").startsWith("shop-can-") || (product.tags || []).includes("stash-can-pack");
+}
+
 export function quoteForCart(items: CartItem[]): DeliveryQuote {
   const pricePence = quotePostagePence(
     items.map((i) => ({
       quantity: i.quantity,
       caliPack: isCaliPackLine(i.product),
+      stashCan: isStashCanPackLine(i.product),
       postagePence: i.product.postage == null ? undefined : Math.round(i.product.postage * 100),
     }))
   );

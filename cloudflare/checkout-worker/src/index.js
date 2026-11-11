@@ -283,11 +283,16 @@ function validateAddress(addr) {
  * Names, prices and postage come from PRODUCT_CATALOG.
  * Basket postage is the highest single postage, charged once (not summed, not × quantity).
  * Cali Pack lines are priced as one band from the total number of packs.
+ * Stash can pack-of-10 lines are priced as one band from the total number of packs.
  * All maths is in whole pence to avoid rounding errors.
  */
 
 function isCaliPackProduct(productId, product) {
   return (product && product.caliPack === true) || String(productId).startsWith("pack-");
+}
+
+function isStashCanProduct(productId, product) {
+  return (product && product.stashCan === true) || String(productId).startsWith("shop-can-");
 }
 function buildTotals(items) {
   if (!Array.isArray(items) || !items.length) throw new Error("Cart is empty.");
@@ -315,7 +320,8 @@ function buildTotals(items) {
       throw new Error(`${product.name}: the minimum order is ${product.minOrder}.`);
     }
     const caliPack = isCaliPackProduct(productId, product);
-    const postagePence = caliPack
+    const stashCan = isStashCanProduct(productId, product);
+    const postagePence = caliPack || stashCan
       ? 0
       : product.postagePence == null
         ? DEFAULT_POSTAGE_PENCE
@@ -334,11 +340,17 @@ function buildTotals(items) {
       linePence,
       postagePence,
       caliPack,
+      stashCan,
     });
   }
 
   const shippingPence = quotePostagePence(
-    lines.map((l) => ({ quantity: l.quantity, postagePence: l.postagePence, caliPack: l.caliPack }))
+    lines.map((l) => ({
+      quantity: l.quantity,
+      postagePence: l.postagePence,
+      caliPack: l.caliPack,
+      stashCan: l.stashCan,
+    }))
   );
   const totalPence = subtotalPence + shippingPence;
   if (totalPence > MAX_ORDER_PENCE) {

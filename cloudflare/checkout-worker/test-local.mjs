@@ -300,6 +300,27 @@ assert.equal(split.subtotalPence, 1100);
 assert.equal(split.shippingPence, 299);
 assert.equal(split.totalPence, 1399);
 
+const oneCanPack = buildTotals([{ productId: "shop-can-alien-space", quantity: 1 }]);
+assert.equal(oneCanPack.subtotalPence, 750);
+assert.equal(oneCanPack.shippingPence, 299);
+assert.equal(oneCanPack.totalPence, 1049);
+const fiveCanPacks = buildTotals([{ productId: "shop-can-lemonhead", quantity: 5 }]);
+assert.equal(fiveCanPacks.subtotalPence, 3750);
+assert.equal(fiveCanPacks.shippingPence, 399);
+assert.equal(fiveCanPacks.totalPence, 4149);
+const mixedCansAndFree = buildTotals([
+  { productId: "shop-can-gush", quantity: 1 },
+  { productId: "shop-mz100", quantity: 1 },
+]);
+assert.equal(mixedCansAndFree.shippingPence, 299);
+const mixedCansAndTin = buildTotals([
+  { productId: "shop-can-gush", quantity: 1 },
+  { productId: "shop-stash-cans", quantity: 1 },
+]);
+assert.equal(mixedCansAndTin.shippingPence, 399);
+assert.equal(PRODUCT_CATALOG["shop-can-alien-space"].stashCan, true);
+assert.equal(PRODUCT_CATALOG["shop-stash-cans"].stashCan, undefined);
+
 assert.equal(quotePostagePence([{ caliPack: true, quantity: 200, postagePence: 399 }]), 299);
 assert.equal(quotePostagePence([{ caliPack: true, quantity: 201, postagePence: 9999 }]), 350);
 assert.equal(
@@ -308,6 +329,31 @@ assert.equal(
     { postagePence: 0, quantity: 2 },
   ]),
   299
+);
+
+assert.equal(quotePostagePence([{ stashCan: true, quantity: 1, postagePence: 399 }]), 299);
+assert.equal(quotePostagePence([{ stashCan: true, quantity: 4, postagePence: 399 }]), 299);
+assert.equal(quotePostagePence([{ stashCan: true, quantity: 5, postagePence: 0 }]), 399);
+assert.equal(
+  quotePostagePence([
+    { stashCan: true, quantity: 1, postagePence: 399 },
+    { postagePence: 0, quantity: 1 },
+  ]),
+  299
+);
+assert.equal(
+  quotePostagePence([
+    { stashCan: true, quantity: 1, postagePence: 399 },
+    { postagePence: 399, quantity: 1 },
+  ]),
+  399
+);
+assert.equal(
+  quotePostagePence([
+    { stashCan: true, quantity: 5, postagePence: 399 },
+    { caliPack: true, quantity: 25, postagePence: 399 },
+  ]),
+  399
 );
 
 // 11. Customer confirmation email. The business alert still sends. A missing

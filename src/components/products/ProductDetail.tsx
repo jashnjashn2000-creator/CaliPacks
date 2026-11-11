@@ -10,6 +10,7 @@ import {
   bundleSavingLabel,
   flattenOption,
   isCaliPack,
+  isStashCanPack,
   lineTotalGbp,
   packOfferText,
   productImageClass,
@@ -18,8 +19,9 @@ import {
   savingPercent,
   unitPriceGbp,
 } from "@/lib/product";
-import { DELIVERY_NOTE, caliPackPostageLabel, postageLabel, productPostageGbp } from "@/lib/shipping";
+import { DELIVERY_NOTE, caliPackPostageLabel, postageLabel, productPostageGbp, stashCanPostageLabel } from "@/lib/shipping";
 import { useCart } from "@/context/CartContext";
+import { ProductTrustpilotBadge } from "@/components/layout/TrustpilotLink";
 
 interface ProductPurchaseProps {
   product: Product;
@@ -48,7 +50,11 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
         ) : null}
       </div>
       <p className="mb-2 text-sm font-bold text-brand-800">
-        {isCaliPack(product) ? caliPackPostageLabel : postageLabel(postage)}
+        {isCaliPack(product)
+          ? caliPackPostageLabel
+          : isStashCanPack(product)
+            ? stashCanPostageLabel
+            : postageLabel(postage)}
       </p>
       <p className="mb-2 text-xs font-semibold text-surface-800/50">SKU {selling.sku}</p>
       {packOfferText(selling) ? (
@@ -139,10 +145,12 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
           </button>
         </div>
         <p className="text-sm text-surface-800/60">
-          {min > 1 ? (
+          {isStashCanPack(product) ? (
+            <span className="mr-3 font-bold text-brand-700">Minimum 10 cans (1 pack)</span>
+          ) : min > 1 ? (
             <span className="mr-3 font-bold text-brand-700">Min. {min} pcs</span>
           ) : null}
-          {formatPrice(unit)} each · Total:{" "}
+          {formatPrice(unit)} {productUnit(product)} · Total:{" "}
           <span className="font-semibold text-surface-900">{formatPrice(total)}</span>
           {saving > 0 ? (
             <span className="ml-2 font-bold text-brand-700">You save {formatPrice(saving)}</span>
@@ -167,6 +175,7 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
           </>
         )}
       </button>
+      <ProductTrustpilotBadge />
     </div>
   );
 }

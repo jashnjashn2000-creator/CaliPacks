@@ -12,6 +12,9 @@ export function VivaLogo({ className }: { className?: string }) {
       alt="Viva.com"
       width={36}
       height={50}
+      loading="lazy"
+      decoding="async"
+      fetchPriority="low"
       className={cn("h-12 w-auto rounded-md", className)}
     />
   );
@@ -36,6 +39,9 @@ export function PaymentMethodIcons({ className }: { className?: string }) {
             alt={m.alt}
             width={m.w}
             height={m.square ? 58 : 24}
+            loading="lazy"
+            decoding="async"
+            fetchPriority="low"
             className={m.square ? "h-9 w-9 max-w-none" : "h-5 w-auto"}
           />
         </li>

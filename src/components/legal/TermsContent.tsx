@@ -86,10 +86,11 @@ export function TermsContent() {
         We deliver to UK addresses only, by <strong>{deliveryService}</strong>. Each product shows its own
         UK postage, or free UK delivery. Cali Packs are postage £2.99 when the order contains up to and
         including 200 packs, and £3.50 when it contains more than 200 packs. That rate uses the total
-        number of Cali Packs in the order. When you order several items you pay the{" "}
+        number of Cali Packs in the order. Stash can packs of 10 are postage £2.99, or £3.99 if the order
+        contains 5 or more of those packs. When you order several items you pay the{" "}
         <strong>highest postage once</strong>. Postage is not added together. Ordering more of the same
-        item does not increase its postage, except where the Cali Pack total moves the order over 200
-        packs. If every item in the basket includes free delivery, postage is £0.
+        item does not increase its postage, except where a Cali Pack or stash can pack total moves the
+        order into a higher postage band. If every item in the basket includes free delivery, postage is £0.
       </p>
       <p>
         In-stock orders are normally dispatched within 2–3 business days. Evri tracked delivery then
