@@ -92,8 +92,7 @@ export function DeliveryTable() {
         <h3 className="font-semibold text-surface-900 mb-2">Next working day (usually)</h3>
         <ul className="list-disc pl-5 space-y-1 text-sm">
           <li>Bag orders only.</li>
-          <li>£4.99 for 1–4 packs.</li>
-          <li>£5.99 for 5 or more packs.</li>
+          <li>£4.99 up to 200 bags, £5.99 over 200.</li>
           <li>Order by 10am, Monday to Friday.</li>
           <li>Not available if the basket includes other products.</li>
           <li>Not a guaranteed service.</li>

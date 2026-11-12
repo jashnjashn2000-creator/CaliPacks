@@ -341,14 +341,15 @@ assert.equal(PRODUCT_CATALOG["shop-cup-whoppers"].pricePence, 85);
 assert.equal(iceCupPostagePence(40), 299);
 assert.equal(iceCupPostagePence(41), 350);
 
-const nextDaySmall = nextDayPostagePence(4);
-const nextDayLarge = nextDayPostagePence(5);
-assert.equal(nextDaySmall, 499);
-assert.equal(nextDayLarge, 599);
+assert.equal(nextDayPostagePence(25), 499);
+assert.equal(nextDayPostagePence(200), 499);
+assert.equal(nextDayPostagePence(201), 599);
 const nextDayOrder = buildTotals([{ productId: "pack-001", quantity: 25 }], "nextday");
-assert.equal(nextDayOrder.shippingPence, 599);
+assert.equal(nextDayOrder.shippingPence, 499);
 assert.equal(nextDayOrder.shippingBand, "Next working day (usually)");
-assert.equal(nextDayOrder.totalPence, 25 * 22 + 599);
+assert.equal(nextDayOrder.totalPence, 25 * 22 + 499);
+const nextDayOver = buildTotals([{ productId: "pack-001", quantity: 201 }], "nextday");
+assert.equal(nextDayOver.shippingPence, 599);
 assert.throws(
   () => buildTotals(
     [
@@ -503,7 +504,7 @@ r = await post("/api/checkout/create", {
 });
 data = await r.json();
 assert.equal(r.status, 200, JSON.stringify(data));
-assert.equal(txStore.get("order").amount, 25 * 22 + 599);
+assert.equal(txStore.get("order").amount, 25 * 22 + 499);
 
 r = await post("/api/checkout/create", {
   customerEmail: "buyer@example.com",

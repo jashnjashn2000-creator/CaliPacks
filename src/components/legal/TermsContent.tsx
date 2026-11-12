@@ -89,7 +89,7 @@ export function TermsContent() {
         number of Cali Packs in the order. Stash can packs of 10 are postage £2.99, or £3.99 if the order
         contains 5 or more of those packs. Ice cream cup cans are postage £2.99 up to 40 cups in the
         order, and £3.50 above 40. Bag-only orders can choose next working day (usually) instead of
-        standard postage: £4.99 for 1–4 packs, or £5.99 for 5 or more packs. The cut-off is 10am,
+        standard postage: £4.99 up to 200 bags, £5.99 over 200. The cut-off is 10am,
         Monday to Friday. It is not a guaranteed next-day service, and it is not available if the
         basket includes other products. When you order several items you pay the{" "}
         <strong>highest postage once</strong>. Postage is not added together. Ordering more of the same

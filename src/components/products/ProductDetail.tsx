@@ -181,7 +181,7 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
         )}
         </button>
       {isCaliPack(product) ? (
-        <p className="text-xs font-semibold text-graphite/70">{nextDayNote} Bag orders only.</p>
+        <p className="text-xs font-semibold text-graphite/70">{nextDayNote}</p>
       ) : null}
       <ProductTrustpilotBadge />
     </div>

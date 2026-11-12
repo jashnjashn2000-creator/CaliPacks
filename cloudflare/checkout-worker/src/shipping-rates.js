@@ -18,7 +18,8 @@
  *
  * Next working day (usually) is a separate choice, bags only.
  * It replaces standard postage. It is not added on top.
- * £4.99 for 1 to 4 bag packs in the order, £5.99 for 5 or more.
+ * It uses the same bag count and the same 200 threshold as standard bag postage:
+ * £4.99 up to and including 200 bags, £5.99 over 200.
  * A basket that also contains anything else cannot use it.
  *
  * Basket postage is the HIGHEST single postage, charged ONCE.
@@ -60,20 +61,18 @@ export const ICE_CUP_POSTAGE_LABEL =
   "Postage £2.99 up to 40 cups, £3.50 above 40";
 
 /**
- * Next working day (usually), bag packs only.
- * Same style of split as the 1–4 / 5+ pack band: 1 to 4 packs, then 5 or more.
- * Standard bag postage is unchanged (the 200-pack bands above).
+ * Next working day (usually), bags only.
+ * Same count and same threshold as standard bag postage (CALI_PACK_POSTAGE_MAX_QTY).
+ * £4.99 up to and including 200 bags, £5.99 when the order is over 200 bags.
  */
-export const NEXT_DAY_POSTAGE_MAX_PACKS = 4;
 export const NEXT_DAY_POSTAGE_UP_TO_PENCE = 499;
 export const NEXT_DAY_POSTAGE_OVER_PENCE = 599;
 
-export const NEXT_DAY_POSTAGE_LABEL =
-  "Next working day (usually): £4.99 for 1–4 packs, £5.99 for 5 or more";
+export const NEXT_DAY_POSTAGE_LABEL = "£4.99 up to 200 bags, £5.99 over 200";
 
 /** One short line for checkout and bag product pages. Not a guarantee. */
 export const NEXT_DAY_NOTE =
-  "Order by 10am, Monday to Friday. Next working day (usually).";
+  "Next working day (usually). £4.99 up to 200 bags, £5.99 over 200. Order by 10am, Monday to Friday.";
 
 export const DELIVERY_SERVICE = "Evri tracked delivery";
 
@@ -119,11 +118,14 @@ export function iceCupPostagePence(totalCups) {
     : ICE_CUP_POSTAGE_OVER_PENCE;
 }
 
-/** Next working day postage for a bags-only order, from the total number of bag packs. */
-export function nextDayPostagePence(totalPacks) {
-  const qty = Math.floor(Number(totalPacks) || 0);
+/**
+ * Next working day postage for a bags-only order.
+ * Counts bags the same way as standard bag postage, and uses the same 200 threshold.
+ */
+export function nextDayPostagePence(totalBags) {
+  const qty = Math.floor(Number(totalBags) || 0);
   if (qty < 1) return 0;
-  return qty <= NEXT_DAY_POSTAGE_MAX_PACKS
+  return qty <= CALI_PACK_POSTAGE_MAX_QTY
     ? NEXT_DAY_POSTAGE_UP_TO_PENCE
     : NEXT_DAY_POSTAGE_OVER_PENCE;
 }

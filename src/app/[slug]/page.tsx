@@ -13,7 +13,7 @@ const pages: Record<string, { title: string; content: string }> = {
   },
   shipping: {
     title: "Shipping Policy",
-    content: "UK delivery by Evri tracked delivery, usually 2–3 working days after dispatch. Cali Packs are postage £2.99 up to 200 packs and £3.50 over 200 packs. Bag-only orders can choose next working day (usually): £4.99 for 1–4 packs, £5.99 for 5 or more, order by 10am Monday to Friday. Not guaranteed. Other products show their postage or free UK delivery. When you order several items you pay the highest postage once.",
+    content: "UK delivery by Evri tracked delivery, usually 2–3 working days after dispatch. Cali Packs are postage £2.99 up to 200 packs and £3.50 over 200 packs. Bag-only orders can choose next working day (usually): £4.99 up to 200 bags, £5.99 over 200. Order by 10am Monday to Friday. Not guaranteed. Other products show their postage or free UK delivery. When you order several items you pay the highest postage once.",
   },
   returns: {
     title: "Returns & Refunds",
