@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ShopCatalogue } from "@/components/shop/ShopCatalogue";
-import { getCategoryBySlug, categories } from "@/data/categories";
+import { getCategoryBySlug, categories, categoryProductCount } from "@/data/categories";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { productsForCategory } from "@/lib/catalogue";
 import { pageUrl } from "@/lib/site";
@@ -11,7 +11,9 @@ interface CategoryPageProps {
 }
 
 export async function generateStaticParams() {
-  return categories.map((cat) => ({ category: cat.slug }));
+  return categories
+    .filter((cat) => categoryProductCount(cat.slug) > 0)
+    .map((cat) => ({ category: cat.slug }));
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
@@ -35,7 +37,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category: slug } = await params;
   const category = getCategoryBySlug(slug);
-  if (!category) notFound();
+  if (!category || categoryProductCount(slug) < 1) notFound();
   const items = productsForCategory(category.slug);
   const parent = category.parentSlug ? getCategoryBySlug(category.parentSlug) : undefined;
   const crumbs = [

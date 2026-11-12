@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MapPin, ShoppingBag } from "lucide-react";
 import { contactInfo } from "@/data/social";
+import { CALI_PACK_COUNT } from "@/data/products";
 
 export function StorefrontShowcase() {
   return (
@@ -25,7 +26,7 @@ export function StorefrontShowcase() {
               Shop Smoke Cali Online
             </div>
             <h2 className="font-serif text-4xl font-normal leading-tight text-white sm:text-5xl">
-              111 Cali Packs. <span className="heading-accent">One click.</span>
+              {CALI_PACK_COUNT} Cali Packs. <span className="heading-accent">One click.</span>
             </h2>
             <p className="mt-4 max-w-md text-base font-medium leading-relaxed text-white/70 sm:text-lg">
               Browse HD product photos, pick your packs, and order online —

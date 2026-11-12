@@ -5,7 +5,10 @@
  * caliPack products ignore that stored postage: the basket rate is £2.99 up to 200
  * packs in the order and £3.50 over 200 (see shipping-rates.js).
  * stashCan products (packs of 10) ignore stored postage: £2.99 for 1 to 4 packs,
- * £3.99 for 5 or more packs. The Candy Stash Cans sold each are not stashCan.
+ * £3.99 for 5 or more packs.
+ * iceCup products ignore stored postage: £2.99 up to 40 cups, £3.50 above 40.
+ * hidden products stay in this file so the worker can reject them. They are not for sale.
+ * Next working day is not stored here. The worker prices it from the bag count.
  * bulkPricePence replaces pricePence when the line quantity is at least bulkMinQty.
  * Generated from src/data/products.ts + src/data/shop-stock.ts.
  */
@@ -281,7 +284,7 @@ export const PRODUCT_CATALOG = {
   "bulkMinQty": 50
  },
  "pack-028": {
-  "name": "Big League Gas",
+  "name": "Big League Gas Bubble Gum",
   "pricePence": 22,
   "postagePence": 399,
   "minOrder": 25,
@@ -1120,6 +1123,626 @@ export const PRODUCT_CATALOG = {
   "bulkPricePence": 20,
   "bulkMinQty": 50
  },
+ "pack-112": {
+  "name": "Koolberry Koolatta",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-113": {
+  "name": "Wocky Donut S'mores",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-114": {
+  "name": "Popsiclez Berry Freeze",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-115": {
+  "name": "Bottle Capz",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-116": {
+  "name": "The Trapp",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-117": {
+  "name": "Zaruto",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-118": {
+  "name": "Bubble Yum Watermelon",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-119": {
+  "name": "Trippy's Essentials",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-120": {
+  "name": "Durban Poison",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-121": {
+  "name": "NachoZ",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-122": {
+  "name": "Chocolate Donut",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-123": {
+  "name": "Strawberry Donut",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-124": {
+  "name": "Hash Bandicoot",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-125": {
+  "name": "Natty's Summer Edition",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-126": {
+  "name": "Donut Milkshake",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-127": {
+  "name": "Teds Budz Lemonberry Cherries",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-128": {
+  "name": "Zasuke",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-129": {
+  "name": "Kandy Depo",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-130": {
+  "name": "CataPop Honey Comb",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-131": {
+  "name": "Lychee",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-132": {
+  "name": "White Raz Gelato",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-133": {
+  "name": "7abreakers",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-134": {
+  "name": "Zabubu Macaroonz",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-135": {
+  "name": "Frozen Berries",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-136": {
+  "name": "Game Over",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-137": {
+  "name": "Pain God",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-138": {
+  "name": "Zushi Mango Matsuri Rush",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-139": {
+  "name": "Zushi Grape Kabuki Pop",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-140": {
+  "name": "Zushi Strawberry Sakura Pop",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-141": {
+  "name": "Zushi Blue Wave",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-142": {
+  "name": "Zushi Yuzu Cream",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-143": {
+  "name": "Hood Lemon Drops",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-144": {
+  "name": "Fumi Original Soy Sauce",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-145": {
+  "name": "Fumi Soy Sauce",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-146": {
+  "name": "Fumi Original Sriracha",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-147": {
+  "name": "Black Cherry LemonHead",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-148": {
+  "name": "Gushers",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-149": {
+  "name": "Odom Gelato",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-150": {
+  "name": "Gusher Sherbert",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-151": {
+  "name": "Sprinklez Loud",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-152": {
+  "name": "Coochie Popperz",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-153": {
+  "name": "Peanut Butter Runtz",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-154": {
+  "name": "Red Velvet Cupcakes",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-155": {
+  "name": "Candy Cartel Rocky Road",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-156": {
+  "name": "Candy Cartel Green Apple Sour Punch",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-157": {
+  "name": "RS11",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-158": {
+  "name": "King Louis",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-159": {
+  "name": "GB Exotics",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-160": {
+  "name": "High Rollers",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-161": {
+  "name": "IOFMF",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-162": {
+  "name": "East",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-163": {
+  "name": "Dirty Zoca",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-164": {
+  "name": "Cherry Creme Bombom",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-165": {
+  "name": "Beetle Juice",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-166": {
+  "name": "OT7",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-167": {
+  "name": "Zabores Caramel Cookies",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-168": {
+  "name": "Ryu Runtz",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-169": {
+  "name": "Trappin With The Nino Boyz",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-170": {
+  "name": "Pink Ooze Lemonade",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-171": {
+  "name": "Ken's Tropical Punch",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-172": {
+  "name": "Sour Lemons",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
+ "pack-173": {
+  "name": "Bélicas",
+  "pricePence": 22,
+  "postagePence": 399,
+  "minOrder": 25,
+  "inStock": true,
+  "caliPack": true,
+  "bulkPricePence": 20,
+  "bulkMinQty": 50
+ },
  "shop-can-cherry-pie-gelato": {
   "name": "Cherry Pie Gelato Stash Can – Pack of 10",
   "pricePence": 750,
@@ -1200,12 +1823,125 @@ export const PRODUCT_CATALOG = {
   "inStock": true,
   "stashCan": true
  },
- "shop-stash-cans": {
-  "name": "Candy Stash Cans",
-  "pricePence": 599,
-  "postagePence": 399,
-  "minOrder": 1,
-  "inStock": true
+ "shop-cup-kool-aid-sharkleberry-fin": {
+  "name": "Kool-Aid Sharkleberry Fin Can",
+  "pricePence": 85,
+  "postagePence": 299,
+  "minOrder": 20,
+  "inStock": true,
+  "iceCup": true
+ },
+ "shop-cup-candy-chups": {
+  "name": "Candy Chups Can",
+  "pricePence": 85,
+  "postagePence": 299,
+  "minOrder": 20,
+  "inStock": true,
+  "iceCup": true
+ },
+ "shop-cup-gelato-runtz": {
+  "name": "Gelato Runtz Can",
+  "pricePence": 85,
+  "postagePence": 299,
+  "minOrder": 20,
+  "inStock": true,
+  "iceCup": true
+ },
+ "shop-cup-hi-cheu-strawberry": {
+  "name": "Hi-Cheu Strawberry Can",
+  "pricePence": 85,
+  "postagePence": 299,
+  "minOrder": 20,
+  "inStock": true,
+  "iceCup": true
+ },
+ "shop-cup-canada-za-lemon-cherry-ginger-ale": {
+  "name": "Canada Za Lemon Cherry Ginger Ale Can",
+  "pricePence": 85,
+  "postagePence": 299,
+  "minOrder": 20,
+  "inStock": true,
+  "iceCup": true
+ },
+ "shop-cup-whoppers": {
+  "name": "Whoppers Can",
+  "pricePence": 85,
+  "postagePence": 299,
+  "minOrder": 20,
+  "inStock": true,
+  "iceCup": true
+ },
+ "shop-cup-zabubu-macaroonz": {
+  "name": "Zabubu Macaroonz Can",
+  "pricePence": 85,
+  "postagePence": 299,
+  "minOrder": 20,
+  "inStock": true,
+  "iceCup": true
+ },
+ "shop-cup-fanta-bomb-pop-watermelon": {
+  "name": "Fanta Bomb Pop Watermelon Can",
+  "pricePence": 85,
+  "postagePence": 299,
+  "minOrder": 20,
+  "inStock": true,
+  "iceCup": true
+ },
+ "shop-cup-strawberry-nerdz": {
+  "name": "Strawberry Nerdz Can",
+  "pricePence": 85,
+  "postagePence": 299,
+  "minOrder": 20,
+  "inStock": true,
+  "iceCup": true
+ },
+ "shop-cup-jolly-rancher-tropical": {
+  "name": "Jolly Rancher Tropical Can",
+  "pricePence": 85,
+  "postagePence": 299,
+  "minOrder": 20,
+  "inStock": true,
+  "iceCup": true
+ },
+ "shop-cup-bubblicious-pink-lemonade": {
+  "name": "Bubblicious Pink Lemonade Can",
+  "pricePence": 85,
+  "postagePence": 299,
+  "minOrder": 20,
+  "inStock": true,
+  "iceCup": true
+ },
+ "shop-cup-hersheys-milk-chocolate": {
+  "name": "Hershey's Milk Chocolate Can",
+  "pricePence": 85,
+  "postagePence": 299,
+  "minOrder": 20,
+  "inStock": true,
+  "iceCup": true
+ },
+ "shop-cup-trop-cherry": {
+  "name": "Trop Cherry Can",
+  "pricePence": 85,
+  "postagePence": 299,
+  "minOrder": 20,
+  "inStock": true,
+  "iceCup": true
+ },
+ "shop-cup-ice-cream-cake": {
+  "name": "Ice Cream Cake Can",
+  "pricePence": 85,
+  "postagePence": 299,
+  "minOrder": 20,
+  "inStock": true,
+  "iceCup": true
+ },
+ "shop-cup-reeses-peanut-butter-cups": {
+  "name": "Reese's Peanut Butter Cups Can",
+  "pricePence": 85,
+  "postagePence": 299,
+  "minOrder": 20,
+  "inStock": true,
+  "iceCup": true
  },
  "shop-vacuum-rolls": {
   "name": "Black Vacuum Sealer Rolls — 15 cm wide",
@@ -1380,7 +2116,8 @@ export const PRODUCT_CATALOG = {
   "pricePence": 179,
   "postagePence": 399,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "hidden": true
  },
  "shop-character-ashtray": {
   "name": "Character Statue Ashtray",
@@ -1583,91 +2320,104 @@ export const PRODUCT_CATALOG = {
   "pricePence": 1299,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "hidden": true
  },
  "shop-lgt-skulls": {
   "name": "Blu Flame Click Lighters – Skull Designs (Box of 50)",
   "pricePence": 1599,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "hidden": true
  },
  "shop-lgt-portraits": {
   "name": "Blu Flame Click Lighters – Portrait Designs (Box of 50)",
   "pricePence": 1599,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "hidden": true
  },
  "shop-lgt-aces": {
   "name": "Blu Flame Click Lighters – Ace Designs (Box of 50)",
   "pricePence": 1599,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "hidden": true
  },
  "shop-lgt-rasta": {
   "name": "Blu Flame Click Lighters – Rasta Designs (Box of 50)",
   "pricePence": 1599,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "hidden": true
  },
  "shop-lgt-cardsuits": {
   "name": "Blu Flame Click Lighters – Card Suit Designs (Box of 50)",
   "pricePence": 1599,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "hidden": true
  },
  "shop-lgt-unionjack": {
   "name": "Blu Flame Click Lighters – Union Jack Designs (Box of 50)",
   "pricePence": 1599,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "hidden": true
  },
  "shop-lgt-glamour": {
   "name": "Blu Flame Click Lighters – Glamour Designs (Box of 50)",
   "pricePence": 1599,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "hidden": true
  },
  "shop-lgt-leaf": {
   "name": "Blu Flame Click Lighters – Leaf Designs (Box of 50)",
   "pricePence": 1599,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "hidden": true
  },
  "shop-lgt-bigben": {
   "name": "Blu Flame Click Lighters – Big Ben Designs (Box of 50)",
   "pricePence": 1599,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "hidden": true
  },
  "shop-lgt-casino": {
   "name": "Blu Flame Click Lighters – Casino Designs (Box of 50)",
   "pricePence": 1599,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "hidden": true
  },
  "shop-lgt-london": {
   "name": "Blu Flame Click Lighters – London Designs (Box of 50)",
   "pricePence": 1599,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "hidden": true
  },
  "shop-lgt-love": {
   "name": "Blu Flame Click Lighters – Love Designs (Box of 50)",
   "pricePence": 1599,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "hidden": true
  },
  "shop-bong-m-01": {
   "name": "Medium Green Frog Glass Bong",

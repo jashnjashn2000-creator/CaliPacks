@@ -25,8 +25,12 @@ const RETIRED_PRODUCTS: Record<string, { href: string; message: string }> = {
     message: "This Nerds beaker has been replaced by the Medium Nerds bongs. Taking you there…",
   },
   "graphic-flame-lighters": {
-    href: "/shop/lighters/",
-    message: "Those single graphic lighters have been replaced by Blu Flame and 4smoke boxes. Taking you there…",
+    href: "/shop/",
+    message: "Those lighters are not listed online. Taking you to the shop…",
+  },
+  "candy-stash-cans": {
+    href: "/shop/stash-cans/",
+    message: "That can is no longer sold. Taking you to the cans…",
   },
 };
 
@@ -114,7 +118,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             url: pageUrl(`/product/${product.slug}`),
             image: (product.images?.length ? product.images : [product.image]).map((img) => `${SITE_URL}${img}`),
             ...(category ? { category: category.name } : {}),
-            description: product.description,
+            description: product.description.replace(/\n/g, ". "),
             sku: product.sku,
             brand: { "@type": "Brand", name: SITE_NAME },
             offers: product.options?.length
@@ -272,9 +276,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </h1>
             <ProductPurchase product={product} />
             <MatchingOffer productId={product.id} />
-            <p className="text-graphite/75 leading-relaxed mb-8 mt-8 font-medium">
-              {product.description}
-            </p>
+            <ul className="mb-8 mt-8 list-disc space-y-1 pl-5 text-sm font-medium text-graphite/80">
+              {product.description
+                .split("\n")
+                .map((line) => line.trim())
+                .filter(Boolean)
+                .map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+            </ul>
 
             <div className="border-t border-surface-200 pt-6 mb-6">
               <dl className="grid grid-cols-2 gap-4 text-sm">

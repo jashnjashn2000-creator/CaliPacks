@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Clock, Layers, MapPin, Tag, Truck } from "lucide-react";
 import { Product } from "@/types";
+import { CALI_PACK_COUNT } from "@/data/products";
 import { RotatingPackTiles } from "@/components/home/RotatingPackTiles";
 
 interface HeroBannerSliderProps {
@@ -41,7 +42,7 @@ export function HeroBannerSlider({ products }: HeroBannerSliderProps) {
             <div className="absolute -left-20 -top-20 -z-10 h-72 w-72 rounded-full bg-gold/20 blur-3xl" />
 
             <span className="absolute right-4 top-4 rounded-full border border-white/20 bg-ink/40 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-cream backdrop-blur-md sm:right-6 sm:top-6">
-              111 designs in stock
+              {CALI_PACK_COUNT} designs in stock
             </span>
 
             <div className="mt-auto flex w-full flex-col px-6 pb-8 pt-24 sm:px-10 sm:pb-10 lg:my-auto lg:max-w-[34rem] lg:px-12 lg:py-14">
@@ -50,7 +51,7 @@ export function HeroBannerSlider({ products }: HeroBannerSliderProps) {
                 Smoke Cali · Manchester
               </p>
               <h1 className="font-serif text-[2.6rem] font-normal leading-[1.02] tracking-tight sm:text-6xl lg:text-[4.1rem]">
-                111 Cali Packs.
+                {CALI_PACK_COUNT} Cali Packs.
                 <span className="block text-gold">
                   Studio HD.
                 </span>

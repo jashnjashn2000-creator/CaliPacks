@@ -8,6 +8,7 @@ import { CartProvider } from "@/context/CartContext";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { localBusinessJsonLd } from "@/lib/local-business";
 import { SITE_LOGO, SITE_NAME, SITE_URL, pageUrl } from "@/lib/site";
+import { CALI_PACK_COUNT } from "@/data/products";
 import "./globals.css";
 
 // Logo wordmark only — keeps the brand mark unchanged.
@@ -95,7 +96,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description:
-    "Smoke Cali is a Manchester smoke shop for wholesale Cali Packs. 111 HD designs, £0.22 each, minimum 25 pcs, or £0.20 each from 50. UK postage is shown on each product. Visit us at 5 Sagar Street, Manchester, open daily 9:30–19:30.",
+    `Smoke Cali is a Manchester smoke shop for wholesale Cali Packs. ${CALI_PACK_COUNT} HD designs, £0.22 each, minimum 25 pcs, or £0.20 each from 50. UK postage is shown on each product. Visit us at 5 Sagar Street, Manchester, open daily 9:30–19:30.`,
   keywords: [
     "Smoke Cali",
     "Cali Packs UK",
@@ -114,7 +115,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: "Smoke Cali | Cali Packs £0.22 · Manchester",
     description:
-      "111 HD Cali Packs from Smoke Cali Manchester. £0.22 each, minimum 25 pcs, or £0.20 each from 50. Shop online or visit Sagar Street.",
+      `${CALI_PACK_COUNT} HD Cali Packs from Smoke Cali Manchester. £0.22 each, minimum 25 pcs, or £0.20 each from 50. Shop online or visit Sagar Street.`,
     images: [
       {
         url: "/hero-cali-packs.webp",
@@ -127,7 +128,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Smoke Cali | Cali Packs £0.22",
-    description: "111 HD Cali Packs. £0.22 each, min 25 pcs, 50+ for £0.20. Manchester smoke shop.",
+    description: `${CALI_PACK_COUNT} HD Cali Packs. £0.22 each, min 25 pcs, 50+ for £0.20. Manchester smoke shop.`,
     images: ["/hero-cali-packs.webp"],
   },
   robots: {

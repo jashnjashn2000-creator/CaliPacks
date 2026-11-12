@@ -11,7 +11,6 @@ fs.mkdirSync(outShop, { recursive: true });
 
 const jobs = [
   { src: "Shop image.jpeg", dest: path.join(root, "public", "cali-smoke-storefront.webp"), width: 1400, cover: true },
-  { src: "WhatsApp Image 2026-07-14 at 6.45.27 PM (5).jpeg", dest: path.join(outShop, "candy-stash-cans.webp"), width: 1200 },
   { src: "WhatsApp Image 2026-07-09 at 7.46.31 PM (1).jpeg", dest: path.join(outShop, "vacuum-sealer-rolls.webp"), width: 1200 },
   { src: "WhatsApp Image 2026-07-09 at 7.46.31 PM (2).jpeg", dest: path.join(outShop, "vacuum-sealer.webp"), width: 1200 },
   { src: "WhatsApp Image 2026-07-09 at 7.46.31 PM (3).jpeg", dest: path.join(outShop, "cartoon-travel-kit.webp"), width: 1200 },

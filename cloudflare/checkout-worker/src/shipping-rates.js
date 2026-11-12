@@ -13,7 +13,13 @@
  * are in the basket:
  *   Cali Packs: £2.99 up to and including 200 packs, £3.50 when over 200.
  *   Stash can packs of 10: £2.99 for 1 to 4 packs, £3.99 for 5 or more packs.
+ *   Ice cream cup cans: £2.99 up to and including 40 cups, £3.50 above 40.
  * Those band rates are then compared with every other item's postage.
+ *
+ * Next working day (usually) is a separate choice, bags only.
+ * It replaces standard postage. It is not added on top.
+ * £4.99 for 1 to 4 bag packs in the order, £5.99 for 5 or more.
+ * A basket that also contains anything else cannot use it.
  *
  * Basket postage is the HIGHEST single postage, charged ONCE.
  * It is not summed across lines. Quantity does not multiply a non-pack postage.
@@ -45,11 +51,35 @@ export const STASH_CAN_POSTAGE_OVER_PENCE = 399;
 export const STASH_CAN_POSTAGE_LABEL =
   "Postage £2.99, or £3.99 for 5 or more packs";
 
+/** Ice cream cup cans, counted as individual cups across the order. */
+export const ICE_CUP_POSTAGE_MAX_QTY = 40;
+export const ICE_CUP_POSTAGE_UP_TO_PENCE = 299;
+export const ICE_CUP_POSTAGE_OVER_PENCE = 350;
+
+export const ICE_CUP_POSTAGE_LABEL =
+  "Postage £2.99 up to 40 cups, £3.50 above 40";
+
+/**
+ * Next working day (usually), bag packs only.
+ * Same style of split as the 1–4 / 5+ pack band: 1 to 4 packs, then 5 or more.
+ * Standard bag postage is unchanged (the 200-pack bands above).
+ */
+export const NEXT_DAY_POSTAGE_MAX_PACKS = 4;
+export const NEXT_DAY_POSTAGE_UP_TO_PENCE = 499;
+export const NEXT_DAY_POSTAGE_OVER_PENCE = 599;
+
+export const NEXT_DAY_POSTAGE_LABEL =
+  "Next working day (usually): £4.99 for 1–4 packs, £5.99 for 5 or more";
+
+/** One short line for checkout and bag product pages. Not a guarantee. */
+export const NEXT_DAY_NOTE =
+  "Order by 10am, Monday to Friday. Next working day (usually).";
+
 export const DELIVERY_SERVICE = "Evri tracked delivery";
 
 /** Shown beside the postage total. Postage is not calculated from weight. */
 export const POSTAGE_RULE =
-  "Cali Packs are postage £2.99 up to 200 packs in the order, and £3.50 over 200 packs. Stash can packs of 10 are postage £2.99, or £3.99 if you order 5 or more packs. Every other product shows its own UK postage, or free UK delivery. When you order several items you pay the highest postage once. If every item includes free delivery, postage is £0.";
+  "Cali Packs are postage £2.99 up to 200 packs in the order, and £3.50 over 200 packs. Stash can packs of 10 are postage £2.99, or £3.99 if you order 5 or more packs. Ice cream cup cans are postage £2.99 up to 40 cups, and £3.50 above 40. Every other product shows its own UK postage, or free UK delivery. When you order several items you pay the highest postage once. If every item includes free delivery, postage is £0.";
 
 /**
  * Postage in pence for one non-pack line. Missing or non-numeric values use the default.
@@ -80,13 +110,31 @@ export function stashCanPostagePence(totalPacks) {
     : STASH_CAN_POSTAGE_OVER_PENCE;
 }
 
+/** One ice cream cup postage for the whole basket, from the total number of cups. */
+export function iceCupPostagePence(totalCups) {
+  const qty = Math.floor(Number(totalCups) || 0);
+  if (qty < 1) return 0;
+  return qty <= ICE_CUP_POSTAGE_MAX_QTY
+    ? ICE_CUP_POSTAGE_UP_TO_PENCE
+    : ICE_CUP_POSTAGE_OVER_PENCE;
+}
+
+/** Next working day postage for a bags-only order, from the total number of bag packs. */
+export function nextDayPostagePence(totalPacks) {
+  const qty = Math.floor(Number(totalPacks) || 0);
+  if (qty < 1) return 0;
+  return qty <= NEXT_DAY_POSTAGE_MAX_PACKS
+    ? NEXT_DAY_POSTAGE_UP_TO_PENCE
+    : NEXT_DAY_POSTAGE_OVER_PENCE;
+}
+
 /**
  * Basket postage in pence.
  * Lines with `caliPack: true` are counted together and charged the Cali Pack band,
  * not their stored postagePence. Lines with `stashCan: true` are counted together
- * and charged the stash can pack band. The result is the highest postage, once.
- * The existing Candy Stash Cans (sold each) are ordinary items, not stashCan packs.
- * @param {Array<{ postagePence?: number, quantity?: number, caliPack?: boolean, stashCan?: boolean }>|null|undefined} items
+ * and charged the stash can pack band. Lines with `iceCup: true` are counted
+ * together and charged the ice cream cup band. The result is the highest postage, once.
+ * @param {Array<{ postagePence?: number, quantity?: number, caliPack?: boolean, stashCan?: boolean, iceCup?: boolean }>|null|undefined} items
  * @returns {number}
  */
 export function quotePostagePence(items) {
@@ -94,6 +142,7 @@ export function quotePostagePence(items) {
   let seen = false;
   let packQty = 0;
   let canPackQty = 0;
+  let cupQty = 0;
   for (const item of items || []) {
     const qty = Math.floor(Number(item && item.quantity) || 0);
     if (qty < 1) continue;
@@ -106,6 +155,10 @@ export function quotePostagePence(items) {
       canPackQty += qty;
       continue;
     }
+    if (item && item.iceCup) {
+      cupQty += qty;
+      continue;
+    }
     const pence = linePostagePence(item.postagePence);
     if (pence > highest) highest = pence;
   }
@@ -113,5 +166,7 @@ export function quotePostagePence(items) {
   if (packPostage > highest) highest = packPostage;
   const canPostage = stashCanPostagePence(canPackQty);
   if (canPostage > highest) highest = canPostage;
+  const cupPostage = iceCupPostagePence(cupQty);
+  if (cupPostage > highest) highest = cupPostage;
   return seen ? highest : 0;
 }

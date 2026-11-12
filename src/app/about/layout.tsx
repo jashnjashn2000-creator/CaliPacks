@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { WithTrustBadges } from "@/components/layout/WithTrustBadges";
 import { pageUrl } from "@/lib/site";
+import { CALI_PACK_COUNT } from "@/data/products";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
     url: pageUrl("/about"),
     title: "About Smoke Cali | Manchester Cali Packs",
     description:
-      "A real Manchester shop supplying 111 HD Cali Packs. £0.22 each, minimum 25 pcs, or £0.20 each from 50.",
+      `A real Manchester shop supplying ${CALI_PACK_COUNT} HD Cali Packs. £0.22 each, minimum 25 pcs, or £0.20 each from 50.`,
   },
 };
 

@@ -5,9 +5,10 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { LOCAL_BUSINESS } from "@/lib/local-business";
 import { contactInfo } from "@/data/social";
 import { SITE_URL, pageUrl } from "@/lib/site";
+import { CALI_PACK_COUNT } from "@/data/products";
 
 const highlights = [
-  "111 HD Cali Pack designs, each named and photographed",
+  `${CALI_PACK_COUNT} HD Cali Pack designs, each named and photographed`,
   "£0.22 each · minimum 25 pcs · 50+ for £0.20 each",
   "Online cart and WhatsApp ordering",
   "Dispatched in 2–3 business days · Evri tracked delivery · Cali Packs postage £2.99 up to 200",
@@ -30,7 +31,7 @@ export default function AboutPage() {
         eyebrow="Real Manchester stock"
         title="About"
         accent="Smoke Cali"
-        description="A real Manchester shop supplying 111 HD Cali Packs. £0.22 each, minimum 25 pcs, or £0.20 each from 50 — shop online or visit us on Sagar Street."
+        description={`A real Manchester shop supplying ${CALI_PACK_COUNT} HD Cali Packs. £0.22 each, minimum 25 pcs, or £0.20 each from 50 — shop online or visit us on Sagar Street.`}
         images={[
           "/cali-shop-hero.webp",
           "/products/pack-030.webp",

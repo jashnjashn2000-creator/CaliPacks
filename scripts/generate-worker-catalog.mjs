@@ -21,6 +21,7 @@ const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "smokecali-catalog-"));
 function transpile(srcPath, destName) {
   let code = fs.readFileSync(srcPath, "utf8");
   code = code.replace(/from\s+["']@\/data\/shop-stock["']/g, 'from "./shop-stock.mjs"');
+  code = code.replace(/from\s+["']@\/data\/new-bags["']/g, 'from "./new-bags.mjs"');
   const out = ts.transpileModule(code, {
     compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
   });
@@ -28,10 +29,11 @@ function transpile(srcPath, destName) {
 }
 
 transpile(path.join(root, "src/data/shop-stock.ts"), "shop-stock.mjs");
+transpile(path.join(root, "src/data/new-bags.ts"), "new-bags.mjs");
 transpile(path.join(root, "src/data/products.ts"), "products.mjs");
 
 const mod = await import(pathToFileURL(path.join(tmp, "products.mjs")).href);
-const all = mod.products;
+const all = mod.allProducts || mod.products;
 if (!Array.isArray(all) || all.length < 10) {
   throw new Error("Product list looks wrong — catalog not written.");
 }
@@ -48,7 +50,7 @@ function postagePence(value) {
 }
 
 const catalog = {};
-function addEntry(id, name, price, minOrder, inStock, postage, bulk, caliPack, stashCan) {
+function addEntry(id, name, price, minOrder, inStock, postage, bulk, caliPack, stashCan, iceCup, hidden) {
   if (!id || typeof price !== "number" || price <= 0) return;
   if (catalog[id]) throw new Error(`Duplicate product id in worker catalog: ${id}`);
   const row = {
@@ -60,6 +62,8 @@ function addEntry(id, name, price, minOrder, inStock, postage, bulk, caliPack, s
   };
   if (caliPack) row.caliPack = true;
   if (stashCan) row.stashCan = true;
+  if (iceCup) row.iceCup = true;
+  if (hidden) row.hidden = true;
   if (bulk && bulk.price != null && bulk.minQty) {
     row.bulkPricePence = Math.round(Number(bulk.price) * 100);
     row.bulkMinQty = Math.floor(Number(bulk.minQty));
@@ -72,15 +76,17 @@ for (const p of all) {
   const caliPack = p.categorySlug === "cali-packs";
   const stashCan =
     String(p.id || "").startsWith("shop-can-") || (p.tags || []).includes("stash-can-pack");
+  const iceCup = String(p.id || "").startsWith("shop-cup-") || (p.tags || []).includes("ice-cup");
+  const hidden = p.hidden === true;
   if (p.options?.length) {
     for (const opt of p.options) {
-      addEntry(opt.id, opt.name, opt.price, p.minOrder, p.inStock, opt.postage, null, false, false);
+      addEntry(opt.id, opt.name, opt.price, p.minOrder, p.inStock, opt.postage, null, false, false, false, hidden);
     }
     if (!p.options.some((opt) => opt.id === p.id)) {
-      addEntry(p.id, p.name, p.price, p.minOrder, p.inStock, p.postage, bulk, caliPack, stashCan);
+      addEntry(p.id, p.name, p.price, p.minOrder, p.inStock, p.postage, bulk, caliPack, stashCan, iceCup, hidden);
     }
   } else {
-    addEntry(p.id, p.name, p.price, p.minOrder, p.inStock, p.postage, bulk, caliPack, stashCan);
+    addEntry(p.id, p.name, p.price, p.minOrder, p.inStock, p.postage, bulk, caliPack, stashCan, iceCup, hidden);
   }
 }
 
@@ -91,7 +97,10 @@ const header = `/**
  * caliPack products ignore that stored postage: the basket rate is £2.99 up to 200
  * packs in the order and £3.50 over 200 (see shipping-rates.js).
  * stashCan products (packs of 10) ignore stored postage: £2.99 for 1 to 4 packs,
- * £3.99 for 5 or more packs. The Candy Stash Cans sold each are not stashCan.
+ * £3.99 for 5 or more packs.
+ * iceCup products ignore stored postage: £2.99 up to 40 cups, £3.50 above 40.
+ * hidden products stay in this file so the worker can reject them. They are not for sale.
+ * Next working day is not stored here. The worker prices it from the bag count.
  * bulkPricePence replaces pricePence when the line quantity is at least bulkMinQty.
  * Generated from src/data/products.ts + src/data/shop-stock.ts.
  */

@@ -1,4 +1,5 @@
 import { Product } from "@/types";
+import { newBagProducts } from "@/data/new-bags";
 import { shopStockProducts } from "@/data/shop-stock";
 
 const catalogue: Product[] = [
@@ -466,7 +467,7 @@ const catalogue: Product[] = [
   },
   {
     id: "pack-028",
-    name: "Big League Gas",
+    name: "Big League Gas Bubble Gum",
     slug: "big-league-gas",
     description: "High Tolerance Big League Gas bubble-gum pack. £0.22 per pack. Minimum order 25 pcs. Buy 50 or more of this design for £0.20 each. Smell-proof 3.5g Cali Pack with HD studio photography.",
     shortDescription: "High Tolerance Big League Gas bubble-gum pack — £0.22 each, minimum 25, or £0.20 each when you buy 50 or more.",
@@ -1824,16 +1825,45 @@ const catalogue: Product[] = [
     minOrder: 25,
     sku: "CP-111",
   },
+  ...newBagProducts,
   ...shopStockProducts,
 ];
+
+/** Replaced with a new approved photo. Same listing, not a second product. */
+const NICE_QUALITY_BAG_IDS = new Set(["pack-019", "pack-025", "pack-026", "pack-028", "pack-029"]);
 
 /** Every Cali Pack: £0.22 each from 25, £0.20 each once that line reaches 50. */
 function withCaliPackOffer(product: Product): Product {
   if (product.categorySlug !== "cali-packs") return product;
-  return { ...product, price: 0.22, minOrder: 25, bulkPrice: 0.2, bulkMinQty: 50 };
+  const priced = { ...product, price: 0.22, minOrder: 25, bulkPrice: 0.2, bulkMinQty: 50 };
+  if (product.description.includes("\n")) return priced;
+  const design = product.description.split(". ")[0].replace(/\.$/, "");
+  const lines = [
+    design,
+    ...(NICE_QUALITY_BAG_IDS.has(product.id) ? ["Nice quality bag"] : []),
+    "3.5g pack",
+    "£0.22 each, or £0.20 each from 50 of this design",
+    "Minimum order 25",
+    "Postage £2.99 up to 200 packs, £3.50 over 200",
+  ];
+  return {
+    ...priced,
+    description: lines.join("\n"),
+    shortDescription: `${product.name} — 3.5g bag. £0.22 each, minimum 25, or £0.20 from 50.`,
+  };
 }
 
-export const products: Product[] = catalogue.map(withCaliPackOffer);
+/** Full catalogue, including products with hidden: true. Do not use this on the shop. */
+export const allProducts: Product[] = catalogue.map(withCaliPackOffer);
+
+/**
+ * What customers can see and buy.
+ * Hidden products stay in allProducts (and in the source files) so unhiding
+ * is deleting `hidden: true`. See README, "Hiding a product".
+ */
+export const products: Product[] = allProducts.filter((product) => product.hidden !== true);
+
+export const CALI_PACK_COUNT = products.filter((product) => product.categorySlug === "cali-packs").length;
 
 export function getProductBySlug(slug: string): Product | undefined {
   return products.find((p) => p.slug === slug);

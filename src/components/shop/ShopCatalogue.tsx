@@ -71,12 +71,12 @@ function ShopView({ categorySlug, query, isNew }: ShopViewProps) {
       : category?.description ??
         (isNew
           ? "Latest drops from the Manchester shop — Cali Packs at £0.22 (min 25, 50+ for £0.20) plus new shop-floor stock."
-          : "Cali Packs at £0.22 each (min 25 pcs, 50+ for £0.20) plus grinders, bongs, hookahs, scales, and accessories from the shop floor.");
+          : "Cali Packs at £0.22 each (min 25 pcs, 50+ for £0.20) plus grinders, bongs, hookahs, scales, cans and accessories from the shop floor.");
 
   const heroImages = (category
     ? [category.image, ...displayProducts.slice(0, 2).map((p) => p.image)]
     : isNew
-      ? ["/shop/cartoon-travel-kit.webp", "/shop/gold-honeycomb-grinder.webp", "/shop/candy-stash-cans.webp"]
+      ? ["/shop/cartoon-travel-kit.webp", "/shop/gold-honeycomb-grinder.webp", "/shop/can-cherry-pie-gelato.webp"]
       : ["/products/pack-040.webp", "/shop/colour-novelty-hookah.webp", "/shop/gold-honeycomb-grinder.webp"]
   ).map((src) => thumbSrc(src));
 

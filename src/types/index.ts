@@ -59,6 +59,13 @@ export interface Product {
   isFeatured?: boolean;
   minOrder?: number;
   sku: string;
+  /**
+   * Hide this product from customers without deleting it.
+   * Hidden products stay in this file and keep their photos.
+   * To sell one again, delete this flag (or set it to false), rebuild the site,
+   * and redeploy the checkout worker. See README, "Hiding a product".
+   */
+  hidden?: boolean;
 }
 
 export interface CartItem {

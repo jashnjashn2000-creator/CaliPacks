@@ -1,14 +1,19 @@
 import { Product, ProductOption } from "@/types";
-import { caliPackPostageLabel, postageLabel, productPostageGbp, stashCanPostageLabel } from "@/lib/shipping";
+import { caliPackPostageLabel, iceCupPostageLabel, postageLabel, productPostageGbp, stashCanPostageLabel } from "@/lib/shipping";
 import { formatPrice } from "@/lib/utils";
 
 export function isCaliPack(product: Product) {
   return product.categorySlug === "cali-packs";
 }
 
-/** Pack-of-10 flavour stash cans, not the existing Candy Stash Cans sold each. */
+/** Pack-of-10 flavour stash cans. */
 export function isStashCanPack(product: { id?: string; tags?: string[] }) {
   return String(product.id || "").startsWith("shop-can-") || (product.tags || []).includes("stash-can-pack");
+}
+
+/** Ice cream cup cans, sold each with a minimum of 20 per design. */
+export function isIceCup(product: { id?: string; tags?: string[] }) {
+  return String(product.id || "").startsWith("shop-cup-") || (product.tags || []).includes("ice-cup");
 }
 
 function toPence(gbp: number) {
@@ -119,6 +124,7 @@ export function bundleSavingLabel(product: Product): string | null {
 export function displayPostageLabel(product: Product): string {
   if (isCaliPack(product)) return caliPackPostageLabel;
   if (isStashCanPack(product)) return stashCanPostageLabel;
+  if (isIceCup(product)) return iceCupPostageLabel;
   const options = product.options;
   if (!options?.length) return postageLabel(productPostageGbp(product));
   const paid = [...new Set(options.filter((o) => o.postage > 0).map((o) => o.postage))];

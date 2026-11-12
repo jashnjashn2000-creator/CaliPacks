@@ -12,7 +12,15 @@ import { checkoutCreateUrl, LAST_ORDER_KEY } from "@/lib/payments";
 import { VivaPayOverlay } from "@/components/payments/VivaPayOverlay";
 import { SecuredByViva } from "@/components/payments/VivaBadge";
 import { CheckoutLegalLinks } from "@/components/legal/LegalLinks";
-import { DELIVERY_LABEL, DELIVERY_NOTE, deliveryService, quoteForCart } from "@/lib/shipping";
+import {
+  DELIVERY_LABEL,
+  DELIVERY_NOTE,
+  bagsOnlyBasket,
+  deliveryService,
+  nextDayNote,
+  quoteForCart,
+  type ShippingMethod,
+} from "@/lib/shipping";
 
 type OverlayStatus = "preparing" | "redirecting" | "error";
 
@@ -23,8 +31,11 @@ export default function CheckoutPage() {
   const [overlayStatus, setOverlayStatus] = useState<OverlayStatus>("preparing");
   const [overlayMessage, setOverlayMessage] = useState("");
   const [cancelNote, setCancelNote] = useState(false);
+  const [method, setMethod] = useState<ShippingMethod>("standard");
 
-  const delivery = quoteForCart(items);
+  const bagsOnly = bagsOnlyBasket(items);
+  const shippingMethod: ShippingMethod = bagsOnly && method === "nextday" ? "nextday" : "standard";
+  const delivery = quoteForCart(items, shippingMethod);
   const shipping = delivery.price;
   const total = subtotal + shipping;
 
@@ -38,11 +49,11 @@ export default function CheckoutPage() {
       ...lines,
       "",
       `Subtotal: ${formatPrice(subtotal)}`,
-      `${DELIVERY_LABEL}: ${formatPrice(shipping)}`,
+      `${shippingMethod === "nextday" ? "Next working day (usually)" : DELIVERY_LABEL}: ${formatPrice(shipping)}`,
       `Total: ${formatPrice(total)}`,
     ].join("\n");
     return `https://wa.me/${whatsappOrderNumber}?text=${encodeURIComponent(text)}`;
-  }, [items, subtotal, shipping, total]);
+  }, [items, subtotal, shipping, shippingMethod, total]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -131,6 +142,7 @@ export default function CheckoutPage() {
         productId: i.product.id,
         quantity: i.quantity,
       })),
+      shippingMethod,
     };
 
     try {
@@ -368,6 +380,34 @@ export default function CheckoutPage() {
                   </li>
                 ))}
               </ul>
+              {bagsOnly ? (
+                <fieldset className="mb-4 space-y-2 border-t border-surface-200 pt-4">
+                  <legend className="mb-2 text-sm font-semibold text-ink">Postage</legend>
+                  <label className="flex items-start gap-2 text-sm">
+                    <input
+                      type="radio"
+                      name="postage"
+                      className="mt-1"
+                      checked={shippingMethod === "standard"}
+                      onChange={() => setMethod("standard")}
+                    />
+                    <span>Standard · {formatPrice(quoteForCart(items, "standard").price)}</span>
+                  </label>
+                  <label className="flex items-start gap-2 text-sm">
+                    <input
+                      type="radio"
+                      name="postage"
+                      className="mt-1"
+                      checked={shippingMethod === "nextday"}
+                      onChange={() => setMethod("nextday")}
+                    />
+                    <span>
+                      Next working day (usually) · {formatPrice(quoteForCart(items, "nextday").price)}
+                    </span>
+                  </label>
+                  <p className="text-xs font-semibold text-graphite/70">{nextDayNote}</p>
+                </fieldset>
+              ) : null}
               <dl className="space-y-2 text-sm border-t border-surface-200 pt-4">
                 <div className="flex justify-between">
                   <dt className="text-surface-800/60">Subtotal</dt>
@@ -382,11 +422,15 @@ export default function CheckoutPage() {
                   <dd>{formatPrice(total)}</dd>
                 </div>
               </dl>
-              <p className="text-xs font-bold text-brand-700 mt-3 rounded-lg bg-brand-50 px-3 py-2">
-                {DELIVERY_NOTE}
-              </p>
+              {shippingMethod === "nextday" ? null : (
+                <p className="text-xs font-bold text-brand-700 mt-3 rounded-lg bg-brand-50 px-3 py-2">
+                  {DELIVERY_NOTE}
+                </p>
+              )}
               <p className="mt-4 text-xs font-medium text-ink/75">
-                Dispatched within 2–3 business days, then usually 2–3 working days with {deliveryService}.
+                {shippingMethod === "nextday"
+                  ? "Next working day (usually). This is not a guaranteed service."
+                  : `Dispatched within 2–3 business days, then usually 2–3 working days with ${deliveryService}.`}
               </p>
             </div>
           </aside>

@@ -87,9 +87,13 @@ export function TermsContent() {
         UK postage, or free UK delivery. Cali Packs are postage £2.99 when the order contains up to and
         including 200 packs, and £3.50 when it contains more than 200 packs. That rate uses the total
         number of Cali Packs in the order. Stash can packs of 10 are postage £2.99, or £3.99 if the order
-        contains 5 or more of those packs. When you order several items you pay the{" "}
+        contains 5 or more of those packs. Ice cream cup cans are postage £2.99 up to 40 cups in the
+        order, and £3.50 above 40. Bag-only orders can choose next working day (usually) instead of
+        standard postage: £4.99 for 1–4 packs, or £5.99 for 5 or more packs. The cut-off is 10am,
+        Monday to Friday. It is not a guaranteed next-day service, and it is not available if the
+        basket includes other products. When you order several items you pay the{" "}
         <strong>highest postage once</strong>. Postage is not added together. Ordering more of the same
-        item does not increase its postage, except where a Cali Pack or stash can pack total moves the
+        item does not increase its postage, except where a Cali Pack, stash can pack or ice cream cup total moves the
         order into a higher postage band. If every item in the basket includes free delivery, postage is £0.
       </p>
       <p>

@@ -1,0 +1,102 @@
+import { Product } from "@/types";
+
+/**
+ * New bag designs from the approved 1024px photos.
+ * Five photos replaced existing listings (pack-019, pack-025, pack-026, pack-028, pack-029)
+ * and are not listed again here.
+ * To hide one, set hidden: true. See README, Hiding a product.
+ */
+function bag(n: number, name: string, slug: string): Product {
+  const id = `pack-${String(n).padStart(3, "0")}`;
+  const image = `/products/${id}.webp`;
+  return {
+    id,
+    name,
+    slug,
+    description: [
+      name,
+      "Nice quality bag",
+      "3.5g pack",
+      "£0.22 each, or £0.20 each from 50 of this design",
+      "Minimum order 25",
+      "Postage £2.99 up to 200 packs, £3.50 over 200",
+    ].join("\n"),
+    shortDescription: `${name} — nice quality 3.5g bag. £0.22 each, minimum 25, or £0.20 from 50.`,
+    price: 0.22,
+    categoryId: "cali-packs",
+    categorySlug: "cali-packs",
+    image,
+    images: [image],
+    tags: ["cali-packs", "mylar", "wholesale", "new"],
+    inStock: true,
+    isNew: true,
+    minOrder: 25,
+    sku: `CP-${String(n).padStart(3, "0")}`,
+  };
+}
+
+export const newBagProducts: Product[] = [
+  bag(112, "Koolberry Koolatta", "koolberry-koolatta"),
+  bag(113, "Wocky Donut S'mores", "wocky-donut-smores"),
+  bag(114, "Popsiclez Berry Freeze", "popsiclez-berry-freeze"),
+  bag(115, "Bottle Capz", "bottle-capz"),
+  bag(116, "The Trapp", "the-trapp"),
+  bag(117, "Zaruto", "zaruto"),
+  bag(118, "Bubble Yum Watermelon", "bubble-yum-watermelon"),
+  bag(119, "Trippy's Essentials", "trippys-essentials"),
+  bag(120, "Durban Poison", "durban-poison"),
+  bag(121, "NachoZ", "nachoz"),
+  bag(122, "Chocolate Donut", "chocolate-donut"),
+  bag(123, "Strawberry Donut", "strawberry-donut"),
+  bag(124, "Hash Bandicoot", "hash-bandicoot"),
+  bag(125, "Natty's Summer Edition", "nattys-summer-edition"),
+  bag(126, "Donut Milkshake", "donut-milkshake"),
+  bag(127, "Teds Budz Lemonberry Cherries", "teds-budz-lemonberry-cherries"),
+  bag(128, "Zasuke", "zasuke"),
+  bag(129, "Kandy Depo", "kandy-depo"),
+  bag(130, "CataPop Honey Comb", "catapop-honey-comb"),
+  bag(131, "Lychee", "lychee"),
+  bag(132, "White Raz Gelato", "white-raz-gelato"),
+  bag(133, "7abreakers", "7abreakers"),
+  bag(134, "Zabubu Macaroonz", "zabubu-macaroonz"),
+  bag(135, "Frozen Berries", "frozen-berries"),
+  bag(136, "Game Over", "game-over"),
+  bag(137, "Pain God", "pain-god"),
+  bag(138, "Zushi Mango Matsuri Rush", "zushi-mango-matsuri-rush"),
+  bag(139, "Zushi Grape Kabuki Pop", "zushi-grape-kabuki-pop"),
+  bag(140, "Zushi Strawberry Sakura Pop", "zushi-strawberry-sakura-pop"),
+  bag(141, "Zushi Blue Wave", "zushi-blue-wave"),
+  bag(142, "Zushi Yuzu Cream", "zushi-yuzu-cream"),
+  bag(143, "Hood Lemon Drops", "hood-lemon-drops"),
+  bag(144, "Fumi Original Soy Sauce", "fumi-original-soy-sauce"),
+  bag(145, "Fumi Soy Sauce", "fumi-soy-sauce"),
+  bag(146, "Fumi Original Sriracha", "fumi-original-sriracha"),
+  bag(147, "Black Cherry LemonHead", "black-cherry-lemonhead"),
+  bag(148, "Gushers", "gushers"),
+  bag(149, "Odom Gelato", "odom-gelato"),
+  bag(150, "Gusher Sherbert", "gusher-sherbert"),
+  bag(151, "Sprinklez Loud", "sprinklez-loud"),
+  bag(152, "Coochie Popperz", "coochie-popperz"),
+  bag(153, "Peanut Butter Runtz", "peanut-butter-runtz"),
+  bag(154, "Red Velvet Cupcakes", "red-velvet-cupcakes"),
+  bag(155, "Candy Cartel Rocky Road", "candy-cartel-rocky-road"),
+  bag(156, "Candy Cartel Green Apple Sour Punch", "candy-cartel-green-apple-sour-punch"),
+  bag(157, "RS11", "rs11"),
+  bag(158, "King Louis", "king-louis"),
+  bag(159, "GB Exotics", "gb-exotics"),
+  bag(160, "High Rollers", "high-rollers"),
+  bag(161, "IOFMF", "iofmf"),
+  bag(162, "East", "east"),
+  bag(163, "Dirty Zoca", "dirty-zoca"),
+  bag(164, "Cherry Creme Bombom", "cherry-creme-bombom"),
+  bag(165, "Beetle Juice", "beetle-juice"),
+  bag(166, "OT7", "ot7"),
+  bag(167, "Zabores Caramel Cookies", "zabores-caramel-cookies"),
+  bag(168, "Ryu Runtz", "ryu-runtz"),
+  bag(169, "Trappin With The Nino Boyz", "trappin-with-the-nino-boyz"),
+  bag(170, "Pink Ooze Lemonade", "pink-ooze-lemonade"),
+  bag(171, "Ken's Tropical Punch", "kens-tropical-punch"),
+  bag(172, "Sour Lemons", "sour-lemons"),
+  bag(173, "Bélicas", "belicas"),
+];
+

@@ -1,8 +1,9 @@
-import { categories } from "@/data/categories";
+import { categories, categoryProductCount } from "@/data/categories";
 import { faqs } from "@/data/faqs";
 import { contactInfo, socialLinks } from "@/data/social";
 import { LOCAL_BUSINESS } from "@/lib/local-business";
 import { pageUrl } from "@/lib/site";
+import { CALI_PACK_COUNT } from "@/data/products";
 
 export const dynamic = "force-static";
 
@@ -11,7 +12,7 @@ export function GET() {
   const lines = [
     "# Smoke Cali (SMOKE CALI LTD)",
     "",
-    "> Manchester smoke shop and UK online store. 111 HD Cali Pack designs at £0.22 each (minimum 25 pcs, or £0.20 each when you buy 50 or more of the same design), plus grinders, bongs, hookahs, scales and smoking accessories. Customers must be 18+.",
+    `> Manchester smoke shop and UK online store. ${CALI_PACK_COUNT} HD Cali Pack designs at £0.22 each (minimum 25 pcs, or £0.20 each when you buy 50 or more of the same design), plus grinders, bongs, hookahs, scales and smoking accessories. Customers must be 18+.`,
     "",
     "## Key facts",
     `- Legal name: ${LOCAL_BUSINESS.legalName}`,
@@ -22,14 +23,16 @@ export function GET() {
     `- Phone / WhatsApp: ${contactInfo.phone}`,
     `- Email: ${contactInfo.email}`,
     `- Website: ${pageUrl("/")}`,
-    "- Delivery: UK only, Evri tracked delivery. Cali Packs are postage £2.99 up to 200 packs in the order, and £3.50 over 200 packs. Other products show their own postage or free UK delivery. Ordering several items, you pay the highest postage once (not added together). If every item is free delivery, postage is £0. Dispatched in 2–3 business days, then usually 2–3 working days in transit",
+    "- Delivery: UK only, Evri tracked delivery. Cali Packs are postage £2.99 up to 200 packs in the order, and £3.50 over 200 packs. Bag-only orders can choose next working day (usually): £4.99 for 1–4 packs, £5.99 for 5 or more. Order by 10am, Monday to Friday. Not guaranteed, and not available if the basket includes other products. Ice cream cup cans are £2.99 up to 40 cups and £3.50 above 40. Other products show their own postage or free UK delivery. Ordering several items, you pay the highest postage once. Standard dispatch is 2–3 business days, then usually 2–3 working days in transit",
     "- Returns: 14-day cancellation right for distance orders, starting the day after delivery (Consumer Contracts Regulations 2013). Cancel before dispatch for a full refund including postage. After delivery, return unused goods in the original packaging where possible; the customer pays return postage for a change of mind. Opened sealed hygiene items (such as used bongs, pipes, mouthpieces, opened papers or filters) and custom orders once production has started cannot be returned for a change of mind. In-store purchases are outside the 14-day online cancellation right. Faulty or damaged goods are covered by the Consumer Rights Act 2015",
     "- Payment: card payments are processed securely by Viva.com (Visa, Mastercard, Apple Pay, Google Pay)",
     "- Order: online card checkout via Viva.com, or order on WhatsApp",
     "",
     "## Main pages",
     `- [Shop](${pageUrl("/shop")}): full catalogue`,
-    ...categories.map((c) => `- [${c.name}](${pageUrl(`/shop/${c.slug}`)}): ${c.description}`),
+    ...categories
+      .filter((c) => categoryProductCount(c.slug) > 0)
+      .map((c) => `- [${c.name}](${pageUrl(`/shop/${c.slug}`)}): ${c.description}`),
     `- [About](${pageUrl("/about")})`,
     `- [Contact](${pageUrl("/contact")})`,
     `- [FAQ](${pageUrl("/faq")})`,

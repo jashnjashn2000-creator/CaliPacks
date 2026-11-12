@@ -4,7 +4,7 @@
  */
 import assert from "node:assert/strict";
 import worker, { buildTotals } from "./src/index.js";
-import { quotePostagePence } from "./src/shipping-rates.js";
+import { iceCupPostagePence, nextDayPostagePence, quotePostagePence } from "./src/shipping-rates.js";
 import { PRODUCT_CATALOG } from "./src/product-catalog.js";
 
 const env = {
@@ -313,13 +313,54 @@ const mixedCansAndFree = buildTotals([
   { productId: "shop-mz100", quantity: 1 },
 ]);
 assert.equal(mixedCansAndFree.shippingPence, 299);
-const mixedCansAndTin = buildTotals([
-  { productId: "shop-can-gush", quantity: 1 },
-  { productId: "shop-stash-cans", quantity: 1 },
-]);
-assert.equal(mixedCansAndTin.shippingPence, 399);
+assert.equal(PRODUCT_CATALOG["shop-stash-cans"], undefined);
+assert.throws(() => buildTotals([{ productId: "shop-stash-cans", quantity: 1 }]), /no longer available/);
 assert.equal(PRODUCT_CATALOG["shop-can-alien-space"].stashCan, true);
-assert.equal(PRODUCT_CATALOG["shop-stash-cans"].stashCan, undefined);
+assert.equal(PRODUCT_CATALOG["shop-lgt-skulls"].hidden, true);
+assert.equal(PRODUCT_CATALOG["shop-lgt-4smoke"].hidden, true);
+assert.equal(PRODUCT_CATALOG["shop-clipper-lighters"].hidden, true);
+assert.throws(() => buildTotals([{ productId: "shop-lgt-skulls", quantity: 1 }]), /no longer available/);
+assert.throws(() => buildTotals([{ productId: "shop-clipper-lighters", quantity: 1 }]), /no longer available/);
+
+const cups20 = buildTotals([{ productId: "shop-cup-whoppers", quantity: 20 }]);
+assert.equal(cups20.subtotalPence, 1700);
+assert.equal(cups20.shippingPence, 299);
+assert.throws(() => buildTotals([{ productId: "shop-cup-whoppers", quantity: 19 }]), /minimum order is 20/);
+const cups40 = buildTotals([
+  { productId: "shop-cup-whoppers", quantity: 20 },
+  { productId: "shop-cup-trop-cherry", quantity: 20 },
+]);
+assert.equal(cups40.shippingPence, 299);
+const cups41 = buildTotals([
+  { productId: "shop-cup-whoppers", quantity: 21 },
+  { productId: "shop-cup-trop-cherry", quantity: 20 },
+]);
+assert.equal(cups41.shippingPence, 350);
+assert.equal(PRODUCT_CATALOG["shop-cup-whoppers"].iceCup, true);
+assert.equal(PRODUCT_CATALOG["shop-cup-whoppers"].pricePence, 85);
+assert.equal(iceCupPostagePence(40), 299);
+assert.equal(iceCupPostagePence(41), 350);
+
+const nextDaySmall = nextDayPostagePence(4);
+const nextDayLarge = nextDayPostagePence(5);
+assert.equal(nextDaySmall, 499);
+assert.equal(nextDayLarge, 599);
+const nextDayOrder = buildTotals([{ productId: "pack-001", quantity: 25 }], "nextday");
+assert.equal(nextDayOrder.shippingPence, 599);
+assert.equal(nextDayOrder.shippingBand, "Next working day (usually)");
+assert.equal(nextDayOrder.totalPence, 25 * 22 + 599);
+assert.throws(
+  () => buildTotals(
+    [
+      { productId: "pack-001", quantity: 25 },
+      { productId: "shop-mz100", quantity: 1 },
+    ],
+    "nextday"
+  ),
+  /bag/
+);
+const standardStill = buildTotals([{ productId: "pack-001", quantity: 25 }]);
+assert.equal(standardStill.shippingPence, 299);
 
 assert.equal(quotePostagePence([{ caliPack: true, quantity: 200, postagePence: 399 }]), 299);
 assert.equal(quotePostagePence([{ caliPack: true, quantity: 201, postagePence: 9999 }]), 350);
@@ -453,5 +494,34 @@ assert.equal(r.status, 200, JSON.stringify(data));
 assert.equal(data.status, "ok");
 assert.equal(data.notified.customer.ok, false);
 assert.equal(data.notified.email.ok, true);
+
+r = await post("/api/checkout/create", {
+  customerEmail: "buyer@example.com",
+  shippingAddress: address,
+  shippingMethod: "nextday",
+  items: [{ productId: "pack-001", quantity: 25 }],
+});
+data = await r.json();
+assert.equal(r.status, 200, JSON.stringify(data));
+assert.equal(txStore.get("order").amount, 25 * 22 + 599);
+
+r = await post("/api/checkout/create", {
+  customerEmail: "buyer@example.com",
+  shippingAddress: address,
+  shippingMethod: "nextday",
+  items: [
+    { productId: "pack-001", quantity: 25 },
+    { productId: "shop-cup-whoppers", quantity: 20 },
+  ],
+});
+assert.equal(r.status, 400);
+assert.match((await r.json()).message, /bag/);
+
+r = await post("/api/checkout/create", {
+  customerEmail: "buyer@example.com",
+  shippingAddress: address,
+  items: [{ productId: "shop-lgt-4smoke", quantity: 1 }],
+});
+assert.equal(r.status, 400);
 
 console.log("All worker checks passed.");
