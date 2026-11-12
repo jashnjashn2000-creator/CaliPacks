@@ -10,6 +10,7 @@ import {
   bundleSavingLabel,
   flattenOption,
   isCaliPack,
+  isIceCup,
   isStashCanPack,
   lineTotalGbp,
   packOfferText,
@@ -19,7 +20,7 @@ import {
   savingPercent,
   unitPriceGbp,
 } from "@/lib/product";
-import { DELIVERY_NOTE, caliPackPostageLabel, postageLabel, productPostageGbp, stashCanPostageLabel } from "@/lib/shipping";
+import { DELIVERY_NOTE, caliPackPostageLabel, iceCupPostageLabel, nextDayNote, postageLabel, productPostageGbp, stashCanPostageLabel } from "@/lib/shipping";
 import { useCart } from "@/context/CartContext";
 import { ProductTrustpilotBadge } from "@/components/layout/TrustpilotLink";
 
@@ -54,7 +55,9 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
           ? caliPackPostageLabel
           : isStashCanPack(product)
             ? stashCanPostageLabel
-            : postageLabel(postage)}
+            : isIceCup(product)
+              ? iceCupPostageLabel
+              : postageLabel(postage)}
       </p>
       <p className="mb-2 text-xs font-semibold text-surface-800/50">SKU {selling.sku}</p>
       {packOfferText(selling) ? (
@@ -147,6 +150,8 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
         <p className="text-sm text-surface-800/60">
           {isStashCanPack(product) ? (
             <span className="mr-3 font-bold text-brand-700">Minimum 10 cans (1 pack)</span>
+          ) : isIceCup(product) ? (
+            <span className="mr-3 font-bold text-brand-700">Minimum 20 of this design</span>
           ) : min > 1 ? (
             <span className="mr-3 font-bold text-brand-700">Min. {min} pcs</span>
           ) : null}
@@ -174,7 +179,10 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
             Add to Cart
           </>
         )}
-      </button>
+        </button>
+      {isCaliPack(product) ? (
+        <p className="text-xs font-semibold text-graphite/70">{nextDayNote}</p>
+      ) : null}
       <ProductTrustpilotBadge />
     </div>
   );

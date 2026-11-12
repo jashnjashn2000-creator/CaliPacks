@@ -123,9 +123,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [state.items, hydrated]);
 
   // Overlay live catalogue prices and postage so the basket matches the worker.
-  const items = state.items.map((item) => {
+  const items = state.items.flatMap((item) => {
     const product = resolveSellable(item.product.id);
-    return product ? { ...item, product } : item;
+    if (!product || product.hidden) return [];
+    return [{ ...item, product }];
   });
   const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
   const subtotal = items.reduce((sum, i) => sum + lineTotalGbp(i.product, i.quantity), 0);
@@ -135,8 +136,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
     itemCount,
     subtotal,
     ready: hydrated,
-    addItem: (product, quantity = product.minOrder || 1) =>
-      dispatch({ type: "ADD_ITEM", product, quantity }),
+    addItem: (product, quantity = product.minOrder || 1) => {
+      if (product.hidden || !resolveSellable(product.id)) return;
+      dispatch({ type: "ADD_ITEM", product, quantity });
+    },
     removeItem: (productId) =>
       dispatch({ type: "REMOVE_ITEM", productId }),
     updateQuantity: (productId, quantity) =>

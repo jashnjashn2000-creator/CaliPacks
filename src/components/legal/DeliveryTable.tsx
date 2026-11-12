@@ -41,6 +41,18 @@ export function DeliveryTable() {
                 <td className="px-4 py-3 text-right font-semibold text-surface-900">£2.99</td>
               </tr>
               <tr className="border-t border-surface-200">
+                <td className="px-4 py-3 font-medium text-surface-900">Ice cream cup cans, up to 40 cups in the order</td>
+                <td className="px-4 py-3">{deliveryService}</td>
+                <td className="px-4 py-3">Usually 2–3 working days after dispatch</td>
+                <td className="px-4 py-3 text-right font-semibold text-surface-900">£2.99</td>
+              </tr>
+              <tr className="border-t border-surface-200">
+                <td className="px-4 py-3 font-medium text-surface-900">Ice cream cup cans, above 40 cups in the order</td>
+                <td className="px-4 py-3">{deliveryService}</td>
+                <td className="px-4 py-3">Usually 2–3 working days after dispatch</td>
+                <td className="px-4 py-3 text-right font-semibold text-surface-900">£3.50</td>
+              </tr>
+              <tr className="border-t border-surface-200">
                 <td className="px-4 py-3 font-medium text-surface-900">Stash can packs of 10, 5 or more packs in the order</td>
                 <td className="px-4 py-3">{deliveryService}</td>
                 <td className="px-4 py-3">Usually 2–3 working days after dispatch</td>
@@ -74,6 +86,17 @@ export function DeliveryTable() {
           if you order 5 or more packs. You still pay only the highest postage once.
           Each other product page shows either a postage price or &ldquo;Free UK delivery&rdquo;.
         </p>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-surface-900 mb-2">Next working day (usually)</h3>
+        <ul className="list-disc pl-5 space-y-1 text-sm">
+          <li>Bag orders only.</li>
+          <li>£4.99 up to 200 bags, £5.99 over 200.</li>
+          <li>Order by 10am, Monday to Friday.</li>
+          <li>Not available if the basket includes other products.</li>
+          <li>Not a guaranteed service.</li>
+        </ul>
       </div>
 
       <div>

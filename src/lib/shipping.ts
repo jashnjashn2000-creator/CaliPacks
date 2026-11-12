@@ -14,8 +14,12 @@ import {
   CALI_PACK_POSTAGE_UP_TO_PENCE,
   DEFAULT_POSTAGE_PENCE,
   DELIVERY_SERVICE,
+  ICE_CUP_POSTAGE_LABEL,
+  NEXT_DAY_NOTE,
+  NEXT_DAY_POSTAGE_LABEL,
   POSTAGE_RULE,
   STASH_CAN_POSTAGE_LABEL,
+  nextDayPostagePence,
   quotePostagePence,
 } from "../../cloudflare/checkout-worker/src/shipping-rates.js";
 
@@ -24,6 +28,14 @@ export const deliveryService: string = DELIVERY_SERVICE;
 export const caliPackPostageLabel: string = CALI_PACK_POSTAGE_LABEL;
 
 export const stashCanPostageLabel: string = STASH_CAN_POSTAGE_LABEL;
+
+export const iceCupPostageLabel: string = ICE_CUP_POSTAGE_LABEL;
+
+export const nextDayPostageLabel: string = NEXT_DAY_POSTAGE_LABEL;
+
+export const nextDayNote: string = NEXT_DAY_NOTE;
+
+export type ShippingMethod = "standard" | "nextday";
 
 /** Postage shown for a Cali Pack order of 200 packs or fewer. */
 export const CALI_PACK_POSTAGE_UP_TO_GBP = CALI_PACK_POSTAGE_UP_TO_PENCE / 100;
@@ -60,12 +72,28 @@ function isStashCanPackLine(product: { id?: string; tags?: string[] }) {
   return String(product.id || "").startsWith("shop-can-") || (product.tags || []).includes("stash-can-pack");
 }
 
-export function quoteForCart(items: CartItem[]): DeliveryQuote {
+function isIceCupLine(product: { id?: string; tags?: string[] }) {
+  return String(product.id || "").startsWith("shop-cup-") || (product.tags || []).includes("ice-cup");
+}
+
+/** Next working day is only for a basket made entirely of bag packs. */
+export function bagsOnlyBasket(items: CartItem[]): boolean {
+  return items.length > 0 && items.every((item) => isCaliPackLine(item.product));
+}
+
+export function quoteForCart(items: CartItem[], method: ShippingMethod = "standard"): DeliveryQuote {
+  if (method === "nextday") {
+    if (!bagsOnlyBasket(items)) return { pricePence: 0, price: 0 };
+    const packs = items.reduce((sum, item) => sum + item.quantity, 0);
+    const pricePence = nextDayPostagePence(packs);
+    return { pricePence, price: pricePence / 100 };
+  }
   const pricePence = quotePostagePence(
     items.map((i) => ({
       quantity: i.quantity,
       caliPack: isCaliPackLine(i.product),
       stashCan: isStashCanPackLine(i.product),
+      iceCup: isIceCupLine(i.product),
       postagePence: i.product.postage == null ? undefined : Math.round(i.product.postage * 100),
     }))
   );

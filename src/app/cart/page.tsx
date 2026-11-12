@@ -7,7 +7,7 @@ import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/lib/utils";
 import { bulkSavingGbp, lineTotalGbp, packOfferText, productImageClass, productUnit, unitPriceGbp } from "@/lib/product";
 import { PayNowButton } from "@/components/payments/PayNowButton";
-import { DELIVERY_LABEL, DELIVERY_NOTE, quoteForCart } from "@/lib/shipping";
+import { DELIVERY_LABEL, DELIVERY_NOTE, bagsOnlyBasket, nextDayNote, quoteForCart } from "@/lib/shipping";
 
 export default function CartPage() {
   const { items, subtotal, updateQuantity, removeItem, clearCart, ready } = useCart();
@@ -168,6 +168,11 @@ export default function CartPage() {
               <p className="text-xs font-bold text-brand-700 bg-brand-50 rounded-lg p-2 mt-3">
                 {DELIVERY_NOTE}
               </p>
+              {bagsOnlyBasket(items) ? (
+                <p className="mt-2 text-xs font-semibold text-graphite/70">
+                  {nextDayNote} Choose it at checkout for bag-only orders.
+                </p>
+              ) : null}
               <div className="border-t border-surface-200 pt-3 flex justify-between text-sm">
                 <span className="font-semibold">Total</span>
                 <span className="font-bold text-lg">{formatPrice(total)}</span>

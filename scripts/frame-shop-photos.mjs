@@ -14,11 +14,6 @@ fs.mkdirSync(outShop, { recursive: true });
 /** crop is [left, top, width, height] as fractions of the EXIF-oriented photo */
 const jobs = [
   {
-    src: "WhatsApp Image 2026-07-14 at 6.45.27 PM (5).jpeg",
-    dest: path.join(outShop, "candy-stash-cans.webp"),
-    crop: [0.04, 0.20, 0.92, 0.38],
-  },
-  {
     src: "WhatsApp Image 2026-07-09 at 7.46.31 PM (1).jpeg",
     dest: path.join(outShop, "vacuum-sealer-rolls.webp"),
     crop: [0.18, 0.08, 0.80, 0.84],

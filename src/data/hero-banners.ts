@@ -1,3 +1,5 @@
+import { CALI_PACK_COUNT } from "@/data/products";
+
 export interface HeroBanner {
   id: string;
   image: string;
@@ -14,9 +16,9 @@ export const heroBanners: HeroBanner[] = [
   {
     id: "hero-wall",
     image: "/hero-cali-packs.jpg",
-    imageAlt: "Cali Packs wholesale wall — 111 HD designs",
+    imageAlt: `Cali Packs wholesale wall — ${CALI_PACK_COUNT} HD designs`,
     mood: "pink",
-    headline: "111 Cali Packs. Studio HD.",
+    headline: `${CALI_PACK_COUNT} Cali Packs. Studio HD.`,
     subline:
       "£0.22 each · minimum 25 pcs · 50+ for £0.20 each. Smell-proof 3.5g designs photographed for the web.",
     ctaLabel: "Shop Cali Packs",
@@ -43,7 +45,7 @@ export const heroBanners: HeroBanner[] = [
     headline: "Wholesale Ready. £0.22 a Pack.",
     subline:
       "Every design is named, priced and photographed in HD. Minimum 25 pcs, and £0.20 each from 50. We ship across the UK.",
-    ctaLabel: "View All 111 Packs",
+    ctaLabel: `View All ${CALI_PACK_COUNT} Packs`,
     ctaHref: "/shop/cali-packs",
     floatingImages: [],
   },

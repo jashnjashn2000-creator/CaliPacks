@@ -35,6 +35,7 @@
 
 import {
   quotePostagePence,
+  nextDayPostagePence,
   DEFAULT_POSTAGE_PENCE,
   DELIVERY_SERVICE,
   POSTAGE_RULE,
@@ -294,7 +295,16 @@ function isCaliPackProduct(productId, product) {
 function isStashCanProduct(productId, product) {
   return (product && product.stashCan === true) || String(productId).startsWith("shop-can-");
 }
-function buildTotals(items) {
+
+function isIceCupProduct(productId, product) {
+  return (product && product.iceCup === true) || String(productId).startsWith("shop-cup-");
+}
+
+function normaliseShippingMethod(method) {
+  return method === "nextday" ? "nextday" : "standard";
+}
+
+function buildTotals(items, shippingMethod) {
   if (!Array.isArray(items) || !items.length) throw new Error("Cart is empty.");
   if (items.length > MAX_LINES) throw new Error("Too many different products in one order.");
 
@@ -313,7 +323,9 @@ function buildTotals(items) {
     const product = Object.prototype.hasOwnProperty.call(PRODUCT_CATALOG, productId)
       ? PRODUCT_CATALOG[productId]
       : null;
-    if (!product) throw new Error("One of the items in your basket is no longer available. Please refresh the page.");
+    if (!product || product.hidden === true) {
+      throw new Error("One of the items in your basket is no longer available. Please refresh the page.");
+    }
     if (!product.inStock) throw new Error(`${product.name} is currently out of stock.`);
     if (quantity > MAX_LINE_QTY) throw new Error(`Please contact us to order that many of ${product.name}.`);
     if (quantity < product.minOrder) {
@@ -321,7 +333,8 @@ function buildTotals(items) {
     }
     const caliPack = isCaliPackProduct(productId, product);
     const stashCan = isStashCanProduct(productId, product);
-    const postagePence = caliPack || stashCan
+    const iceCup = isIceCupProduct(productId, product);
+    const postagePence = caliPack || stashCan || iceCup
       ? 0
       : product.postagePence == null
         ? DEFAULT_POSTAGE_PENCE
@@ -341,17 +354,26 @@ function buildTotals(items) {
       postagePence,
       caliPack,
       stashCan,
+      iceCup,
     });
   }
 
-  const shippingPence = quotePostagePence(
-    lines.map((l) => ({
-      quantity: l.quantity,
-      postagePence: l.postagePence,
-      caliPack: l.caliPack,
-      stashCan: l.stashCan,
-    }))
-  );
+  const method = normaliseShippingMethod(shippingMethod);
+  if (method === "nextday" && lines.some((line) => !line.caliPack)) {
+    throw new Error("Next working day is only available when every item in the basket is a bag.");
+  }
+  const packQty = lines.reduce((sum, line) => sum + (line.caliPack ? line.quantity : 0), 0);
+  const shippingPence = method === "nextday"
+    ? nextDayPostagePence(packQty)
+    : quotePostagePence(
+        lines.map((l) => ({
+          quantity: l.quantity,
+          postagePence: l.postagePence,
+          caliPack: l.caliPack,
+          stashCan: l.stashCan,
+          iceCup: l.iceCup,
+        }))
+      );
   const totalPence = subtotalPence + shippingPence;
   if (totalPence > MAX_ORDER_PENCE) {
     throw new Error("This order is too large for online checkout. Please contact us on WhatsApp.");
@@ -360,7 +382,12 @@ function buildTotals(items) {
     lines,
     subtotalPence,
     shippingPence,
-    shippingBand: shippingPence > 0 ? "Highest item postage" : "Free UK delivery",
+    shippingMethod: method,
+    shippingBand: method === "nextday"
+      ? "Next working day (usually)"
+      : shippingPence > 0
+        ? "Highest item postage"
+        : "Free UK delivery",
     totalPence,
   };
 }
@@ -601,6 +628,19 @@ function buildCustomerConfirmation(env, { order, paidPence }) {
     }
   }
   const postage = Number(o.shippingPence) > 0 ? money(o.shippingPence) : "£0.00";
+  const nextDay = /next working day/i.test(String(o.shippingBand || ""));
+  const deliveryCopy = nextDay
+    ? [
+        "Delivery",
+        "You chose next working day (usually).",
+        "Order cut-off is 10am, Monday to Friday.",
+        "This is not a guaranteed next-day service.",
+        `We send by ${DELIVERY_SERVICE}.`,
+      ]
+    : [
+        "Delivery",
+        `We send in-stock orders by ${DELIVERY_SERVICE}. We dispatch within 2–3 business days, and delivery then usually takes 2–3 working days.`,
+      ];
 
   return {
     subject: `Your Smoke Cali order ${reference}`,
@@ -619,10 +659,10 @@ function buildCustomerConfirmation(env, { order, paidPence }) {
       "Items",
       itemLines,
       `Postage: ${postage}`,
+      o.shippingBand ? `Service: ${o.shippingBand}` : "",
       `Total: ${money(paidPence)}`,
       "",
-      "Delivery",
-      "We send in-stock orders by Evri tracked delivery. We dispatch within 2–3 business days, and delivery then usually takes 2–3 working days.",
+      ...deliveryCopy,
       "",
       "Cancellation and returns",
       "You can cancel within 14 days of delivery. The 14 days start on the day after the goods are delivered. You then have 14 days to send them back, and we refund you within 14 days of receiving them (or of proof of postage, if earlier).",
@@ -705,7 +745,7 @@ async function createVivaCheckout(env, body) {
 
   let totals;
   try {
-    totals = buildTotals(body.items);
+    totals = buildTotals(body.items, body.shippingMethod);
   } catch (err) {
     return { status: 400, data: { status: "error", message: err.message } };
   }

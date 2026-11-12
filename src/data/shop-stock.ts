@@ -1,11 +1,22 @@
 import { Product } from "@/types";
 
+/** Turn a sentence into short bullets. Prices like £3.99 are left in one line. */
+function bullets(text: string): string {
+  if (text.includes("\n")) return text.trim();
+  return text
+    .split(/(?<!\d)\.\s+/)
+    .map((part) => part.trim().replace(/\.$/, ""))
+    .filter(Boolean)
+    .join("\n");
+}
+
 function shopItem(
   partial: Omit<Product, "inStock" | "isNew" | "images"> & { isFeatured?: boolean; images?: string[] }
 ): Product {
   const { images, ...rest } = partial;
   return {
     ...rest,
+    description: bullets(partial.description),
     images: images?.length ? images : [partial.image],
     inStock: true,
     isNew: true,
@@ -63,6 +74,8 @@ function bluFlame(key: string, title: string, detail: string): Product {
     tags: ["lighters", "blu-flame", "box", "shop-stock"],
     minOrder: 1,
     sku: `SC-LGT-${key.toUpperCase()}`,
+    // Lighters cannot be posted. hidden keeps the listing in the repo. See README.
+    hidden: true,
   });
 }
 
@@ -122,9 +135,17 @@ function stashCanPack(
     id: `shop-can-${slug}`,
     name: `${name} Stash Can – Pack of 10`,
     slug: `${slug}-stash-can`,
-    description:
-      `${name} plastic stash can, sold as a pack of 10. Each can holds 3.5 g. 75p per can, so the pack is £7.50. The minimum you can buy is 10 cans (one pack). Opens by twisting the top: the silver lid and the coloured cap attached to it twist open together. A novelty can for hidden storage. UK postage is £2.99, or £3.99 if you order 5 or more packs.`,
-    shortDescription: `${name} stash can — pack of 10, 75p per can (£7.50). Holds 3.5 g. Opens by twisting the top. Minimum 10 cans.`,
+    description: [
+      `${name} can`,
+      "Plastic can",
+      "Holds 3.5g",
+      "Pack of 10",
+      "75p per can (£7.50 a pack)",
+      "Minimum 10 cans (1 pack)",
+      "Twist the top to open",
+      "Postage £2.99, or £3.99 for 5 or more packs",
+    ].join("\n"),
+    shortDescription: `${name} can — pack of 10, 75p per can (£7.50). Holds 3.5g. Minimum 10 cans.`,
     price: STASH_CAN_PACK_PRICE,
     postage: STASH_CAN_PACK_POSTAGE,
     categoryId: "stash-cans",
@@ -151,26 +172,57 @@ const stashCanPackProducts: Product[] = [
   stashCanPack("lemonhead", "Lemonhead", "SC-CAN-LEMONHEAD"),
 ];
 
+const ICE_CUP_LINES = [
+  "Ice cream cup can",
+  "Holds 3.5g",
+  "85p each",
+  "Minimum order 20 of this design",
+  "Quantity goes up by 1",
+  "Postage £2.99 up to 40 cups in the order, £3.50 above 40",
+];
+
+function iceCup(slug: string, name: string, sku: string): Product {
+  const image = `/shop/cup-${slug}.webp`;
+  return shopItem({
+    id: `shop-cup-${slug}`,
+    name,
+    slug: `${slug}-can`,
+    description: ICE_CUP_LINES.join("\n"),
+    shortDescription: `${name} — 85p each, minimum 20 of this design. Holds 3.5g.`,
+    price: 0.85,
+    postage: 2.99,
+    categoryId: "stash-cans",
+    categorySlug: "stash-cans",
+    image,
+    tags: ["stash-cans", "ice-cup", "shop-stock", "novelty"],
+    isFeatured: false,
+    minOrder: 20,
+    sku,
+  });
+}
+
+const iceCupProducts: Product[] = [
+  iceCup("kool-aid-sharkleberry-fin", "Kool-Aid Sharkleberry Fin Can", "SC-CUP-KOOLAID"),
+  iceCup("candy-chups", "Candy Chups Can", "SC-CUP-CANDYCHUPS"),
+  iceCup("gelato-runtz", "Gelato Runtz Can", "SC-CUP-GELATORUNTZ"),
+  iceCup("hi-cheu-strawberry", "Hi-Cheu Strawberry Can", "SC-CUP-HICHEU"),
+  iceCup("canada-za-lemon-cherry-ginger-ale", "Canada Za Lemon Cherry Ginger Ale Can", "SC-CUP-CANADAZA"),
+  iceCup("whoppers", "Whoppers Can", "SC-CUP-WHOPPERS"),
+  iceCup("zabubu-macaroonz", "Zabubu Macaroonz Can", "SC-CUP-ZABUBU"),
+  iceCup("fanta-bomb-pop-watermelon", "Fanta Bomb Pop Watermelon Can", "SC-CUP-FANTA"),
+  iceCup("strawberry-nerdz", "Strawberry Nerdz Can", "SC-CUP-NERDZ"),
+  iceCup("jolly-rancher-tropical", "Jolly Rancher Tropical Can", "SC-CUP-JOLLY"),
+  iceCup("bubblicious-pink-lemonade", "Bubblicious Pink Lemonade Can", "SC-CUP-PINKLEM"),
+  iceCup("hersheys-milk-chocolate", "Hershey's Milk Chocolate Can", "SC-CUP-HERSHEY"),
+  iceCup("trop-cherry", "Trop Cherry Can", "SC-CUP-TROPCHERRY"),
+  iceCup("ice-cream-cake", "Ice Cream Cake Can", "SC-CUP-ICECREAM"),
+  iceCup("reeses-peanut-butter-cups", "Reese's Peanut Butter Cups Can", "SC-CUP-REESES"),
+];
+
 /** In-store Smoke Cali stock from shop-floor photos. UK-competitive retail. */
 export const shopStockProducts: Product[] = [
   ...stashCanPackProducts,
-  shopItem({
-    id: "shop-stash-cans",
-    name: "Candy Stash Cans",
-    slug: "candy-stash-cans",
-    description:
-      "Novelty candy-tin diversion cans from the Manchester shop. Hidden stash compartment, supermarket-style labels, sold individually. A popular counter item at UK smoke shops.",
-    shortDescription: "Novelty candy-tin stash cans — hidden compartment, sold each.",
-    price: 5.99,
-    originalPrice: 7.99,
-    categoryId: "stash-cans",
-    categorySlug: "stash-cans",
-    image: "/shop/candy-stash-cans.webp",
-    tags: ["stash-cans", "shop-stock", "accessories"],
-    isFeatured: true,
-    minOrder: 1,
-    sku: "SC-STASH-01",
-  }),
+  ...iceCupProducts,
   shopItem({
     id: "shop-vacuum-rolls",
     name: "Black Vacuum Sealer Rolls",
@@ -471,6 +523,7 @@ export const shopStockProducts: Product[] = [
     isFeatured: true,
     minOrder: 1,
     sku: "SC-LGT-CLIP",
+    hidden: true,
   }),
   shopItem({
     id: "shop-character-ashtray",
@@ -767,6 +820,7 @@ export const shopStockProducts: Product[] = [
     tags: ["lighters", "disposable", "box", "shop-stock"],
     minOrder: 1,
     sku: "SC-LGT-4SMOKE",
+    hidden: true,
   }),
   bluFlame(
     "skulls",

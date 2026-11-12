@@ -7,7 +7,7 @@ export const mainNav: NavItem[] = [
     children: [
       { label: "All Products", href: "/shop", description: "Cali Packs and shop stock" },
       { label: "Cali Packs", href: "/shop/cali-packs", description: "£0.22 each · postage £2.99 up to 200" },
-      { label: "Stash Cans", href: "/shop/stash-cans", description: "Packs of 10 £7.50" },
+      { label: "Stash Cans", href: "/shop/stash-cans", description: "Packs of 10 £7.50 · cups 85p" },
       { label: "Grinders", href: "/shop/grinders", description: "From £6.99" },
       { label: "Lighters", href: "/shop/lighters", description: "Clippers and boxes of 50" },
       { label: "Scales", href: "/shop/scales", description: "From £12.99" },

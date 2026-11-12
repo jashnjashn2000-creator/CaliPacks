@@ -15,7 +15,7 @@ export const faqs: Faq[] = [
   {
     group: "Ordering",
     q: "How much are Cali Packs at Smoke Cali?",
-    a: "Every Cali Pack design is £0.22 each, with a minimum order of 25 pcs. Buy 50 or more of the same design and the price drops to £0.20 each. Postage is £2.99 up to 200 packs, and £3.50 over 200 packs. Choose from 111 HD designs and pay by card through Viva.com, or order on WhatsApp.",
+    a: "Every Cali Pack design is £0.22 each, with a minimum order of 25 pcs. Buy 50 or more of the same design and the price drops to £0.20 each. Postage is £2.99 up to 200 packs, and £3.50 over 200 packs. Bag-only orders can choose next working day (usually) at checkout. Pay by card through Viva.com, or order on WhatsApp.",
   },
   {
     group: "Ordering",
@@ -35,7 +35,7 @@ export const faqs: Faq[] = [
   {
     group: "Delivery & returns",
     q: "How much is UK delivery?",
-    a: "Cali Packs are postage £2.99 up to 200 packs, and £3.50 over 200 packs, counted across every Cali Pack in the order. Stash can packs of 10 are postage £2.99, or £3.99 if you order 5 or more packs. Other products show their own UK postage, or free UK delivery. We send by Evri tracked delivery. If you order several items you pay the highest postage once — postage is not added together. If every item includes free delivery, postage is £0. Orders are dispatched within 2–3 business days and usually arrive in 2–3 working days.",
+    a: "Cali Packs are postage £2.99 up to 200 packs, and £3.50 over 200 packs. Stash can packs of 10 are £2.99, or £3.99 for 5 or more packs. Ice cream cup cans are £2.99 up to 40 cups, and £3.50 above 40. Bag-only orders can choose next working day (usually): £4.99 up to 200 bags, £5.99 over 200. Order by 10am, Monday to Friday. It is not guaranteed, and it is not offered if the basket includes other products. If you order several items you pay the highest postage once. Standard dispatch is 2–3 business days, then usually 2–3 working days.",
   },
   {
     group: "Delivery & returns",

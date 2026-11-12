@@ -1,4 +1,5 @@
 import { Category } from "@/types";
+import { CALI_PACK_COUNT, products } from "@/data/products";
 
 export const categories: Category[] = [
   {
@@ -7,19 +8,19 @@ export const categories: Category[] = [
     slug: "cali-packs",
     tagline: "£0.22 each · Min 25 · Postage from £2.99",
     description:
-      "111 HD-photographed Cali Packs. £0.22 each, minimum order 25 pcs. Buy 50 or more of the same design for £0.20 each. Postage £2.99 up to 200 packs, £3.50 over 200 packs. Smell-proof 3.5g designs, dispatched within 2–3 business days by Evri tracked delivery.",
+      `${CALI_PACK_COUNT} HD-photographed Cali Packs. £0.22 each, minimum order 25 pcs. Buy 50 or more of the same design for £0.20 each. Postage £2.99 up to 200 packs, £3.50 over 200 packs. Bag-only orders can choose next working day (usually) at checkout. 3.5g designs, dispatched within 2–3 business days by Evri tracked delivery.`,
     image: "/products/pack-001.webp",
-    productCount: 111,
+    productCount: CALI_PACK_COUNT,
   },
   {
     id: "stash-cans",
     name: "Stash Cans",
     slug: "stash-cans",
-    tagline: "Packs of 10 £7.50 · Tins from £5.99",
+    tagline: "Packs of 10 £7.50 · Cups 85p",
     description:
-      "Plastic stash cans in ten designs, sold as packs of 10. Each can holds 3.5 g, 75p per can (£7.50 a pack), minimum 10 cans. Postage £2.99, or £3.99 for 5 or more packs. Also candy-tin stash cans from the Manchester shop, sold each from £5.99.",
+      "Plastic stash cans in ten designs, sold as packs of 10. Each can holds 3.5g, 75p per can (£7.50 a pack), minimum 10 cans. Postage £2.99, or £3.99 for 5 or more packs. Ice cream cup cans are 85p each, minimum 20 of each design. Cup postage is £2.99 up to 40 cups, and £3.50 above 40.",
     image: "/shop/can-cherry-pie-gelato.webp",
-    productCount: 11,
+    productCount: 25,
   },
   {
     id: "grinders",
@@ -121,8 +122,14 @@ export function getCategoryBySlug(slug: string): Category | undefined {
 }
 
 /** Categories shown as top-level shop filters. Subcategories stay under their parent. */
+export function categoryProductCount(slug: string): number {
+  const children = categories.filter((category) => category.parentSlug === slug);
+  const slugs = new Set(children.length ? children.map((category) => category.slug) : [slug]);
+  return products.filter((product) => slugs.has(product.categorySlug)).length;
+}
+
 export function topLevelCategories(): Category[] {
-  return categories.filter((category) => !category.parentSlug);
+  return categories.filter((category) => !category.parentSlug && categoryProductCount(category.slug) > 0);
 }
 
 export function childCategories(parentSlug: string): Category[] {

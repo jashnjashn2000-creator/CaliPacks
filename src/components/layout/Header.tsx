@@ -4,10 +4,18 @@ import Link from "next/link";
 import { useState } from "react";
 import { Search, ShoppingBag, User, Menu, X, ChevronDown } from "lucide-react";
 import { mainNav } from "@/data/navigation";
+import { categoryProductCount } from "@/data/categories";
 import { useCart } from "@/context/CartContext";
 import { Logo } from "@/components/layout/Logo";
 import { PayNowButton } from "@/components/payments/PayNowButton";
 import { cn } from "@/lib/utils";
+
+/** Drop shop links whose category has no visible products (for example hidden lighters). */
+function showNavChild(child: { href: string }) {
+  const match = child.href.match(/^\/shop\/([^/?#]+)/);
+  if (!match) return true;
+  return categoryProductCount(match[1]) > 0;
+}
 
 export function Header() {
   const { itemCount } = useCart();
@@ -67,7 +75,7 @@ export function Header() {
                   {shopOpen && (
                     <div className="absolute top-full left-0 pt-3 w-72">
                       <div className="max-h-[min(70vh,640px)] overflow-y-auto bg-graphite rounded-xl shadow-2xl border border-white/10 p-2">
-                        {item.children.map((child) => (
+                        {item.children.filter(showNavChild).map((child) => (
                           <Link
                             key={child.href}
                             href={child.href}
@@ -164,7 +172,7 @@ export function Header() {
                   <p className="px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-gold">
                     {item.label}
                   </p>
-                  {item.children.map((child) => (
+                  {item.children.filter(showNavChild).map((child) => (
                     <Link
                       key={child.href}
                       href={child.href}

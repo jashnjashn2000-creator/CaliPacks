@@ -11,7 +11,7 @@ import { QuickAnswers } from "@/components/home/QuickAnswers";
 import { StorefrontShowcase } from "@/components/home/StorefrontShowcase";
 import { TrustBadges } from "@/components/layout/AnnouncementBar";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { getHomepageSections } from "@/data/products";
+import { CALI_PACK_COUNT, getHomepageSections } from "@/data/products";
 import { pageUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -76,7 +76,7 @@ export default function HomePage() {
       />
       <CategorySection
         title="More Designs"
-        subtitle="111 named Cali Packs in the shop — every image is a clear HD studio shot."
+        subtitle={`${CALI_PACK_COUNT} named Cali Packs in the shop — every image is a clear HD studio shot.`}
         products={more}
         viewAllHref="/shop/cali-packs"
         eagerCount={0}

@@ -59,6 +59,23 @@ src/
 | `/contact` | Contact form |
 | `/faq` | FAQ accordion |
 
+## Hiding a product
+
+Set `hidden: true` on the product in `src/data/products.ts`, `src/data/new-bags.ts` or `src/data/shop-stock.ts`.
+
+- The product, its text and its photos stay in the repo.
+- It drops off the shop, search, home page, sitemap and structured data.
+- Its page address returns a 404.
+- The checkout worker refuses payment for it.
+- To sell it again, delete `hidden: true` (or set it to `false`).
+- Then run `npm run build`, and redeploy the worker:
+
+```bash
+cd cloudflare/checkout-worker && npx wrangler deploy
+```
+
+Lighters are hidden because they cannot be posted. Do not delete them.
+
 ## License
 
 Private — All rights reserved.

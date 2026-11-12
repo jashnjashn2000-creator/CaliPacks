@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Product } from "@/types";
+import { CALI_PACK_COUNT } from "@/data/products";
 
 export function CategoryShowcase({ products }: { products: Product[] }) {
   return (
@@ -25,7 +26,7 @@ export function CategoryShowcase({ products }: { products: Product[] }) {
               href="/shop/cali-packs"
               className="btn-glow inline-flex w-fit items-center gap-2 rounded-full bg-gold px-6 py-3 text-sm font-bold text-ink hover:bg-brand-400"
             >
-              Shop all 111 packs
+              Shop all {CALI_PACK_COUNT} packs
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
