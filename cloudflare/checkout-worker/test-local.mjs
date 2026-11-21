@@ -322,24 +322,41 @@ assert.equal(PRODUCT_CATALOG["shop-clipper-lighters"].hidden, true);
 assert.throws(() => buildTotals([{ productId: "shop-lgt-skulls", quantity: 1 }]), /no longer available/);
 assert.throws(() => buildTotals([{ productId: "shop-clipper-lighters", quantity: 1 }]), /no longer available/);
 
-const cups20 = buildTotals([{ productId: "shop-cup-whoppers", quantity: 20 }]);
-assert.equal(cups20.subtotalPence, 1700);
-assert.equal(cups20.shippingPence, 299);
-assert.throws(() => buildTotals([{ productId: "shop-cup-whoppers", quantity: 19 }]), /minimum order is 20/);
+const oneCupPack = buildTotals([{ productId: "shop-cup-whoppers", quantity: 1 }]);
+assert.equal(oneCupPack.subtotalPence, 850);
+assert.equal(oneCupPack.shippingPence, 299);
 const cups40 = buildTotals([
-  { productId: "shop-cup-whoppers", quantity: 20 },
-  { productId: "shop-cup-trop-cherry", quantity: 20 },
+  { productId: "shop-cup-whoppers", quantity: 2 },
+  { productId: "shop-cup-trop-cherry", quantity: 2 },
 ]);
 assert.equal(cups40.shippingPence, 299);
-const cups41 = buildTotals([
-  { productId: "shop-cup-whoppers", quantity: 21 },
-  { productId: "shop-cup-trop-cherry", quantity: 20 },
+const cups50 = buildTotals([
+  { productId: "shop-cup-whoppers", quantity: 3 },
+  { productId: "shop-cup-trop-cherry", quantity: 2 },
 ]);
-assert.equal(cups41.shippingPence, 350);
+assert.equal(cups50.shippingPence, 350);
 assert.equal(PRODUCT_CATALOG["shop-cup-whoppers"].iceCup, true);
-assert.equal(PRODUCT_CATALOG["shop-cup-whoppers"].pricePence, 85);
+assert.equal(PRODUCT_CATALOG["shop-cup-whoppers"].pricePence, 850);
+assert.equal(PRODUCT_CATALOG["shop-cup-whoppers"].minOrder, 1);
 assert.equal(iceCupPostagePence(40), 299);
 assert.equal(iceCupPostagePence(41), 350);
+assert.equal(PRODUCT_CATALOG["shop-zip-25x25-clear"].pricePence, 949);
+assert.equal(PRODUCT_CATALOG["shop-zip-25x25-clear"].postagePence, 0);
+assert.equal(PRODUCT_CATALOG["shop-zip-25x25-orange"].postagePence, 0);
+assert.equal(PRODUCT_CATALOG["shop-zip-30x30-green"].pricePence, 949);
+assert.equal(PRODUCT_CATALOG["shop-zip-60x90-clear"].pricePence, 1149);
+assert.equal(PRODUCT_CATALOG["shop-zip-60x90-clear"].postagePence, 0);
+assert.equal(PRODUCT_CATALOG["shop-zip-125x125-clear"].pricePence, 1549);
+assert.equal(PRODUCT_CATALOG["shop-puff-3x3"].pricePence, 1849);
+assert.equal(PRODUCT_CATALOG["shop-puff-3x3"].postagePence, 0);
+assert.equal(PRODUCT_CATALOG["shop-puff-65x75"].pricePence, 2649);
+assert.equal(PRODUCT_CATALOG["shop-puff-12x16"].pricePence, 2449);
+const zipBox = buildTotals([{ productId: "shop-zip-25x25-purple", quantity: 1 }]);
+assert.equal(zipBox.subtotalPence, 949);
+assert.equal(zipBox.shippingPence, 0);
+const puffBox = buildTotals([{ productId: "shop-puff-85x10", quantity: 1 }]);
+assert.equal(puffBox.subtotalPence, 2149);
+assert.equal(puffBox.shippingPence, 0);
 
 assert.equal(nextDayPostagePence(25), 499);
 assert.equal(nextDayPostagePence(200), 499);

@@ -13,7 +13,8 @@
  * are in the basket:
  *   Cali Packs: £2.99 up to and including 200 packs, £3.50 when over 200.
  *   Stash can packs of 10: £2.99 for 1 to 4 packs, £3.99 for 5 or more packs.
- *   Ice cream cup cans: £2.99 up to and including 40 cups, £3.50 above 40.
+ *   Ice cream cup cans: sold as packs of 10. Postage counts the cups
+ *   (10 per pack): £2.99 up to and including 40 cups, £3.50 above 40.
  * Those band rates are then compared with every other item's postage.
  *
  * Next working day (usually) is a separate choice, bags only.
@@ -51,6 +52,12 @@ export const STASH_CAN_POSTAGE_OVER_PENCE = 399;
 /** Customer-facing stash can pack postage line. */
 export const STASH_CAN_POSTAGE_LABEL =
   "Postage £2.99, or £3.99 for 5 or more packs";
+
+/**
+ * Ice cream cup cans are sold as packs of 10.
+ * Postage still counts the cups: one pack line is 10 cups.
+ */
+export const ICE_CUP_PACK_SIZE = 10;
 
 /** Ice cream cup cans, counted as individual cups across the order. */
 export const ICE_CUP_POSTAGE_MAX_QTY = 40;
@@ -134,8 +141,8 @@ export function nextDayPostagePence(totalBags) {
  * Basket postage in pence.
  * Lines with `caliPack: true` are counted together and charged the Cali Pack band,
  * not their stored postagePence. Lines with `stashCan: true` are counted together
- * and charged the stash can pack band. Lines with `iceCup: true` are counted
- * together and charged the ice cream cup band. The result is the highest postage, once.
+ * and charged the stash can pack band. Lines with `iceCup: true` are packs of
+ * ICE_CUP_PACK_SIZE cups; postage uses the cup total. The result is the highest postage, once.
  * @param {Array<{ postagePence?: number, quantity?: number, caliPack?: boolean, stashCan?: boolean, iceCup?: boolean }>|null|undefined} items
  * @returns {number}
  */
@@ -158,7 +165,7 @@ export function quotePostagePence(items) {
       continue;
     }
     if (item && item.iceCup) {
-      cupQty += qty;
+      cupQty += qty * ICE_CUP_PACK_SIZE;
       continue;
     }
     const pence = linePostagePence(item.postagePence);

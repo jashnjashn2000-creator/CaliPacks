@@ -7,7 +7,8 @@ export const mainNav: NavItem[] = [
     children: [
       { label: "All Products", href: "/shop", description: "Cali Packs and shop stock" },
       { label: "Cali Packs", href: "/shop/cali-packs", description: "£0.22 each · postage £2.99 up to 200" },
-      { label: "Stash Cans", href: "/shop/stash-cans", description: "Packs of 10 £7.50 · cups 85p" },
+      { label: "Stash Cans", href: "/shop/stash-cans", description: "Packs of 10 £7.50 · cup packs £8.50" },
+      { label: "Zipper Bags", href: "/shop/zipper-bags", description: "Grip seal boxes · free UK delivery" },
       { label: "Grinders", href: "/shop/grinders", description: "From £6.99" },
       { label: "Lighters", href: "/shop/lighters", description: "Clippers and boxes of 50" },
       { label: "Scales", href: "/shop/scales", description: "From £12.99" },
@@ -35,6 +36,8 @@ export const footerLinks = {
   shop: [
     { label: "All Products", href: "/shop" },
     { label: "Cali Packs", href: "/shop/cali-packs" },
+    { label: "Stash Cans", href: "/shop/stash-cans" },
+    { label: "Zipper Bags", href: "/shop/zipper-bags" },
     { label: "Grinders", href: "/shop/grinders" },
     { label: "Bongs", href: "/shop/bongs" },
     { label: "Hookahs", href: "/shop/hookahs" },

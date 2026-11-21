@@ -11,7 +11,7 @@ export function isStashCanPack(product: { id?: string; tags?: string[] }) {
   return String(product.id || "").startsWith("shop-can-") || (product.tags || []).includes("stash-can-pack");
 }
 
-/** Ice cream cup cans, sold each with a minimum of 20 per design. */
+/** Ice cream cup cans, sold as packs of 10. 85p per can, £8.50 a pack. */
 export function isIceCup(product: { id?: string; tags?: string[] }) {
   return String(product.id || "").startsWith("shop-cup-") || (product.tags || []).includes("ice-cup");
 }
@@ -71,7 +71,8 @@ export function packOfferText(product: { price: number; bulkPrice?: number; bulk
 }
 
 export function productUnit(product: Product) {
-  if (isCaliPack(product) || isStashCanPack(product)) return "per pack";
+  if (isCaliPack(product) || isStashCanPack(product) || isIceCup(product)) return "per pack";
+  if ((product.tags || []).includes("per-box")) return "per box";
   return "each";
 }
 
@@ -141,6 +142,7 @@ export function displayPostageLabel(product: Product): string {
 
 /** Cart line for one size/bundle. Drops the options list so the line is a single SKU. */
 export function flattenOption(product: Product, option: ProductOption): Product {
+  const images = option.images?.length ? option.images : product.images;
   return {
     ...product,
     id: option.id,
@@ -149,6 +151,8 @@ export function flattenOption(product: Product, option: ProductOption): Product 
     postage: option.postage,
     sku: option.sku,
     originalPrice: option.originalPrice,
+    image: images[0] || product.image,
+    images,
     options: undefined,
   };
 }

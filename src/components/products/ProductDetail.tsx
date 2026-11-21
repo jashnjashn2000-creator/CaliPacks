@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import Image from "next/image";
 import { Minus, Plus, ShoppingBag, Check } from "lucide-react";
 import { Product } from "@/types";
@@ -26,13 +26,20 @@ import { ProductTrustpilotBadge } from "@/components/layout/TrustpilotLink";
 
 interface ProductPurchaseProps {
   product: Product;
+  optionId?: string;
+  onOptionId?: (id: string) => void;
 }
 
 /** Price, postage, size/bundle picker and add to cart. Postage follows the selected option. */
-export function ProductPurchase({ product }: ProductPurchaseProps) {
+export function ProductPurchase({ product, optionId, onOptionId }: ProductPurchaseProps) {
   const options = product.options ?? [];
-  const [optionId, setOptionId] = useState(options[0]?.id ?? product.id);
-  const selected = options.find((o) => o.id === optionId) ?? options[0];
+  const [localOptionId, setLocalOptionId] = useState(options[0]?.id ?? product.id);
+  const currentOptionId = optionId ?? localOptionId;
+  const selectOption = (id: string) => {
+    setLocalOptionId(id);
+    onOptionId?.(id);
+  };
+  const selected = options.find((o) => o.id === currentOptionId) ?? options[0];
   const selling = selected ? flattenOption(product, selected) : product;
   const postage = productPostageGbp(selling);
 
@@ -67,7 +74,9 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
 
       {options.length > 0 && (
         <div className="mb-6">
-          <p className="mb-2 text-sm font-semibold text-ink">Choose an option</p>
+          <p className="mb-2 text-sm font-semibold text-ink">
+            {(product.tags || []).includes("colour-options") ? "Choose a colour" : "Choose an option"}
+          </p>
           <div className="grid gap-2 sm:grid-cols-2">
             {options.map((option) => {
               const active = option.id === selling.id;
@@ -75,7 +84,7 @@ export function ProductPurchase({ product }: ProductPurchaseProps) {
                 <button
                   key={option.id}
                   type="button"
-                  onClick={() => setOptionId(option.id)}
+                  onClick={() => selectOption(option.id)}
                   aria-pressed={active}
                   className={`rounded-xl border px-3 py-3 text-left transition-colors ${
                     active ? "border-ink bg-brand-50" : "border-surface-200 bg-white hover:border-ink/30"
@@ -148,10 +157,8 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
           </button>
         </div>
         <p className="text-sm text-surface-800/60">
-          {isStashCanPack(product) ? (
+          {isStashCanPack(product) || isIceCup(product) ? (
             <span className="mr-3 font-bold text-brand-700">Minimum 10 cans (1 pack)</span>
-          ) : isIceCup(product) ? (
-            <span className="mr-3 font-bold text-brand-700">Minimum 20 of this design</span>
           ) : min > 1 ? (
             <span className="mr-3 font-bold text-brand-700">Min. {min} pcs</span>
           ) : null}
@@ -184,6 +191,46 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
         <p className="text-xs font-semibold text-graphite/70">{nextDayNote}</p>
       ) : null}
       <ProductTrustpilotBadge />
+    </div>
+  );
+}
+
+interface ProductColumnsProps {
+  product: Product;
+  children: ReactNode;
+}
+
+/** Gallery follows the chosen colour or size. The title stays the product name. */
+export function ProductColumns({ product, children }: ProductColumnsProps) {
+  const options = product.options ?? [];
+  const [optionId, setOptionId] = useState(options[0]?.id ?? product.id);
+  const selected = options.find((option) => option.id === optionId) ?? options[0];
+  const galleryImages = selected?.images?.length
+    ? selected.images
+    : product.images.length
+      ? product.images
+      : [product.image];
+  const galleryProduct: Product = {
+    ...product,
+    image: galleryImages[0] || product.image,
+    images: galleryImages,
+  };
+
+  return (
+    <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
+      <ProductGallery key={galleryImages.join("|")} product={galleryProduct} />
+      <div>
+        {product.isNew && (
+          <span className="inline-block px-2.5 py-1 bg-ink text-brand-300 text-[10px] font-bold uppercase tracking-[0.18em] rounded-full mb-3">
+            New Arrival
+          </span>
+        )}
+        <h1 className="font-serif text-3xl md:text-[2.6rem] font-normal leading-tight tracking-tight mb-4 text-ink">
+          {product.name}
+        </h1>
+        <ProductPurchase product={product} optionId={optionId} onOptionId={setOptionId} />
+        {children}
+      </div>
     </div>
   );
 }
