@@ -6,7 +6,8 @@
  * packs in the order and £3.50 over 200 (see shipping-rates.js).
  * stashCan products (packs of 10) ignore stored postage: £2.99 for 1 to 4 packs,
  * £3.99 for 5 or more packs.
- * iceCup products ignore stored postage: £2.99 up to 40 cups, £3.50 above 40.
+ * iceCup products are packs of 10. Postage ignores the stored figure and counts
+ * cups (10 per pack): £2.99 up to 40 cups, £3.50 above 40.
  * hidden products stay in this file so the worker can reject them. They are not for sale.
  * Next working day is not stored here. The worker prices it from the bag count.
  * bulkPricePence replaces pricePence when the line quantity is at least bulkMinQty.
@@ -1824,122 +1825,122 @@ export const PRODUCT_CATALOG = {
   "stashCan": true
  },
  "shop-cup-kool-aid-sharkleberry-fin": {
-  "name": "Kool-Aid Sharkleberry Fin Can",
-  "pricePence": 85,
+  "name": "Kool-Aid Sharkleberry Fin Can – Pack of 10",
+  "pricePence": 850,
   "postagePence": 299,
-  "minOrder": 20,
+  "minOrder": 1,
   "inStock": true,
   "iceCup": true
  },
  "shop-cup-candy-chups": {
-  "name": "Candy Chups Can",
-  "pricePence": 85,
+  "name": "Candy Chups Can – Pack of 10",
+  "pricePence": 850,
   "postagePence": 299,
-  "minOrder": 20,
+  "minOrder": 1,
   "inStock": true,
   "iceCup": true
  },
  "shop-cup-gelato-runtz": {
-  "name": "Gelato Runtz Can",
-  "pricePence": 85,
+  "name": "Gelato Runtz Can – Pack of 10",
+  "pricePence": 850,
   "postagePence": 299,
-  "minOrder": 20,
+  "minOrder": 1,
   "inStock": true,
   "iceCup": true
  },
  "shop-cup-hi-cheu-strawberry": {
-  "name": "Hi-Cheu Strawberry Can",
-  "pricePence": 85,
+  "name": "Hi-Cheu Strawberry Can – Pack of 10",
+  "pricePence": 850,
   "postagePence": 299,
-  "minOrder": 20,
+  "minOrder": 1,
   "inStock": true,
   "iceCup": true
  },
  "shop-cup-canada-za-lemon-cherry-ginger-ale": {
-  "name": "Canada Za Lemon Cherry Ginger Ale Can",
-  "pricePence": 85,
+  "name": "Canada Za Lemon Cherry Ginger Ale Can – Pack of 10",
+  "pricePence": 850,
   "postagePence": 299,
-  "minOrder": 20,
+  "minOrder": 1,
   "inStock": true,
   "iceCup": true
  },
  "shop-cup-whoppers": {
-  "name": "Whoppers Can",
-  "pricePence": 85,
+  "name": "Whoppers Can – Pack of 10",
+  "pricePence": 850,
   "postagePence": 299,
-  "minOrder": 20,
+  "minOrder": 1,
   "inStock": true,
   "iceCup": true
  },
  "shop-cup-zabubu-macaroonz": {
-  "name": "Zabubu Macaroonz Can",
-  "pricePence": 85,
+  "name": "Zabubu Macaroonz Can – Pack of 10",
+  "pricePence": 850,
   "postagePence": 299,
-  "minOrder": 20,
+  "minOrder": 1,
   "inStock": true,
   "iceCup": true
  },
  "shop-cup-fanta-bomb-pop-watermelon": {
-  "name": "Fanta Bomb Pop Watermelon Can",
-  "pricePence": 85,
+  "name": "Fanta Bomb Pop Watermelon Can – Pack of 10",
+  "pricePence": 850,
   "postagePence": 299,
-  "minOrder": 20,
+  "minOrder": 1,
   "inStock": true,
   "iceCup": true
  },
  "shop-cup-strawberry-nerdz": {
-  "name": "Strawberry Nerdz Can",
-  "pricePence": 85,
+  "name": "Strawberry Nerdz Can – Pack of 10",
+  "pricePence": 850,
   "postagePence": 299,
-  "minOrder": 20,
+  "minOrder": 1,
   "inStock": true,
   "iceCup": true
  },
  "shop-cup-jolly-rancher-tropical": {
-  "name": "Jolly Rancher Tropical Can",
-  "pricePence": 85,
+  "name": "Jolly Rancher Tropical Can – Pack of 10",
+  "pricePence": 850,
   "postagePence": 299,
-  "minOrder": 20,
+  "minOrder": 1,
   "inStock": true,
   "iceCup": true
  },
  "shop-cup-bubblicious-pink-lemonade": {
-  "name": "Bubblicious Pink Lemonade Can",
-  "pricePence": 85,
+  "name": "Bubblicious Pink Lemonade Can – Pack of 10",
+  "pricePence": 850,
   "postagePence": 299,
-  "minOrder": 20,
+  "minOrder": 1,
   "inStock": true,
   "iceCup": true
  },
  "shop-cup-hersheys-milk-chocolate": {
-  "name": "Hershey's Milk Chocolate Can",
-  "pricePence": 85,
+  "name": "Hershey's Milk Chocolate Can – Pack of 10",
+  "pricePence": 850,
   "postagePence": 299,
-  "minOrder": 20,
+  "minOrder": 1,
   "inStock": true,
   "iceCup": true
  },
  "shop-cup-trop-cherry": {
-  "name": "Trop Cherry Can",
-  "pricePence": 85,
+  "name": "Trop Cherry Can – Pack of 10",
+  "pricePence": 850,
   "postagePence": 299,
-  "minOrder": 20,
+  "minOrder": 1,
   "inStock": true,
   "iceCup": true
  },
  "shop-cup-ice-cream-cake": {
-  "name": "Ice Cream Cake Can",
-  "pricePence": 85,
+  "name": "Ice Cream Cake Can – Pack of 10",
+  "pricePence": 850,
   "postagePence": 299,
-  "minOrder": 20,
+  "minOrder": 1,
   "inStock": true,
   "iceCup": true
  },
  "shop-cup-reeses-peanut-butter-cups": {
-  "name": "Reese's Peanut Butter Cups Can",
-  "pricePence": 85,
+  "name": "Reese's Peanut Butter Cups Can – Pack of 10",
+  "pricePence": 850,
   "postagePence": 299,
-  "minOrder": 20,
+  "minOrder": 1,
   "inStock": true,
   "iceCup": true
  },
@@ -2619,6 +2620,209 @@ export const PRODUCT_CATALOG = {
   "name": "Small Blue Crescent Rig with Pipe",
   "pricePence": 899,
   "postagePence": 399,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-25x25-clear": {
+  "name": "Grip Seal Zipper Bags 25mm x 25mm – Box of approx 1000 – Clear",
+  "pricePence": 949,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-25x25-black": {
+  "name": "Grip Seal Zipper Bags 25mm x 25mm – Box of approx 1000 – Black",
+  "pricePence": 949,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-25x25-purple": {
+  "name": "Grip Seal Zipper Bags 25mm x 25mm – Box of approx 1000 – Purple",
+  "pricePence": 949,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-25x25-red": {
+  "name": "Grip Seal Zipper Bags 25mm x 25mm – Box of approx 1000 – Red",
+  "pricePence": 949,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-25x25-orange": {
+  "name": "Grip Seal Zipper Bags 25mm x 25mm – Box of approx 1000 – Orange",
+  "pricePence": 949,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-30x30-clear": {
+  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of approx 1000 – Clear",
+  "pricePence": 949,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-30x30-black": {
+  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of approx 1000 – Black",
+  "pricePence": 949,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-30x30-orange": {
+  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of approx 1000 – Orange",
+  "pricePence": 949,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-30x30-purple": {
+  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of approx 1000 – Purple",
+  "pricePence": 949,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-30x30-red": {
+  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of approx 1000 – Red",
+  "pricePence": 949,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-30x30-blue": {
+  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of approx 1000 – Blue",
+  "pricePence": 949,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-30x30-pink": {
+  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of approx 1000 – Pink",
+  "pricePence": 949,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-30x30-green": {
+  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of approx 1000 – Green",
+  "pricePence": 949,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-60x60-clear": {
+  "name": "Grip Seal Zipper Bags 60mm x 60mm – Box of approx 1000 – Clear",
+  "pricePence": 1049,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-60x90-clear": {
+  "name": "Grip Seal Zipper Bags 60mm x 90mm – Box – Clear",
+  "pricePence": 1149,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-70x70-clear": {
+  "name": "Grip Seal Zipper Bags 70mm x 70mm – Box of approx 1000 – Clear",
+  "pricePence": 1149,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-70x105-clear": {
+  "name": "Grip Seal Zipper Bags 70mm x 105mm – Box – Clear",
+  "pricePence": 1249,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-75x75-clear": {
+  "name": "Grip Seal Zipper Bags 75mm x 75mm – Box of approx 1000 – Clear",
+  "pricePence": 1149,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-80x80-clear": {
+  "name": "Grip Seal Zipper Bags 80mm x 80mm – Box of approx 500 – Clear",
+  "pricePence": 1049,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-90x90-clear": {
+  "name": "Grip Seal Zipper Bags 90mm x 90mm – Box of approx 500 – Clear",
+  "pricePence": 1149,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-100x100-clear": {
+  "name": "Grip Seal Zipper Bags 100mm x 100mm – Box of approx 500 – Clear",
+  "pricePence": 1249,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-100x150-clear": {
+  "name": "Grip Seal Zipper Bags 100mm x 150mm – Box of approx 500 – Clear",
+  "pricePence": 1449,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-zip-125x125-clear": {
+  "name": "Grip Seal Zipper Bags 125mm x 125mm – Box – Clear",
+  "pricePence": 1549,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-puff-3x3": {
+  "name": "Puff Black Smelly Proof Bags 3\" x 3\" – 100 pcs",
+  "pricePence": 1849,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-puff-3x4": {
+  "name": "Puff Black Smelly Proof Bags 3\" x 4\" – 100 pcs",
+  "pricePence": 2049,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-puff-4x6": {
+  "name": "Puff Black Smelly Proof Bags 4\" x 6\" – 100 pcs",
+  "pricePence": 2349,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-puff-65x75": {
+  "name": "Puff Black Smelly Proof Bags Matt 6.5\" x 7.5\" – 100 pcs",
+  "pricePence": 2649,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-puff-85x10": {
+  "name": "Puff Black Smelly Proof Bags 8.5\" x 10\" – 25 pcs",
+  "pricePence": 2149,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true
+ },
+ "shop-puff-12x16": {
+  "name": "Puff Black Smelly Proof Bags 12\" x 16\" – 25 pcs",
+  "pricePence": 2449,
+  "postagePence": 0,
   "minOrder": 1,
   "inStock": true
  }

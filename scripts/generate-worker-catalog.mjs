@@ -98,7 +98,8 @@ const header = `/**
  * packs in the order and £3.50 over 200 (see shipping-rates.js).
  * stashCan products (packs of 10) ignore stored postage: £2.99 for 1 to 4 packs,
  * £3.99 for 5 or more packs.
- * iceCup products ignore stored postage: £2.99 up to 40 cups, £3.50 above 40.
+ * iceCup products are packs of 10. Postage ignores the stored figure and counts
+ * cups (10 per pack): £2.99 up to 40 cups, £3.50 above 40.
  * hidden products stay in this file so the worker can reject them. They are not for sale.
  * Next working day is not stored here. The worker prices it from the bag count.
  * bulkPricePence replaces pricePence when the line quantity is at least bulkMinQty.

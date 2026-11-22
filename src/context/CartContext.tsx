@@ -36,7 +36,8 @@ interface CartContextValue {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-const STORAGE_KEY = "calipacks-cart-v2";
+/** v3: ice cream cup cans are packs of 10, so an old per-cup quantity must not be reused. */
+const STORAGE_KEY = "calipacks-cart-v3";
 
 function minQty(product: Product, quantity: number) {
   const live = resolveSellable(product.id) ?? product;

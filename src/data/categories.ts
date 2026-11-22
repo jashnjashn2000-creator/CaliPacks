@@ -16,9 +16,9 @@ export const categories: Category[] = [
     id: "stash-cans",
     name: "Stash Cans",
     slug: "stash-cans",
-    tagline: "Packs of 10 £7.50 · Cups 85p",
+    tagline: "Packs of 10 £7.50 · Cup packs £8.50",
     description:
-      "Plastic stash cans in ten designs, sold as packs of 10. Each can holds 3.5g, 75p per can (£7.50 a pack), minimum 10 cans. Postage £2.99, or £3.99 for 5 or more packs. Ice cream cup cans are 85p each, minimum 20 of each design. Cup postage is £2.99 up to 40 cups, and £3.50 above 40.",
+      "Plastic stash cans in ten designs, sold as packs of 10. Each can holds 3.5g, 75p per can (£7.50 a pack), minimum 10 cans. Postage £2.99, or £3.99 for 5 or more packs. Ice cream cup cans are packs of 10, 85p per can (£8.50 a pack), minimum 1 pack. Cup postage is £2.99 up to 40 cups, and £3.50 above 40.",
     image: "/shop/can-cherry-pie-gelato.webp",
     productCount: 25,
   },
@@ -104,6 +104,16 @@ export const categories: Category[] = [
       "Small glass bubblers, a hand pipe and rigs sold with a mouthpiece pipe. £8.99 each, postage £3.99.",
     image: "/shop/bong-s-22-swan-rig-with-pipe.webp",
     productCount: 11,
+  },
+  {
+    id: "zipper-bags",
+    name: "Zipper Bags",
+    slug: "zipper-bags",
+    tagline: "Grip seal from £9.49 · free UK delivery",
+    description:
+      "Grip seal zipper bag boxes, from 25mm x 25mm. Clear, and other colours where listed. Puff black smell-proof zipper bags in six sizes. Free UK delivery. Minimum order 1 box.",
+    image: "/shop/zip25-clear.webp",
+    productCount: 18,
   },
   {
     id: "accessories",

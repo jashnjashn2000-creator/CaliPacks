@@ -17,7 +17,11 @@ export function AddToCartMini({ product }: { product: Product }) {
         href={`/product/${product.slug}`}
         className="mt-3 w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-semibold text-sm text-white bg-ink hover:bg-gold hover:text-ink transition-colors"
       >
-        {product.slug === "vacuum-sealer-rolls" ? "Choose size" : "Choose option"}
+        {product.slug === "vacuum-sealer-rolls"
+          ? "Choose size"
+          : (product.tags || []).includes("colour-options")
+            ? "Choose colour"
+            : "Choose option"}
       </Link>
     );
   }

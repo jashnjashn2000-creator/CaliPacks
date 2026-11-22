@@ -26,6 +26,8 @@ export interface ProductOption {
    */
   originalPrice?: number;
   sku: string;
+  /** Photos for this choice. The first one is the cart and gallery image. */
+  images?: string[];
 }
 
 export interface Product {

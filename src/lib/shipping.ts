@@ -6,6 +6,7 @@
  * Amounts live on each product (`postage` in GBP). Omit it to use £3.99. 0 = free.
  * Cali Packs use a quantity band instead (£2.99 up to 200 packs, £3.50 over 200).
  * Stash can packs of 10 use a quantity band (£2.99, or £3.99 for 5 or more packs).
+ * Ice cream cup cans are packs of 10. Postage counts the cups (10 per pack).
  */
 import type { CartItem } from "@/types";
 import { formatPrice } from "@/lib/utils";

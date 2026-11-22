@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getProductBySlug, products } from "@/data/products";
 import { getCategoryBySlug } from "@/data/categories";
-import { ProductGallery, ProductPurchase } from "@/components/products/ProductDetail";
+import { ProductColumns } from "@/components/products/ProductDetail";
 import { MatchingOffer } from "@/components/products/MatchingOffer";
 import { ShopLegacyRedirect } from "@/components/shop/ShopLegacyRedirect";
 import { ProductCard } from "@/components/products/ProductCard";
@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     ? "£0.22 each, minimum 25 pcs. Buy 50 or more for £0.20 each"
     : shown.from
       ? `from ${formatPrice(shown.amount)}`
-      : `${formatPrice(product.price)} each`;
+      : `${formatPrice(product.price)} ${productUnit(product)}`;
   const postageBit = pack
     ? `${caliPackPostageLabel}. Ordering several items, you pay the highest postage once.`
     : product.slug === "vacuum-sealer-rolls"
@@ -262,19 +262,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <span className="text-surface-800 line-clamp-1">{product.name}</span>
         </nav>
 
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
-          <ProductGallery product={product} />
-
-          <div>
-            {product.isNew && (
-              <span className="inline-block px-2.5 py-1 bg-ink text-brand-300 text-[10px] font-bold uppercase tracking-[0.18em] rounded-full mb-3">
-                New Arrival
-              </span>
-            )}
-            <h1 className="font-serif text-3xl md:text-[2.6rem] font-normal leading-tight tracking-tight mb-4 text-ink">
-              {product.name}
-            </h1>
-            <ProductPurchase product={product} />
+        <ProductColumns product={product}>
             <MatchingOffer productId={product.id} />
             <ul className="mb-8 mt-8 list-disc space-y-1 pl-5 text-sm font-medium text-graphite/80">
               {product.description
@@ -312,8 +300,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 )}
               </dl>
             </div>
-          </div>
-        </div>
+        </ProductColumns>
 
         {related.length > 0 && (
           <section className="mt-16 pt-12 border-t border-surface-200">

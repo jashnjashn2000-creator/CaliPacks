@@ -172,31 +172,33 @@ const stashCanPackProducts: Product[] = [
   stashCanPack("lemonhead", "Lemonhead", "SC-CAN-LEMONHEAD"),
 ];
 
+const ICE_CUP_PACK_PRICE = 8.5;
+
 const ICE_CUP_LINES = [
   "Ice cream cup can",
   "Holds 3.5g",
-  "85p each",
-  "Minimum order 20 of this design",
-  "Quantity goes up by 1",
-  "Postage £2.99 up to 40 cups in the order, £3.50 above 40",
+  "Pack of 10",
+  "85p per can (£8.50 a pack)",
+  "Minimum 10 cans (1 pack)",
+  "Postage £2.99 up to 40 cups, £3.50 above 40",
 ];
 
 function iceCup(slug: string, name: string, sku: string): Product {
   const image = `/shop/cup-${slug}.webp`;
   return shopItem({
     id: `shop-cup-${slug}`,
-    name,
+    name: `${name} – Pack of 10`,
     slug: `${slug}-can`,
     description: ICE_CUP_LINES.join("\n"),
-    shortDescription: `${name} — 85p each, minimum 20 of this design. Holds 3.5g.`,
-    price: 0.85,
+    shortDescription: `${name} — pack of 10, 85p per can (£8.50). Holds 3.5g. Minimum 10 cans.`,
+    price: ICE_CUP_PACK_PRICE,
     postage: 2.99,
     categoryId: "stash-cans",
     categorySlug: "stash-cans",
     image,
     tags: ["stash-cans", "ice-cup", "shop-stock", "novelty"],
     isFeatured: false,
-    minOrder: 20,
+    minOrder: 1,
     sku,
   });
 }
@@ -218,6 +220,167 @@ const iceCupProducts: Product[] = [
   iceCup("ice-cream-cake", "Ice Cream Cake Can", "SC-CUP-ICECREAM"),
   iceCup("reeses-peanut-butter-cups", "Reese's Peanut Butter Cups Can", "SC-CUP-REESES"),
 ];
+
+const ZIP_COLOURS = {
+  clear: "Clear",
+  black: "Black",
+  blue: "Blue",
+  purple: "Purple",
+  red: "Red",
+  orange: "Orange",
+  pink: "Pink",
+  green: "Green",
+} as const;
+
+type ZipColour = keyof typeof ZIP_COLOURS;
+
+const ZIP_BAG_PHOTO: Partial<Record<ZipColour, string>> = {
+  clear: "/shop/zipbag-clear.webp",
+  black: "/shop/zipbag-black.webp",
+  blue: "/shop/zipbag-blue.webp",
+};
+
+function zipBoxPhoto(sizeKey: string, colour: ZipColour) {
+  if (sizeKey === "25x25") return `/shop/zip25-${colour}.webp`;
+  if (sizeKey === "30x30") return `/shop/zip30-${colour}.webp`;
+  return `/shop/zip-${sizeKey}.webp`;
+}
+
+function zipPhotos(sizeKey: string, colour: ZipColour) {
+  const box = zipBoxPhoto(sizeKey, colour);
+  const bag = ZIP_BAG_PHOTO[colour];
+  return bag ? [box, bag] : [box];
+}
+
+const ZIP_SIZES: {
+  key: string;
+  label: string;
+  price: number;
+  /** Bag count for the description. Null means do not state one. */
+  count: string | null;
+  /** Shorter count used in the title. Null means the title says Box only. */
+  titleCount: string | null;
+  colours: ZipColour[];
+}[] = [
+  {
+    key: "25x25",
+    label: "25mm x 25mm",
+    price: 9.49,
+    count: "approx 800–1000",
+    titleCount: "approx 1000",
+    colours: ["clear", "black", "purple", "red", "orange"],
+  },
+  {
+    key: "30x30",
+    label: "30mm x 30mm",
+    price: 9.49,
+    count: "approx 800–1000",
+    titleCount: "approx 1000",
+    colours: ["clear", "black", "orange", "purple", "red", "blue", "pink", "green"],
+  },
+  { key: "60x60", label: "60mm x 60mm", price: 10.49, count: "approx 800–1000", titleCount: "approx 1000", colours: ["clear"] },
+  { key: "60x90", label: "60mm x 90mm", price: 11.49, count: null, titleCount: null, colours: ["clear"] },
+  { key: "70x70", label: "70mm x 70mm", price: 11.49, count: "approx 1000", titleCount: "approx 1000", colours: ["clear"] },
+  { key: "70x105", label: "70mm x 105mm", price: 12.49, count: null, titleCount: null, colours: ["clear"] },
+  { key: "75x75", label: "75mm x 75mm", price: 11.49, count: "approx 1000", titleCount: "approx 1000", colours: ["clear"] },
+  { key: "80x80", label: "80mm x 80mm", price: 10.49, count: "approx 500", titleCount: "approx 500", colours: ["clear"] },
+  { key: "90x90", label: "90mm x 90mm", price: 11.49, count: "approx 500", titleCount: "approx 500", colours: ["clear"] },
+  { key: "100x100", label: "100mm x 100mm", price: 12.49, count: "approx 500", titleCount: "approx 500", colours: ["clear"] },
+  { key: "100x150", label: "100mm x 150mm", price: 14.49, count: "approx 500", titleCount: "approx 500", colours: ["clear"] },
+  { key: "125x125", label: "125mm x 125mm", price: 15.49, count: null, titleCount: null, colours: ["clear"] },
+];
+
+function gripSealBags(size: (typeof ZIP_SIZES)[number]): Product {
+  const boxBit = size.titleCount ? `Box of ${size.titleCount}` : "Box";
+  const baseName = `Grip Seal Zipper Bags ${size.label} – ${boxBit}`;
+  const multi = size.colours.length > 1;
+  const clearPhotos = zipPhotos(size.key, "clear");
+  const options = multi
+    ? size.colours.map((colour) => ({
+        id: `shop-zip-${size.key}-${colour}`,
+        label: ZIP_COLOURS[colour],
+        name: `${baseName} – ${ZIP_COLOURS[colour]}`,
+        price: size.price,
+        postage: 0,
+        sku: `SC-ZIP-${size.key.toUpperCase()}-${colour.toUpperCase()}`,
+        images: zipPhotos(size.key, colour),
+      }))
+    : undefined;
+  return shopItem({
+    id: `shop-zip-${size.key}-clear`,
+    name: multi ? baseName : `${baseName} – Clear`,
+    slug: `grip-seal-zipper-bags-${size.key}`,
+    description: [
+      "Grip seal zipper bags",
+      size.label,
+      size.count ? `Box of ${size.count} bags` : "Box",
+      multi ? "Choose a colour" : "Clear",
+      "Free UK delivery",
+      "Minimum order 1 box",
+    ].join("\n"),
+    shortDescription: `${baseName} — grip seal zipper bags. Free UK delivery. Minimum 1 box.`,
+    price: size.price,
+    postage: 0,
+    categoryId: "zipper-bags",
+    categorySlug: "zipper-bags",
+    image: clearPhotos[0],
+    images: clearPhotos,
+    tags: ["zipper-bags", "grip-seal", "shop-stock", "per-box", ...(multi ? ["colour-options"] : [])],
+    minOrder: 1,
+    sku: `SC-ZIP-${size.key.toUpperCase()}-CLEAR`,
+    options,
+  });
+}
+
+const zipperBagProducts: Product[] = ZIP_SIZES.map(gripSealBags);
+
+const PUFF_SIZES: {
+  key: string;
+  label: string;
+  pcs: number;
+  price: number;
+  matt?: boolean;
+  file: string;
+}[] = [
+  { key: "3x3", label: '3" x 3"', pcs: 100, price: 18.49, file: "puff-box-3x3" },
+  { key: "3x4", label: '3" x 4"', pcs: 100, price: 20.49, file: "puff-box-3x4" },
+  { key: "4x6", label: '4" x 6"', pcs: 100, price: 23.49, file: "puff-box-4x6" },
+  { key: "65x75", label: '6.5" x 7.5"', pcs: 100, price: 26.49, matt: true, file: "puff-box-6.5x7.5" },
+  { key: "85x10", label: '8.5" x 10"', pcs: 25, price: 21.49, file: "puff-box-8.5x10" },
+  { key: "12x16", label: '12" x 16"', pcs: 25, price: 24.49, file: "puff-box-12x16" },
+];
+
+function puffBags(size: (typeof PUFF_SIZES)[number]): Product {
+  const matt = size.matt ? "Matt " : "";
+  const name = `Puff Black Smelly Proof Bags ${matt}${size.label} – ${size.pcs} pcs`;
+  const box = `/shop/${size.file}.webp`;
+  const pouch = "/shop/puff-pouch.webp";
+  return shopItem({
+    id: `shop-puff-${size.key}`,
+    name,
+    slug: `puff-black-smelly-proof-bags-${size.key}`,
+    description: [
+      "Puff black smell-proof zipper bags",
+      size.matt ? `Matt ${size.label}` : size.label,
+      `${size.pcs} pcs`,
+      "Black",
+      "Free UK delivery",
+      "Minimum order 1 box",
+    ].join("\n"),
+    shortDescription: `${name}. Free UK delivery. Minimum 1 box.`,
+    price: size.price,
+    postage: 0,
+    categoryId: "zipper-bags",
+    categorySlug: "zipper-bags",
+    image: box,
+    images: [box, pouch],
+    tags: ["zipper-bags", "puff", "smell-proof", "shop-stock", "per-box"],
+    minOrder: 1,
+    sku: `SC-PUFF-${size.key.toUpperCase()}`,
+  });
+}
+
+const puffBagProducts: Product[] = PUFF_SIZES.map(puffBags);
 
 /** In-store Smoke Cali stock from shop-floor photos. UK-competitive retail. */
 export const shopStockProducts: Product[] = [
@@ -1149,4 +1312,6 @@ export const shopStockProducts: Product[] = [
     "Small clear rig with blue and white crescents inside the chamber, a bent neck and a separate mouthpiece pipe with a blue tip. Sold each.",
     "Small blue crescent rig with a blue-tip mouthpiece pipe."
   ),
+  ...zipperBagProducts,
+  ...puffBagProducts,
 ];
