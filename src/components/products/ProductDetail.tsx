@@ -6,21 +6,19 @@ import { Minus, Plus, ShoppingBag, Check } from "lucide-react";
 import { Product } from "@/types";
 import { formatPrice } from "@/lib/utils";
 import {
-  bulkSavingGbp,
   bundleSavingLabel,
   flattenOption,
   isCaliPack,
   isIceCup,
   isStashCanPack,
-  lineTotalGbp,
   packOfferText,
   productImageClass,
   productUnit,
   savingAmountGbp,
   savingPercent,
-  unitPriceGbp,
 } from "@/lib/product";
-import { DELIVERY_NOTE, caliPackPostageLabel, iceCupPostageLabel, nextDayNote, postageLabel, productPostageGbp, stashCanPostageLabel } from "@/lib/shipping";
+import { DELIVERY_NOTE, caliPackPostageLabel, iceCupPostageLabel, nextDayDeliveryFromLine, nextDayPostageTiers, postageLabel, productPostageGbp, standardBagPostageTiers, standardDeliveryFromLine, stashCanPostageLabel } from "@/lib/shipping";
+import { CALI_PACK_DEAL_BULLET, ZIPPER_BOX_DEAL_BULLET, isGripSealZipperBox, priceCartItems, projectAdd } from "@/lib/pricing";
 import { useCart } from "@/context/CartContext";
 import { ProductTrustpilotBadge } from "@/components/layout/TrustpilotLink";
 
@@ -68,8 +66,9 @@ export function ProductPurchase({ product, optionId, onOptionId }: ProductPurcha
       </p>
       <p className="mb-2 text-xs font-semibold text-surface-800/50">SKU {selling.sku}</p>
       {packOfferText(selling) ? (
-        <p className="mb-4 text-sm font-bold text-ink">{packOfferText(selling)}</p>
+        <p className="mb-2 text-sm font-bold text-ink">{packOfferText(selling)}</p>
       ) : null}
+      <OrderDealBullets product={selling} />
       <p className="mb-6 text-xs font-semibold leading-relaxed text-graphite/70">{DELIVERY_NOTE}</p>
 
       {options.length > 0 && (
@@ -119,7 +118,7 @@ interface AddToCartButtonProps {
 }
 
 export function AddToCartButton({ product }: AddToCartButtonProps) {
-  const { addItem } = useCart();
+  const { addItem, items } = useCart();
   const min = product.minOrder || 1;
   const [quantity, setQuantity] = useState(min);
   const [added, setAdded] = useState(false);
@@ -130,9 +129,16 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
     setTimeout(() => setAdded(false), 2000);
   };
 
-  const total = lineTotalGbp(product, quantity);
-  const saving = bulkSavingGbp(product, quantity);
-  const unit = unitPriceGbp(product, quantity);
+  const projected = priceCartItems(projectAdd(items, product, quantity));
+  const charged = projected.lines.find((line) => line.id === product.id);
+  const listPence = Math.round(product.price * 100);
+  const unitPence = charged?.unitPence ?? listPence;
+  const basePence = charged?.baseUnitPence ?? unitPence;
+  const unit = unitPence / 100;
+  const total = (unitPence * quantity) / 100;
+  const dealSaving = Math.max(0, basePence - unitPence) * quantity / 100;
+  const bulkSaving = Math.max(0, listPence - basePence) * quantity / 100;
+  const saving = dealSaving > 0 ? dealSaving : bulkSaving;
 
   return (
     <div className="space-y-4">
@@ -187,10 +193,48 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
           </>
         )}
         </button>
-      {isCaliPack(product) ? (
-        <p className="text-xs font-semibold text-graphite/70">{nextDayNote}</p>
-      ) : null}
+      {isCaliPack(product) ? <BagDeliveryDetails /> : null}
       <ProductTrustpilotBadge />
+    </div>
+  );
+}
+
+function OrderDealBullets({ product }: { product: Product }) {
+  const bullets = [
+    isCaliPack(product) ? CALI_PACK_DEAL_BULLET : "",
+    isGripSealZipperBox(product) ? ZIPPER_BOX_DEAL_BULLET : "",
+  ].filter(Boolean);
+  if (!bullets.length) return null;
+  return (
+    <ul className="mb-4 list-disc space-y-1 pl-5 text-sm font-semibold text-ink">
+      {bullets.map((bullet) => (
+        <li key={bullet}>{bullet}</li>
+      ))}
+    </ul>
+  );
+}
+
+/** Two short delivery lines, plus the tier list, under Add to basket on bag pages. */
+function BagDeliveryDetails() {
+  return (
+    <div className="text-sm font-semibold text-ink">
+      <p>{standardDeliveryFromLine}</p>
+      <p>{nextDayDeliveryFromLine}</p>
+      <details className="mt-1">
+        <summary className="cursor-pointer text-xs font-bold text-brand-800">See delivery prices</summary>
+        <p className="mt-2 text-xs font-bold text-ink">Standard</p>
+        <ul className="mt-1 list-disc space-y-0.5 pl-5 text-xs font-medium text-ink/80">
+          {standardBagPostageTiers.map((tier) => (
+            <li key={tier.label}>{tier.label}: {tier.price}</li>
+          ))}
+        </ul>
+        <p className="mt-2 text-xs font-bold text-ink">Next day</p>
+        <ul className="mt-1 list-disc space-y-0.5 pl-5 text-xs font-medium text-ink/80">
+          {nextDayPostageTiers.map((tier) => (
+            <li key={tier.label}>{tier.label}: {tier.price}</li>
+          ))}
+        </ul>
+      </details>
     </div>
   );
 }

@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { lineTotalGbp } from "@/lib/product";
+import { priceCartItems } from "@/lib/pricing";
 import { resolveSellable } from "@/lib/sellable";
 import { CartItem, Product } from "@/types";
 
@@ -130,7 +130,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return [{ ...item, product }];
   });
   const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
-  const subtotal = items.reduce((sum, i) => sum + lineTotalGbp(i.product, i.quantity), 0);
+  const subtotal = priceCartItems(items).subtotalGbp;
 
   const value: CartContextValue = {
     items,

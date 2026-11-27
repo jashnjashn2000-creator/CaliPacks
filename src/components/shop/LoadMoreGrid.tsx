@@ -6,7 +6,7 @@ import { ProductGrid } from "@/components/products/ProductGrid";
 
 const PAGE_SIZE = 24;
 
-export function LoadMoreGrid({ products }: { products: Product[] }) {
+export function LoadMoreGrid({ products, designNotice = false }: { products: Product[]; designNotice?: boolean }) {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export function LoadMoreGrid({ products }: { products: Product[] }) {
 
   return (
     <>
-      <ProductGrid products={visible} eagerCount={page === 1 ? 2 : 0} />
+      <ProductGrid products={visible} eagerCount={page === 1 ? 2 : 0} designNotice={designNotice} />
       {hasMore && (
         <div className="mt-10 text-center">
           <button

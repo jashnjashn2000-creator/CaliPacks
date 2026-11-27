@@ -40,6 +40,7 @@ import {
   DELIVERY_SERVICE,
   POSTAGE_RULE,
 } from "./shipping-rates.js";
+import { priceLinesPence } from "./order-deals.js";
 import { PRODUCT_CATALOG } from "./product-catalog.js";
 
 const DEFAULT_OWNER_EMAIL = "hello@calipacks.co.uk";
@@ -283,8 +284,10 @@ function validateAddress(addr) {
  * Builds the order total. Only `productId` and `quantity` are taken from the browser.
  * Names, prices and postage come from PRODUCT_CATALOG.
  * Basket postage is the highest single postage, charged once (not summed, not × quantity).
- * Cali Pack lines are priced as one band from the total number of packs.
- * Stash can pack-of-10 lines are priced as one band from the total number of packs.
+ * Cali Pack postage is one band from the total number of packs.
+ * Stash can pack-of-10 postage is one band from the total number of packs.
+ * More than 120 Cali Packs are £0.18 each (never dearer than the line price).
+ * 3 or more grip-seal zipper boxes are 5% off each box. Sizes can be mixed.
  * All maths is in whole pence to avoid rounding errors.
  */
 
@@ -298,6 +301,10 @@ function isStashCanProduct(productId, product) {
 
 function isIceCupProduct(productId, product) {
   return (product && product.iceCup === true) || String(productId).startsWith("shop-cup-");
+}
+
+function isZipperBoxProduct(productId, product) {
+  return (product && product.zipperBox === true) || String(productId).startsWith("shop-zip-");
 }
 
 function normaliseShippingMethod(method) {
@@ -317,8 +324,7 @@ function buildTotals(items, shippingMethod) {
   }
   if (!merged.size) throw new Error("Cart is empty.");
 
-  const lines = [];
-  let subtotalPence = 0;
+  const pending = [];
   for (const [productId, quantity] of merged) {
     const product = Object.prototype.hasOwnProperty.call(PRODUCT_CATALOG, productId)
       ? PRODUCT_CATALOG[productId]
@@ -334,29 +340,51 @@ function buildTotals(items, shippingMethod) {
     const caliPack = isCaliPackProduct(productId, product);
     const stashCan = isStashCanProduct(productId, product);
     const iceCup = isIceCupProduct(productId, product);
+    const zipperBox = isZipperBoxProduct(productId, product);
     const postagePence = caliPack || stashCan || iceCup
       ? 0
       : product.postagePence == null
         ? DEFAULT_POSTAGE_PENCE
         : product.postagePence;
-    const unitPence =
-      product.bulkPricePence != null && product.bulkMinQty != null && quantity >= product.bulkMinQty
-        ? product.bulkPricePence
-        : product.pricePence;
-    const linePence = quantity * unitPence;
-    subtotalPence += linePence;
-    lines.push({
+    pending.push({
       productId,
-      title: product.name,
+      product,
       quantity,
-      unitPence,
-      linePence,
-      postagePence,
       caliPack,
       stashCan,
       iceCup,
+      zipperBox,
+      postagePence,
     });
   }
+
+  const priced = priceLinesPence(
+    pending.map((row) => ({
+      id: row.productId,
+      quantity: row.quantity,
+      pricePence: row.product.pricePence,
+      bulkPricePence: row.product.bulkPricePence,
+      bulkMinQty: row.product.bulkMinQty,
+      caliPack: row.caliPack,
+      zipperBox: row.zipperBox,
+    }))
+  );
+  const pricedById = new Map(priced.lines.map((line) => [line.id, line]));
+  const lines = pending.map((row) => {
+    const pricedLine = pricedById.get(row.productId);
+    return {
+      productId: row.productId,
+      title: row.product.name,
+      quantity: row.quantity,
+      unitPence: pricedLine.unitPence,
+      linePence: pricedLine.linePence,
+      postagePence: row.postagePence,
+      caliPack: row.caliPack,
+      stashCan: row.stashCan,
+      iceCup: row.iceCup,
+    };
+  });
+  const subtotalPence = priced.subtotalPence;
 
   const method = normaliseShippingMethod(shippingMethod);
   if (method === "nextday" && lines.some((line) => !line.caliPack)) {

@@ -5,12 +5,13 @@ import Link from "next/link";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/lib/utils";
-import { bulkSavingGbp, lineTotalGbp, packOfferText, productImageClass, productUnit, unitPriceGbp } from "@/lib/product";
+import { bulkSavingGbp, packOfferText, productImageClass, productUnit } from "@/lib/product";
+import { priceCartItems } from "@/lib/pricing";
 import { PayNowButton } from "@/components/payments/PayNowButton";
-import { DELIVERY_LABEL, DELIVERY_NOTE, bagsOnlyBasket, nextDayNote, quoteForCart } from "@/lib/shipping";
+import { DELIVERY_LABEL, DELIVERY_NOTE, bagsOnlyBasket, nextDayDeliveryFromLine, quoteForCart } from "@/lib/shipping";
 
 export default function CartPage() {
-  const { items, subtotal, updateQuantity, removeItem, clearCart, ready } = useCart();
+  const { items, updateQuantity, removeItem, clearCart, ready } = useCart();
 
   if (!ready) {
     return (
@@ -43,9 +44,11 @@ export default function CartPage() {
     );
   }
 
+  const priced = priceCartItems(items);
+  const pricedById = new Map(priced.lines.map((line) => [line.id, line]));
   const delivery = quoteForCart(items);
   const shipping = delivery.price;
-  const total = subtotal + shipping;
+  const total = priced.subtotalGbp + shipping;
 
   return (
     <div className="py-8 md:py-12">
@@ -65,7 +68,13 @@ export default function CartPage() {
 
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-4">
-            {items.map((item) => (
+            {items.map((item) => {
+              const line = pricedById.get(item.product.id);
+              const unit = (line?.unitPence ?? Math.round(item.product.price * 100)) / 100;
+              const lineTotal = (line?.linePence ?? 0) / 100;
+              const dealSaving = (line?.dealSavingPence ?? 0) / 100;
+              const bulkSaving = bulkSavingGbp(item.product, item.quantity);
+              return (
               <div
                 key={item.product.id}
                 className="flex gap-4 p-4 bg-white rounded-xl border border-surface-200"
@@ -91,7 +100,7 @@ export default function CartPage() {
                     {item.product.name}
                   </Link>
                   <p className="text-sm text-surface-800/60 mt-1">
-                    {formatPrice(unitPriceGbp(item.product, item.quantity))} {productUnit(item.product)}
+                    {formatPrice(unit)} {productUnit(item.product)}
                     {item.product.minOrder && item.product.minOrder > 1
                       ? ` · min ${item.product.minOrder} pcs`
                       : ""}
@@ -99,9 +108,13 @@ export default function CartPage() {
                   {packOfferText(item.product) ? (
                     <p className="text-xs font-bold text-ink mt-1">{packOfferText(item.product)}</p>
                   ) : null}
-                  {bulkSavingGbp(item.product, item.quantity) > 0 ? (
+                  {dealSaving > 0 ? (
                     <p className="text-xs font-bold text-brand-700 mt-0.5">
-                      You save {formatPrice(bulkSavingGbp(item.product, item.quantity))}
+                      You save {formatPrice(dealSaving)}
+                    </p>
+                  ) : bulkSaving > 0 ? (
+                    <p className="text-xs font-bold text-brand-700 mt-0.5">
+                      You save {formatPrice(bulkSaving)}
                     </p>
                   ) : null}
                   <div className="flex items-center justify-between mt-3">
@@ -135,7 +148,7 @@ export default function CartPage() {
                     </div>
                     <div className="flex items-center gap-4">
                       <span className="font-semibold text-sm">
-                        {formatPrice(lineTotalGbp(item.product, item.quantity))}
+                        {formatPrice(lineTotal)}
                       </span>
                       <button
                         type="button"
@@ -149,7 +162,8 @@ export default function CartPage() {
                   </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="lg:col-span-1">
@@ -158,8 +172,20 @@ export default function CartPage() {
               <dl className="space-y-3 text-sm">
                 <div className="flex justify-between">
                   <dt className="text-surface-800/60">Subtotal</dt>
-                  <dd className="font-medium">{formatPrice(subtotal)}</dd>
+                  <dd className="font-medium">{formatPrice(priced.subtotalGbp)}</dd>
                 </div>
+                {priced.bagSavingGbp > 0 ? (
+                  <div className="flex justify-between text-brand-700">
+                    <dt>121+ bag deal</dt>
+                    <dd className="font-bold">You save {formatPrice(priced.bagSavingGbp)}</dd>
+                  </div>
+                ) : null}
+                {priced.zipperSavingGbp > 0 ? (
+                  <div className="flex justify-between text-brand-700">
+                    <dt>Zipper boxes, 5% off</dt>
+                    <dd className="font-bold">You save {formatPrice(priced.zipperSavingGbp)}</dd>
+                  </div>
+                ) : null}
                 <div className="flex justify-between">
                   <dt className="text-surface-800/60">{DELIVERY_LABEL}</dt>
                   <dd className="font-medium">{formatPrice(shipping)}</dd>
@@ -169,9 +195,10 @@ export default function CartPage() {
                 {DELIVERY_NOTE}
               </p>
               {bagsOnlyBasket(items) ? (
-                <p className="mt-2 text-xs font-semibold text-graphite/70">
-                  {nextDayNote} Choose it at checkout for bag-only orders.
-                </p>
+                <ul className="mt-2 list-disc space-y-0.5 pl-5 text-xs font-semibold text-graphite/70">
+                  <li>{nextDayDeliveryFromLine}</li>
+                  <li>Choose it at checkout for bag-only orders</li>
+                </ul>
               ) : null}
               <div className="border-t border-surface-200 pt-3 flex justify-between text-sm">
                 <span className="font-semibold">Total</span>

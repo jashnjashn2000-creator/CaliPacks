@@ -5,6 +5,7 @@
 import assert from "node:assert/strict";
 import worker, { buildTotals } from "./src/index.js";
 import { iceCupPostagePence, nextDayPostagePence, quotePostagePence } from "./src/shipping-rates.js";
+import { priceLinesPence } from "./src/order-deals.js";
 import { PRODUCT_CATALOG } from "./src/product-catalog.js";
 
 const env = {
@@ -261,7 +262,8 @@ assert.equal(pack100.totalPence, 2299);
 const pack200 = buildTotals([{ productId: "pack-001", quantity: 200 }]);
 assert.equal(pack200.shippingPence, 299);
 const pack201 = buildTotals([{ productId: "pack-001", quantity: 201 }]);
-assert.equal(pack201.lines[0].unitPence, 20);
+assert.equal(pack201.lines[0].unitPence, 18);
+assert.equal(pack201.subtotalPence, 201 * 18);
 assert.equal(pack201.shippingPence, 350);
 const packsAcrossDesigns = buildTotals([
   { productId: "pack-001", quantity: 100 },
@@ -340,27 +342,66 @@ assert.equal(PRODUCT_CATALOG["shop-cup-whoppers"].pricePence, 850);
 assert.equal(PRODUCT_CATALOG["shop-cup-whoppers"].minOrder, 1);
 assert.equal(iceCupPostagePence(40), 299);
 assert.equal(iceCupPostagePence(41), 350);
-assert.equal(PRODUCT_CATALOG["shop-zip-25x25-clear"].pricePence, 949);
+assert.equal(PRODUCT_CATALOG["shop-zip-25x25-clear"].pricePence, 819);
 assert.equal(PRODUCT_CATALOG["shop-zip-25x25-clear"].postagePence, 0);
+assert.equal(PRODUCT_CATALOG["shop-zip-25x25-clear"].zipperBox, true);
 assert.equal(PRODUCT_CATALOG["shop-zip-25x25-orange"].postagePence, 0);
-assert.equal(PRODUCT_CATALOG["shop-zip-30x30-green"].pricePence, 949);
-assert.equal(PRODUCT_CATALOG["shop-zip-60x90-clear"].pricePence, 1149);
+assert.equal(PRODUCT_CATALOG["shop-zip-30x30-green"].pricePence, 919);
+assert.equal(PRODUCT_CATALOG["shop-zip-60x60-clear"].pricePence, 1019);
+assert.equal(PRODUCT_CATALOG["shop-zip-60x90-clear"].pricePence, 1049);
 assert.equal(PRODUCT_CATALOG["shop-zip-60x90-clear"].postagePence, 0);
-assert.equal(PRODUCT_CATALOG["shop-zip-125x125-clear"].pricePence, 1549);
-assert.equal(PRODUCT_CATALOG["shop-puff-3x3"].pricePence, 1849);
+assert.equal(PRODUCT_CATALOG["shop-zip-70x70-clear"].pricePence, 1049);
+assert.equal(PRODUCT_CATALOG["shop-zip-70x105-clear"].pricePence, 1249);
+assert.equal(PRODUCT_CATALOG["shop-zip-75x75-clear"].pricePence, 1149);
+assert.equal(PRODUCT_CATALOG["shop-zip-80x80-clear"].pricePence, 1049);
+assert.equal(PRODUCT_CATALOG["shop-zip-90x90-clear"].pricePence, 1149);
+assert.equal(PRODUCT_CATALOG["shop-zip-100x100-clear"].pricePence, 1249);
+assert.equal(PRODUCT_CATALOG["shop-zip-100x150-clear"].pricePence, 1349);
+assert.equal(PRODUCT_CATALOG["shop-zip-125x125-clear"].pricePence, 1349);
+assert.match(PRODUCT_CATALOG["shop-zip-25x25-clear"].name, /Box of 500/);
+assert.doesNotMatch(PRODUCT_CATALOG["shop-zip-80x80-clear"].name, /1000/);
+assert.equal(PRODUCT_CATALOG["shop-puff-3x3"].pricePence, 1249);
 assert.equal(PRODUCT_CATALOG["shop-puff-3x3"].postagePence, 0);
-assert.equal(PRODUCT_CATALOG["shop-puff-65x75"].pricePence, 2649);
-assert.equal(PRODUCT_CATALOG["shop-puff-12x16"].pricePence, 2449);
+assert.equal(PRODUCT_CATALOG["shop-puff-3x3"].zipperBox, undefined);
+assert.equal(PRODUCT_CATALOG["shop-puff-3x4"].pricePence, 1449);
+assert.equal(PRODUCT_CATALOG["shop-puff-4x6"].pricePence, 1749);
+assert.equal(PRODUCT_CATALOG["shop-puff-65x75"].pricePence, 2149);
+assert.equal(PRODUCT_CATALOG["shop-puff-85x10"].pricePence, 2049);
+assert.equal(PRODUCT_CATALOG["shop-puff-12x16"].pricePence, 2349);
 const zipBox = buildTotals([{ productId: "shop-zip-25x25-purple", quantity: 1 }]);
-assert.equal(zipBox.subtotalPence, 949);
+assert.equal(zipBox.subtotalPence, 819);
 assert.equal(zipBox.shippingPence, 0);
 const puffBox = buildTotals([{ productId: "shop-puff-85x10", quantity: 1 }]);
-assert.equal(puffBox.subtotalPence, 2149);
+assert.equal(puffBox.subtotalPence, 2049);
 assert.equal(puffBox.shippingPence, 0);
+const twoZipBoxes = buildTotals([
+  { productId: "shop-zip-25x25-clear", quantity: 1 },
+  { productId: "shop-zip-30x30-green", quantity: 1 },
+]);
+assert.equal(twoZipBoxes.subtotalPence, 819 + 919);
+assert.equal(twoZipBoxes.shippingPence, 0);
+const threeZipBoxes = buildTotals([
+  { productId: "shop-zip-25x25-clear", quantity: 1 },
+  { productId: "shop-zip-30x30-green", quantity: 1 },
+  { productId: "shop-zip-60x60-clear", quantity: 1 },
+]);
+assert.equal(threeZipBoxes.lines.find((line) => line.productId === "shop-zip-25x25-clear").unitPence, 778);
+assert.equal(threeZipBoxes.lines.find((line) => line.productId === "shop-zip-30x30-green").unitPence, 873);
+assert.equal(threeZipBoxes.lines.find((line) => line.productId === "shop-zip-60x60-clear").unitPence, 968);
+assert.equal(threeZipBoxes.subtotalPence, 778 + 873 + 968);
+assert.equal(threeZipBoxes.shippingPence, 0);
+const zipAndPuff = buildTotals([
+  { productId: "shop-zip-25x25-clear", quantity: 2 },
+  { productId: "shop-puff-3x3", quantity: 1 },
+]);
+assert.equal(zipAndPuff.lines.find((line) => line.productId === "shop-zip-25x25-clear").unitPence, 819);
+assert.equal(zipAndPuff.lines.find((line) => line.productId === "shop-puff-3x3").unitPence, 1249);
 
 assert.equal(nextDayPostagePence(25), 499);
 assert.equal(nextDayPostagePence(200), 499);
 assert.equal(nextDayPostagePence(201), 599);
+assert.equal(nextDayPostagePence(600), 599);
+assert.equal(nextDayPostagePence(601), 750);
 const nextDayOrder = buildTotals([{ productId: "pack-001", quantity: 25 }], "nextday");
 assert.equal(nextDayOrder.shippingPence, 499);
 assert.equal(nextDayOrder.shippingBand, "Next working day (usually)");
@@ -541,5 +582,71 @@ r = await post("/api/checkout/create", {
   items: [{ productId: "shop-lgt-4smoke", quantity: 1 }],
 });
 assert.equal(r.status, 400);
+
+function catalogLines(items) {
+  return items.map(({ productId, quantity }) => {
+    const row = PRODUCT_CATALOG[productId];
+    assert.ok(row, productId);
+    return {
+      id: productId,
+      quantity,
+      pricePence: row.pricePence,
+      bulkPricePence: row.bulkPricePence,
+      bulkMinQty: row.bulkMinQty,
+      caliPack: row.caliPack === true,
+      zipperBox: row.zipperBox === true,
+    };
+  });
+}
+
+function assertSameSubtotal(items, shippingMethod) {
+  const totals = buildTotals(items, shippingMethod);
+  const priced = priceLinesPence(catalogLines(items));
+  assert.equal(priced.subtotalPence, totals.subtotalPence);
+  return { totals, priced };
+}
+
+const bags121 = assertSameSubtotal([{ productId: "pack-001", quantity: 121 }]);
+assert.equal(bags121.totals.lines[0].unitPence, 18);
+assert.equal(bags121.totals.subtotalPence, 121 * 18);
+assert.equal(bags121.totals.shippingPence, 299);
+assert.equal(bags121.priced.bagSavingPence, 121 * 2);
+
+const bags120 = assertSameSubtotal([{ productId: "pack-001", quantity: 120 }]);
+assert.equal(bags120.totals.lines[0].unitPence, 20);
+assert.equal(bags120.totals.subtotalPence, 120 * 20);
+assert.equal(bags120.priced.bagSavingPence, 0);
+
+const mixed121 = assertSameSubtotal([
+  { productId: "pack-001", quantity: 25 },
+  { productId: "pack-002", quantity: 96 },
+]);
+assert.equal(mixed121.totals.subtotalPence, 121 * 18);
+assert.equal(mixed121.totals.lines.every((line) => line.unitPence === 18), true);
+assert.equal(mixed121.priced.bagSavingPence, (22 - 18) * 25 + (20 - 18) * 96);
+
+const bags601 = assertSameSubtotal([{ productId: "pack-001", quantity: 601 }], "nextday");
+assert.equal(bags601.totals.lines[0].unitPence, 18);
+assert.equal(bags601.totals.subtotalPence, 601 * 18);
+assert.equal(bags601.totals.shippingPence, 750);
+assert.equal(bags601.totals.totalPence, 601 * 18 + 750);
+
+const bags600 = buildTotals([{ productId: "pack-001", quantity: 600 }], "nextday");
+assert.equal(bags600.lines[0].unitPence, 18);
+assert.equal(bags600.shippingPence, 599);
+
+const cheapBags = priceLinesPence([{ id: "cheap", quantity: 130, pricePence: 15, caliPack: true }]);
+assert.equal(cheapBags.lines[0].unitPence, 15);
+assert.equal(cheapBags.subtotalPence, 130 * 15);
+assert.equal(cheapBags.bagSavingPence, 0);
+
+const mixedZip = assertSameSubtotal([
+  { productId: "shop-zip-25x25-clear", quantity: 1 },
+  { productId: "shop-zip-30x30-green", quantity: 1 },
+  { productId: "shop-zip-60x60-clear", quantity: 1 },
+]);
+assert.equal(mixedZip.totals.subtotalPence, 2619);
+assert.equal(mixedZip.totals.shippingPence, 0);
+assert.equal(mixedZip.priced.zipperSavingPence, 819 + 919 + 1019 - 2619);
 
 console.log("All worker checks passed.");
