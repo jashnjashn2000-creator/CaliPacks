@@ -22,12 +22,17 @@ function transpile(srcPath, destName) {
   let code = fs.readFileSync(srcPath, "utf8");
   code = code.replace(/from\s+["']@\/data\/shop-stock["']/g, 'from "./shop-stock.mjs"');
   code = code.replace(/from\s+["']@\/data\/new-bags["']/g, 'from "./new-bags.mjs"');
+  code = code.replace(/from\s+["'][^"']*order-deals\.js["']/g, 'from "./order-deals.mjs"');
   const out = ts.transpileModule(code, {
     compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
   });
   fs.writeFileSync(path.join(tmp, destName), out.outputText);
 }
 
+fs.copyFileSync(
+  path.join(root, "cloudflare/checkout-worker/src/order-deals.js"),
+  path.join(tmp, "order-deals.mjs")
+);
 transpile(path.join(root, "src/data/shop-stock.ts"), "shop-stock.mjs");
 transpile(path.join(root, "src/data/new-bags.ts"), "new-bags.mjs");
 transpile(path.join(root, "src/data/products.ts"), "products.mjs");
@@ -50,7 +55,7 @@ function postagePence(value) {
 }
 
 const catalog = {};
-function addEntry(id, name, price, minOrder, inStock, postage, bulk, caliPack, stashCan, iceCup, hidden) {
+function addEntry(id, name, price, minOrder, inStock, postage, bulk, caliPack, stashCan, iceCup, zipperBox, hidden) {
   if (!id || typeof price !== "number" || price <= 0) return;
   if (catalog[id]) throw new Error(`Duplicate product id in worker catalog: ${id}`);
   const row = {
@@ -63,6 +68,7 @@ function addEntry(id, name, price, minOrder, inStock, postage, bulk, caliPack, s
   if (caliPack) row.caliPack = true;
   if (stashCan) row.stashCan = true;
   if (iceCup) row.iceCup = true;
+  if (zipperBox) row.zipperBox = true;
   if (hidden) row.hidden = true;
   if (bulk && bulk.price != null && bulk.minQty) {
     row.bulkPricePence = Math.round(Number(bulk.price) * 100);
@@ -77,16 +83,20 @@ for (const p of all) {
   const stashCan =
     String(p.id || "").startsWith("shop-can-") || (p.tags || []).includes("stash-can-pack");
   const iceCup = String(p.id || "").startsWith("shop-cup-") || (p.tags || []).includes("ice-cup");
+  const zipperBox =
+    String(p.id || "").startsWith("shop-zip-") || (p.tags || []).includes("grip-seal");
   const hidden = p.hidden === true;
   if (p.options?.length) {
     for (const opt of p.options) {
-      addEntry(opt.id, opt.name, opt.price, p.minOrder, p.inStock, opt.postage, null, false, false, false, hidden);
+      const optZip =
+        zipperBox || String(opt.id || "").startsWith("shop-zip-");
+      addEntry(opt.id, opt.name, opt.price, p.minOrder, p.inStock, opt.postage, null, false, false, false, optZip, hidden);
     }
     if (!p.options.some((opt) => opt.id === p.id)) {
-      addEntry(p.id, p.name, p.price, p.minOrder, p.inStock, p.postage, bulk, caliPack, stashCan, iceCup, hidden);
+      addEntry(p.id, p.name, p.price, p.minOrder, p.inStock, p.postage, bulk, caliPack, stashCan, iceCup, zipperBox, hidden);
     }
   } else {
-    addEntry(p.id, p.name, p.price, p.minOrder, p.inStock, p.postage, bulk, caliPack, stashCan, iceCup, hidden);
+    addEntry(p.id, p.name, p.price, p.minOrder, p.inStock, p.postage, bulk, caliPack, stashCan, iceCup, zipperBox, hidden);
   }
 }
 
@@ -101,7 +111,10 @@ const header = `/**
  * iceCup products are packs of 10. Postage ignores the stored figure and counts
  * cups (10 per pack): £2.99 up to 40 cups, £3.50 above 40.
  * hidden products stay in this file so the worker can reject them. They are not for sale.
- * Next working day is not stored here. The worker prices it from the bag count.
+ * Next working day is not stored here. The worker prices it from the bag count:
+ * £4.99 up to 200 bags, £5.99 for 201–600, £7.50 over 600.
+ * zipperBox products are grip seal boxes. 3 or more in an order are 5% off each box.
+ * More than 120 caliPack bags are £0.18 each (see order-deals.js). That price is not stored here.
  * bulkPricePence replaces pricePence when the line quantity is at least bulkMinQty.
  * Generated from src/data/products.ts + src/data/shop-stock.ts.
  */

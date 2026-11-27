@@ -1,6 +1,7 @@
 import { Product } from "@/types";
 import { newBagProducts } from "@/data/new-bags";
 import { shopStockProducts } from "@/data/shop-stock";
+import { CALI_PACK_DEAL_BULLET } from "../../cloudflare/checkout-worker/src/order-deals.js";
 
 const catalogue: Product[] = [
   {
@@ -1836,13 +1837,18 @@ const NICE_QUALITY_BAG_IDS = new Set(["pack-019", "pack-025", "pack-026", "pack-
 function withCaliPackOffer(product: Product): Product {
   if (product.categorySlug !== "cali-packs") return product;
   const priced = { ...product, price: 0.22, minOrder: 25, bulkPrice: 0.2, bulkMinQty: 50 };
-  if (product.description.includes("\n")) return priced;
+  if (product.description.includes("\n")) {
+    const lines = product.description.split("\n").map((line) => line.trim()).filter(Boolean);
+    if (!lines.includes(CALI_PACK_DEAL_BULLET)) lines.push(CALI_PACK_DEAL_BULLET);
+    return { ...priced, description: lines.join("\n") };
+  }
   const design = product.description.split(". ")[0].replace(/\.$/, "");
   const lines = [
     design,
     ...(NICE_QUALITY_BAG_IDS.has(product.id) ? ["Nice quality bag"] : []),
     "3.5g pack",
     "£0.22 each, or £0.20 each from 50 of this design",
+    CALI_PACK_DEAL_BULLET,
     "Minimum order 25",
     "Postage £2.99 up to 200 packs, £3.50 over 200",
   ];

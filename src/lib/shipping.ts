@@ -16,9 +16,13 @@ import {
   DEFAULT_POSTAGE_PENCE,
   DELIVERY_SERVICE,
   ICE_CUP_POSTAGE_LABEL,
+  NEXT_DAY_DELIVERY_FROM_LINE,
   NEXT_DAY_NOTE,
   NEXT_DAY_POSTAGE_LABEL,
+  NEXT_DAY_POSTAGE_TIERS,
   POSTAGE_RULE,
+  STANDARD_BAG_POSTAGE_TIERS,
+  STANDARD_DELIVERY_FROM_LINE,
   STASH_CAN_POSTAGE_LABEL,
   nextDayPostagePence,
   quotePostagePence,
@@ -35,6 +39,14 @@ export const iceCupPostageLabel: string = ICE_CUP_POSTAGE_LABEL;
 export const nextDayPostageLabel: string = NEXT_DAY_POSTAGE_LABEL;
 
 export const nextDayNote: string = NEXT_DAY_NOTE;
+
+export const standardDeliveryFromLine: string = STANDARD_DELIVERY_FROM_LINE;
+
+export const nextDayDeliveryFromLine: string = NEXT_DAY_DELIVERY_FROM_LINE;
+
+export const standardBagPostageTiers: { label: string; price: string }[] = STANDARD_BAG_POSTAGE_TIERS;
+
+export const nextDayPostageTiers: { label: string; price: string }[] = NEXT_DAY_POSTAGE_TIERS;
 
 export type ShippingMethod = "standard" | "nextday";
 

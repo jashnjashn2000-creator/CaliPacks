@@ -1,4 +1,5 @@
 import { Product } from "@/types";
+import { ZIPPER_BOX_DEAL_BULLET } from "../../cloudflare/checkout-worker/src/order-deals.js";
 
 /** Turn a sentence into short bullets. Prices like £3.99 are left in one line. */
 function bullets(text: string): string {
@@ -265,29 +266,29 @@ const ZIP_SIZES: {
   {
     key: "25x25",
     label: "25mm x 25mm",
-    price: 9.49,
-    count: "approx 800–1000",
-    titleCount: "approx 1000",
+    price: 8.19,
+    count: "500",
+    titleCount: "500",
     colours: ["clear", "black", "purple", "red", "orange"],
   },
   {
     key: "30x30",
     label: "30mm x 30mm",
-    price: 9.49,
-    count: "approx 800–1000",
-    titleCount: "approx 1000",
+    price: 9.19,
+    count: "500",
+    titleCount: "500",
     colours: ["clear", "black", "orange", "purple", "red", "blue", "pink", "green"],
   },
-  { key: "60x60", label: "60mm x 60mm", price: 10.49, count: "approx 800–1000", titleCount: "approx 1000", colours: ["clear"] },
-  { key: "60x90", label: "60mm x 90mm", price: 11.49, count: null, titleCount: null, colours: ["clear"] },
-  { key: "70x70", label: "70mm x 70mm", price: 11.49, count: "approx 1000", titleCount: "approx 1000", colours: ["clear"] },
-  { key: "70x105", label: "70mm x 105mm", price: 12.49, count: null, titleCount: null, colours: ["clear"] },
-  { key: "75x75", label: "75mm x 75mm", price: 11.49, count: "approx 1000", titleCount: "approx 1000", colours: ["clear"] },
-  { key: "80x80", label: "80mm x 80mm", price: 10.49, count: "approx 500", titleCount: "approx 500", colours: ["clear"] },
-  { key: "90x90", label: "90mm x 90mm", price: 11.49, count: "approx 500", titleCount: "approx 500", colours: ["clear"] },
-  { key: "100x100", label: "100mm x 100mm", price: 12.49, count: "approx 500", titleCount: "approx 500", colours: ["clear"] },
-  { key: "100x150", label: "100mm x 150mm", price: 14.49, count: "approx 500", titleCount: "approx 500", colours: ["clear"] },
-  { key: "125x125", label: "125mm x 125mm", price: 15.49, count: null, titleCount: null, colours: ["clear"] },
+  { key: "60x60", label: "60mm x 60mm", price: 10.19, count: "500", titleCount: "500", colours: ["clear"] },
+  { key: "60x90", label: "60mm x 90mm", price: 10.49, count: "500", titleCount: "500", colours: ["clear"] },
+  { key: "70x70", label: "70mm x 70mm", price: 10.49, count: "500", titleCount: "500", colours: ["clear"] },
+  { key: "70x105", label: "70mm x 105mm", price: 12.49, count: "500", titleCount: "500", colours: ["clear"] },
+  { key: "75x75", label: "75mm x 75mm", price: 11.49, count: "500", titleCount: "500", colours: ["clear"] },
+  { key: "80x80", label: "80mm x 80mm", price: 10.49, count: "500", titleCount: "500", colours: ["clear"] },
+  { key: "90x90", label: "90mm x 90mm", price: 11.49, count: "500", titleCount: "500", colours: ["clear"] },
+  { key: "100x100", label: "100mm x 100mm", price: 12.49, count: "500", titleCount: "500", colours: ["clear"] },
+  { key: "100x150", label: "100mm x 150mm", price: 13.49, count: "500", titleCount: "500", colours: ["clear"] },
+  { key: "125x125", label: "125mm x 125mm", price: 13.49, count: "500", titleCount: "500", colours: ["clear"] },
 ];
 
 function gripSealBags(size: (typeof ZIP_SIZES)[number]): Product {
@@ -313,10 +314,11 @@ function gripSealBags(size: (typeof ZIP_SIZES)[number]): Product {
     description: [
       "Grip seal zipper bags",
       size.label,
-      size.count ? `Box of ${size.count} bags` : "Box",
+      size.count ? `Box of ${size.count} pieces` : "Box",
       multi ? "Choose a colour" : "Clear",
       "Free UK delivery",
       "Minimum order 1 box",
+      ZIPPER_BOX_DEAL_BULLET,
     ].join("\n"),
     shortDescription: `${baseName} — grip seal zipper bags. Free UK delivery. Minimum 1 box.`,
     price: size.price,
@@ -342,12 +344,12 @@ const PUFF_SIZES: {
   matt?: boolean;
   file: string;
 }[] = [
-  { key: "3x3", label: '3" x 3"', pcs: 100, price: 18.49, file: "puff-box-3x3" },
-  { key: "3x4", label: '3" x 4"', pcs: 100, price: 20.49, file: "puff-box-3x4" },
-  { key: "4x6", label: '4" x 6"', pcs: 100, price: 23.49, file: "puff-box-4x6" },
-  { key: "65x75", label: '6.5" x 7.5"', pcs: 100, price: 26.49, matt: true, file: "puff-box-6.5x7.5" },
-  { key: "85x10", label: '8.5" x 10"', pcs: 25, price: 21.49, file: "puff-box-8.5x10" },
-  { key: "12x16", label: '12" x 16"', pcs: 25, price: 24.49, file: "puff-box-12x16" },
+  { key: "3x3", label: '3" x 3"', pcs: 100, price: 12.49, file: "puff-box-3x3" },
+  { key: "3x4", label: '3" x 4"', pcs: 100, price: 14.49, file: "puff-box-3x4" },
+  { key: "4x6", label: '4" x 6"', pcs: 100, price: 17.49, file: "puff-box-4x6" },
+  { key: "65x75", label: '6.5" x 7.5"', pcs: 100, price: 21.49, matt: true, file: "puff-box-6.5x7.5" },
+  { key: "85x10", label: '8.5" x 10"', pcs: 25, price: 20.49, file: "puff-box-8.5x10" },
+  { key: "12x16", label: '12" x 16"', pcs: 25, price: 23.49, file: "puff-box-12x16" },
 ];
 
 function puffBags(size: (typeof PUFF_SIZES)[number]): Product {

@@ -1,4 +1,4 @@
-import { deliveryService, DELIVERY_NOTE } from "@/lib/shipping";
+import { deliveryService, DELIVERY_NOTE, nextDayPostageTiers } from "@/lib/shipping";
 
 /** How UK postage is worked out. Amounts are shown on each product, not by weight. */
 export function DeliveryTable() {
@@ -92,7 +92,9 @@ export function DeliveryTable() {
         <h3 className="font-semibold text-surface-900 mb-2">Next working day (usually)</h3>
         <ul className="list-disc pl-5 space-y-1 text-sm">
           <li>Bag orders only.</li>
-          <li>£4.99 up to 200 bags, £5.99 over 200.</li>
+          {nextDayPostageTiers.map((tier) => (
+            <li key={tier.label}>{tier.label}: {tier.price}.</li>
+          ))}
           <li>Order by 10am, Monday to Friday.</li>
           <li>Not available if the basket includes other products.</li>
           <li>Not a guaranteed service.</li>

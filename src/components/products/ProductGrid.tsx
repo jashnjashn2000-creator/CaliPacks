@@ -1,18 +1,23 @@
+import { Fragment } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Product } from "@/types";
+import { MoreDesignsNotice } from "@/components/shop/MoreDesignsNotice";
 import { ProductCard } from "./ProductCard";
 
 interface ProductGridProps {
   products: Product[];
   eagerCount?: number;
   showCart?: boolean;
+  /** Repeat the "can't see your design?" box while customers scroll the bags. */
+  designNotice?: boolean;
 }
 
 export function ProductGrid({
   products,
   eagerCount = 0,
   showCart = true,
+  designNotice = false,
 }: ProductGridProps) {
   if (products.length === 0) {
     return (
@@ -24,13 +29,24 @@ export function ProductGrid({
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
+      {designNotice ? (
+        <div className="col-span-full">
+          <MoreDesignsNotice />
+        </div>
+      ) : null}
       {products.map((product, i) => (
-        <ProductCard
-          key={product.id}
-          product={product}
-          priority={i < eagerCount}
-          showCart={showCart}
-        />
+        <Fragment key={product.id}>
+          {designNotice && i > 0 && i % 12 === 0 ? (
+            <div className="col-span-full">
+              <MoreDesignsNotice />
+            </div>
+          ) : null}
+          <ProductCard
+            product={product}
+            priority={i < eagerCount}
+            showCart={showCart}
+          />
+        </Fragment>
       ))}
     </div>
   );

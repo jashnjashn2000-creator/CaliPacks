@@ -9,7 +9,10 @@
  * iceCup products are packs of 10. Postage ignores the stored figure and counts
  * cups (10 per pack): £2.99 up to 40 cups, £3.50 above 40.
  * hidden products stay in this file so the worker can reject them. They are not for sale.
- * Next working day is not stored here. The worker prices it from the bag count.
+ * Next working day is not stored here. The worker prices it from the bag count:
+ * £4.99 up to 200 bags, £5.99 for 201–600, £7.50 over 600.
+ * zipperBox products are grip seal boxes. 3 or more in an order are 5% off each box.
+ * More than 120 caliPack bags are £0.18 each (see order-deals.js). That price is not stored here.
  * bulkPricePence replaces pricePence when the line quantity is at least bulkMinQty.
  * Generated from src/data/products.ts + src/data/shop-stock.ts.
  */
@@ -2624,204 +2627,227 @@ export const PRODUCT_CATALOG = {
   "inStock": true
  },
  "shop-zip-25x25-clear": {
-  "name": "Grip Seal Zipper Bags 25mm x 25mm – Box of approx 1000 – Clear",
-  "pricePence": 949,
+  "name": "Grip Seal Zipper Bags 25mm x 25mm – Box of 500 – Clear",
+  "pricePence": 819,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-zip-25x25-black": {
-  "name": "Grip Seal Zipper Bags 25mm x 25mm – Box of approx 1000 – Black",
-  "pricePence": 949,
+  "name": "Grip Seal Zipper Bags 25mm x 25mm – Box of 500 – Black",
+  "pricePence": 819,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-zip-25x25-purple": {
-  "name": "Grip Seal Zipper Bags 25mm x 25mm – Box of approx 1000 – Purple",
-  "pricePence": 949,
+  "name": "Grip Seal Zipper Bags 25mm x 25mm – Box of 500 – Purple",
+  "pricePence": 819,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-zip-25x25-red": {
-  "name": "Grip Seal Zipper Bags 25mm x 25mm – Box of approx 1000 – Red",
-  "pricePence": 949,
+  "name": "Grip Seal Zipper Bags 25mm x 25mm – Box of 500 – Red",
+  "pricePence": 819,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-zip-25x25-orange": {
-  "name": "Grip Seal Zipper Bags 25mm x 25mm – Box of approx 1000 – Orange",
-  "pricePence": 949,
+  "name": "Grip Seal Zipper Bags 25mm x 25mm – Box of 500 – Orange",
+  "pricePence": 819,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-zip-30x30-clear": {
-  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of approx 1000 – Clear",
-  "pricePence": 949,
+  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of 500 – Clear",
+  "pricePence": 919,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-zip-30x30-black": {
-  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of approx 1000 – Black",
-  "pricePence": 949,
+  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of 500 – Black",
+  "pricePence": 919,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-zip-30x30-orange": {
-  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of approx 1000 – Orange",
-  "pricePence": 949,
+  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of 500 – Orange",
+  "pricePence": 919,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-zip-30x30-purple": {
-  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of approx 1000 – Purple",
-  "pricePence": 949,
+  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of 500 – Purple",
+  "pricePence": 919,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-zip-30x30-red": {
-  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of approx 1000 – Red",
-  "pricePence": 949,
+  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of 500 – Red",
+  "pricePence": 919,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-zip-30x30-blue": {
-  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of approx 1000 – Blue",
-  "pricePence": 949,
+  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of 500 – Blue",
+  "pricePence": 919,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-zip-30x30-pink": {
-  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of approx 1000 – Pink",
-  "pricePence": 949,
+  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of 500 – Pink",
+  "pricePence": 919,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-zip-30x30-green": {
-  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of approx 1000 – Green",
-  "pricePence": 949,
+  "name": "Grip Seal Zipper Bags 30mm x 30mm – Box of 500 – Green",
+  "pricePence": 919,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-zip-60x60-clear": {
-  "name": "Grip Seal Zipper Bags 60mm x 60mm – Box of approx 1000 – Clear",
-  "pricePence": 1049,
+  "name": "Grip Seal Zipper Bags 60mm x 60mm – Box of 500 – Clear",
+  "pricePence": 1019,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-zip-60x90-clear": {
-  "name": "Grip Seal Zipper Bags 60mm x 90mm – Box – Clear",
-  "pricePence": 1149,
-  "postagePence": 0,
-  "minOrder": 1,
-  "inStock": true
- },
- "shop-zip-70x70-clear": {
-  "name": "Grip Seal Zipper Bags 70mm x 70mm – Box of approx 1000 – Clear",
-  "pricePence": 1149,
-  "postagePence": 0,
-  "minOrder": 1,
-  "inStock": true
- },
- "shop-zip-70x105-clear": {
-  "name": "Grip Seal Zipper Bags 70mm x 105mm – Box – Clear",
-  "pricePence": 1249,
-  "postagePence": 0,
-  "minOrder": 1,
-  "inStock": true
- },
- "shop-zip-75x75-clear": {
-  "name": "Grip Seal Zipper Bags 75mm x 75mm – Box of approx 1000 – Clear",
-  "pricePence": 1149,
-  "postagePence": 0,
-  "minOrder": 1,
-  "inStock": true
- },
- "shop-zip-80x80-clear": {
-  "name": "Grip Seal Zipper Bags 80mm x 80mm – Box of approx 500 – Clear",
+  "name": "Grip Seal Zipper Bags 60mm x 90mm – Box of 500 – Clear",
   "pricePence": 1049,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
- "shop-zip-90x90-clear": {
-  "name": "Grip Seal Zipper Bags 90mm x 90mm – Box of approx 500 – Clear",
-  "pricePence": 1149,
+ "shop-zip-70x70-clear": {
+  "name": "Grip Seal Zipper Bags 70mm x 70mm – Box of 500 – Clear",
+  "pricePence": 1049,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
- "shop-zip-100x100-clear": {
-  "name": "Grip Seal Zipper Bags 100mm x 100mm – Box of approx 500 – Clear",
+ "shop-zip-70x105-clear": {
+  "name": "Grip Seal Zipper Bags 70mm x 105mm – Box of 500 – Clear",
   "pricePence": 1249,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
+ },
+ "shop-zip-75x75-clear": {
+  "name": "Grip Seal Zipper Bags 75mm x 75mm – Box of 500 – Clear",
+  "pricePence": 1149,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true,
+  "zipperBox": true
+ },
+ "shop-zip-80x80-clear": {
+  "name": "Grip Seal Zipper Bags 80mm x 80mm – Box of 500 – Clear",
+  "pricePence": 1049,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true,
+  "zipperBox": true
+ },
+ "shop-zip-90x90-clear": {
+  "name": "Grip Seal Zipper Bags 90mm x 90mm – Box of 500 – Clear",
+  "pricePence": 1149,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true,
+  "zipperBox": true
+ },
+ "shop-zip-100x100-clear": {
+  "name": "Grip Seal Zipper Bags 100mm x 100mm – Box of 500 – Clear",
+  "pricePence": 1249,
+  "postagePence": 0,
+  "minOrder": 1,
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-zip-100x150-clear": {
-  "name": "Grip Seal Zipper Bags 100mm x 150mm – Box of approx 500 – Clear",
-  "pricePence": 1449,
+  "name": "Grip Seal Zipper Bags 100mm x 150mm – Box of 500 – Clear",
+  "pricePence": 1349,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-zip-125x125-clear": {
-  "name": "Grip Seal Zipper Bags 125mm x 125mm – Box – Clear",
-  "pricePence": 1549,
+  "name": "Grip Seal Zipper Bags 125mm x 125mm – Box of 500 – Clear",
+  "pricePence": 1349,
   "postagePence": 0,
   "minOrder": 1,
-  "inStock": true
+  "inStock": true,
+  "zipperBox": true
  },
  "shop-puff-3x3": {
   "name": "Puff Black Smelly Proof Bags 3\" x 3\" – 100 pcs",
-  "pricePence": 1849,
+  "pricePence": 1249,
   "postagePence": 0,
   "minOrder": 1,
   "inStock": true
  },
  "shop-puff-3x4": {
   "name": "Puff Black Smelly Proof Bags 3\" x 4\" – 100 pcs",
-  "pricePence": 2049,
+  "pricePence": 1449,
   "postagePence": 0,
   "minOrder": 1,
   "inStock": true
  },
  "shop-puff-4x6": {
   "name": "Puff Black Smelly Proof Bags 4\" x 6\" – 100 pcs",
-  "pricePence": 2349,
+  "pricePence": 1749,
   "postagePence": 0,
   "minOrder": 1,
   "inStock": true
  },
  "shop-puff-65x75": {
   "name": "Puff Black Smelly Proof Bags Matt 6.5\" x 7.5\" – 100 pcs",
-  "pricePence": 2649,
+  "pricePence": 2149,
   "postagePence": 0,
   "minOrder": 1,
   "inStock": true
  },
  "shop-puff-85x10": {
   "name": "Puff Black Smelly Proof Bags 8.5\" x 10\" – 25 pcs",
-  "pricePence": 2149,
+  "pricePence": 2049,
   "postagePence": 0,
   "minOrder": 1,
   "inStock": true
  },
  "shop-puff-12x16": {
   "name": "Puff Black Smelly Proof Bags 12\" x 16\" – 25 pcs",
-  "pricePence": 2449,
+  "pricePence": 2349,
   "postagePence": 0,
   "minOrder": 1,
   "inStock": true

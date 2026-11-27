@@ -19,9 +19,10 @@
  *
  * Next working day (usually) is a separate choice, bags only.
  * It replaces standard postage. It is not added on top.
- * It uses the same bag count and the same 200 threshold as standard bag postage:
- * £4.99 up to and including 200 bags, £5.99 over 200.
- * A basket that also contains anything else cannot use it.
+ * It counts bags the same way as standard bag postage, with its own tiers:
+ * £4.99 up to and including 200 bags, £5.99 for 201–600 bags, £7.50 over 600.
+ * Standard bag postage is unchanged (£2.99 up to 200, £3.50 over 200).
+ * A basket that also contains anything else cannot use next day.
  *
  * Basket postage is the HIGHEST single postage, charged ONCE.
  * It is not summed across lines. Quantity does not multiply a non-pack postage.
@@ -69,17 +70,38 @@ export const ICE_CUP_POSTAGE_LABEL =
 
 /**
  * Next working day (usually), bags only.
- * Same count and same threshold as standard bag postage (CALI_PACK_POSTAGE_MAX_QTY).
- * £4.99 up to and including 200 bags, £5.99 when the order is over 200 bags.
+ * Counts bags the same way as standard bag postage, with three tiers.
+ * £4.99 up to and including 200 bags, £5.99 for 201–600, £7.50 over 600.
+ * Standard bag postage is a separate rule and is not changed here.
  */
-export const NEXT_DAY_POSTAGE_UP_TO_PENCE = 499;
-export const NEXT_DAY_POSTAGE_OVER_PENCE = 599;
+export const NEXT_DAY_QTY_LOW = 200;
+export const NEXT_DAY_QTY_MID = 600;
+export const NEXT_DAY_POSTAGE_UP_TO_200_PENCE = 499;
+export const NEXT_DAY_POSTAGE_UP_TO_600_PENCE = 599;
+export const NEXT_DAY_POSTAGE_OVER_600_PENCE = 750;
 
-export const NEXT_DAY_POSTAGE_LABEL = "£4.99 up to 200 bags, £5.99 over 200";
+export const NEXT_DAY_POSTAGE_LABEL =
+  "£4.99 up to 200 bags, £5.99 for 201–600 bags, £7.50 over 600";
 
-/** One short line for checkout and bag product pages. Not a guarantee. */
+/** One short line where a single sentence is needed. Not a guarantee. */
 export const NEXT_DAY_NOTE =
-  "Next working day (usually). £4.99 up to 200 bags, £5.99 over 200. Order by 10am, Monday to Friday.";
+  "Next working day (usually). £4.99 up to 200 bags, £5.99 for 201–600 bags, £7.50 over 600. Order by 10am, Monday to Friday.";
+
+/** Two short lines under Add to basket on bag product pages. */
+export const STANDARD_DELIVERY_FROM_LINE = "Standard delivery from £2.99";
+export const NEXT_DAY_DELIVERY_FROM_LINE = "Next day from £4.99 (order by 10am, Mon–Fri)";
+
+/** Bullets for the delivery-price expander and the delivery page. */
+export const STANDARD_BAG_POSTAGE_TIERS = [
+  { label: "Up to 200 bags", price: "£2.99" },
+  { label: "Over 200 bags", price: "£3.50" },
+];
+
+export const NEXT_DAY_POSTAGE_TIERS = [
+  { label: "Up to 200 bags", price: "£4.99" },
+  { label: "201–600 bags", price: "£5.99" },
+  { label: "Over 600 bags", price: "£7.50" },
+];
 
 export const DELIVERY_SERVICE = "Evri tracked delivery";
 
@@ -127,14 +149,15 @@ export function iceCupPostagePence(totalCups) {
 
 /**
  * Next working day postage for a bags-only order.
- * Counts bags the same way as standard bag postage, and uses the same 200 threshold.
+ * Counts bags the same way as standard bag postage.
+ * £4.99 up to 200, £5.99 for 201–600, £7.50 over 600.
  */
 export function nextDayPostagePence(totalBags) {
   const qty = Math.floor(Number(totalBags) || 0);
   if (qty < 1) return 0;
-  return qty <= CALI_PACK_POSTAGE_MAX_QTY
-    ? NEXT_DAY_POSTAGE_UP_TO_PENCE
-    : NEXT_DAY_POSTAGE_OVER_PENCE;
+  if (qty <= NEXT_DAY_QTY_LOW) return NEXT_DAY_POSTAGE_UP_TO_200_PENCE;
+  if (qty <= NEXT_DAY_QTY_MID) return NEXT_DAY_POSTAGE_UP_TO_600_PENCE;
+  return NEXT_DAY_POSTAGE_OVER_600_PENCE;
 }
 
 /**

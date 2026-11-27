@@ -109,7 +109,7 @@ export const categories: Category[] = [
     id: "zipper-bags",
     name: "Zipper Bags",
     slug: "zipper-bags",
-    tagline: "Grip seal from £9.49 · free UK delivery",
+    tagline: "Grip seal from £8.19 · free UK delivery",
     description:
       "Grip seal zipper bag boxes, from 25mm x 25mm. Clear, and other colours where listed. Puff black smell-proof zipper bags in six sizes. Free UK delivery. Minimum order 1 box.",
     image: "/shop/zip25-clear.webp",

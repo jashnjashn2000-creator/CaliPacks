@@ -15,6 +15,7 @@ import { getCategoryBySlug, listingSlugs } from "@/data/categories";
 import { SITE_URL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { thumbSrc } from "@/lib/product";
+import { CALI_PACK_DEAL_BULLET } from "@/lib/pricing";
 
 interface ShopCatalogueProps {
   categorySlug?: string;
@@ -109,6 +110,16 @@ function ShopView({ categorySlug, query, isNew }: ShopViewProps) {
 
       <div className="container-site py-8 md:py-12">
         {categorySlug === "cali-packs" ? <WholesaleBanner /> : null}
+        {categorySlug === "cali-packs" ? (
+          <ul className="mb-6 list-disc pl-5 text-sm font-semibold text-ink">
+            <li>{CALI_PACK_DEAL_BULLET}</li>
+          </ul>
+        ) : null}
+        {categorySlug === "zipper-bags" ? (
+          <ul className="mb-6 list-disc pl-5 text-sm font-semibold text-ink">
+            <li>3 or more grip seal boxes: 5% off each box</li>
+          </ul>
+        ) : null}
 
         <ShopCategoriesNav activeSlug={categorySlug} isNew={isNew} />
 
@@ -181,7 +192,11 @@ function ShopView({ categorySlug, query, isNew }: ShopViewProps) {
             </Link>
           </div>
         ) : (
-          <LoadMoreGrid key={`${query}-${isNew}-${categorySlug ?? "all"}`} products={displayProducts} />
+          <LoadMoreGrid
+            key={`${query}-${isNew}-${categorySlug ?? "all"}`}
+            products={displayProducts}
+            designNotice={categorySlug === "cali-packs"}
+          />
         )}
       </div>
     </div>

@@ -6,7 +6,8 @@ import Image from "next/image";
 import { MessageCircle, CreditCard, ArrowLeft, Loader2 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/lib/utils";
-import { lineTotalGbp, productImageClass } from "@/lib/product";
+import { productImageClass } from "@/lib/product";
+import { priceCartItems } from "@/lib/pricing";
 import { contactInfo, whatsappOrderNumber } from "@/data/social";
 import { checkoutCreateUrl, LAST_ORDER_KEY } from "@/lib/payments";
 import { VivaPayOverlay } from "@/components/payments/VivaPayOverlay";
@@ -17,7 +18,6 @@ import {
   DELIVERY_NOTE,
   bagsOnlyBasket,
   deliveryService,
-  nextDayNote,
   quoteForCart,
   type ShippingMethod,
 } from "@/lib/shipping";
@@ -25,7 +25,7 @@ import {
 type OverlayStatus = "preparing" | "redirecting" | "error";
 
 export default function CheckoutPage() {
-  const { items, subtotal, ready } = useCart();
+  const { items, ready } = useCart();
   const [submitting, setSubmitting] = useState(false);
   const [overlayOpen, setOverlayOpen] = useState(false);
   const [overlayStatus, setOverlayStatus] = useState<OverlayStatus>("preparing");
@@ -35,14 +35,21 @@ export default function CheckoutPage() {
 
   const bagsOnly = bagsOnlyBasket(items);
   const shippingMethod: ShippingMethod = bagsOnly && method === "nextday" ? "nextday" : "standard";
+  const priced = priceCartItems(items);
+  const pricedById = new Map(priced.lines.map((line) => [line.id, line]));
+  const subtotal = priced.subtotalGbp;
+  const standardPrice = quoteForCart(items, "standard").price;
+  const nextDayPrice = quoteForCart(items, "nextday").price;
   const delivery = quoteForCart(items, shippingMethod);
   const shipping = delivery.price;
   const total = subtotal + shipping;
 
   const whatsappHref = useMemo(() => {
-    const lines = items.map(
-      (i) => `• ${i.product.name} × ${i.quantity} = ${formatPrice(lineTotalGbp(i.product, i.quantity))}`
-    );
+    const byId = new Map(priceCartItems(items).lines.map((line) => [line.id, line]));
+    const lines = items.map((i) => {
+      const amount = (byId.get(i.product.id)?.linePence ?? 0) / 100;
+      return `• ${i.product.name} × ${i.quantity} = ${formatPrice(amount)}`;
+    });
     const text = [
       "Hi Smoke Cali — I'd like to place an order:",
       "",
@@ -374,38 +381,52 @@ export default function CheckoutPage() {
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium line-clamp-2">{item.product.name}</p>
                       <p className="text-xs text-surface-800/50">
-                        × {item.quantity} · {formatPrice(lineTotalGbp(item.product, item.quantity))}
+                        × {item.quantity} · {formatPrice((pricedById.get(item.product.id)?.linePence ?? 0) / 100)}
                       </p>
                     </div>
                   </li>
                 ))}
               </ul>
               {bagsOnly ? (
-                <fieldset className="mb-4 space-y-2 border-t border-surface-200 pt-4">
-                  <legend className="mb-2 text-sm font-semibold text-ink">Postage</legend>
-                  <label className="flex items-start gap-2 text-sm">
-                    <input
-                      type="radio"
-                      name="postage"
-                      className="mt-1"
-                      checked={shippingMethod === "standard"}
-                      onChange={() => setMethod("standard")}
-                    />
-                    <span>Standard · {formatPrice(quoteForCart(items, "standard").price)}</span>
-                  </label>
-                  <label className="flex items-start gap-2 text-sm">
-                    <input
-                      type="radio"
-                      name="postage"
-                      className="mt-1"
-                      checked={shippingMethod === "nextday"}
-                      onChange={() => setMethod("nextday")}
-                    />
-                    <span>
-                      Next working day (usually) · {formatPrice(quoteForCart(items, "nextday").price)}
-                    </span>
-                  </label>
-                  <p className="text-xs font-semibold text-graphite/70">{nextDayNote}</p>
+                <fieldset className="mb-4 border-t border-surface-200 pt-4">
+                  <legend className="mb-2 text-sm font-semibold text-ink">Delivery</legend>
+                  <div className="grid grid-cols-2 gap-2">
+                    <label
+                      className={`flex cursor-pointer flex-col rounded-xl border p-3 ${
+                        shippingMethod === "standard" ? "border-ink bg-brand-50" : "border-surface-200 bg-white"
+                      }`}
+                    >
+                      <span className="flex items-center gap-2 text-sm font-semibold text-ink">
+                        <input
+                          type="radio"
+                          name="postage"
+                          checked={shippingMethod === "standard"}
+                          onChange={() => setMethod("standard")}
+                        />
+                        Standard
+                      </span>
+                      <span className="mt-2 text-lg font-bold tabular-nums text-ink">{formatPrice(standardPrice)}</span>
+                    </label>
+                    <label
+                      className={`flex cursor-pointer flex-col rounded-xl border p-3 ${
+                        shippingMethod === "nextday" ? "border-ink bg-brand-50" : "border-surface-200 bg-white"
+                      }`}
+                    >
+                      <span className="flex items-center gap-2 text-sm font-semibold text-ink">
+                        <input
+                          type="radio"
+                          name="postage"
+                          checked={shippingMethod === "nextday"}
+                          onChange={() => setMethod("nextday")}
+                        />
+                        Next day
+                      </span>
+                      <span className="mt-2 text-lg font-bold tabular-nums text-ink">{formatPrice(nextDayPrice)}</span>
+                      <span className="mt-1 text-[11px] font-medium leading-snug text-graphite/70">
+                        Order by 10am, Mon–Fri
+                      </span>
+                    </label>
+                  </div>
                 </fieldset>
               ) : null}
               <dl className="space-y-2 text-sm border-t border-surface-200 pt-4">
@@ -413,6 +434,18 @@ export default function CheckoutPage() {
                   <dt className="text-surface-800/60">Subtotal</dt>
                   <dd>{formatPrice(subtotal)}</dd>
                 </div>
+                {priced.bagSavingGbp > 0 ? (
+                  <div className="flex justify-between font-semibold text-brand-700">
+                    <dt>121+ bag deal</dt>
+                    <dd>You save {formatPrice(priced.bagSavingGbp)}</dd>
+                  </div>
+                ) : null}
+                {priced.zipperSavingGbp > 0 ? (
+                  <div className="flex justify-between font-semibold text-brand-700">
+                    <dt>Zipper boxes, 5% off</dt>
+                    <dd>You save {formatPrice(priced.zipperSavingGbp)}</dd>
+                  </div>
+                ) : null}
                 <div className="flex justify-between">
                   <dt className="text-surface-800/60">{DELIVERY_LABEL}</dt>
                   <dd>{formatPrice(shipping)}</dd>
